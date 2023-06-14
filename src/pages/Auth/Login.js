@@ -1,35 +1,48 @@
 import React from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Spin } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { useFetch } from '../../hooks';
-import {BACKEND_URL} from "./../../config";
-
+import useApiPost from '../../hooks/index';
+import { BACKEND_URL } from './../../config';
+import './index.css';
+import Spinner from '../../components/Spinner';
 
 const LoginPage = () => {
-  const navigate = useNavigate();  
-  const onSubmit = async (values) => {
-    console.log('Received values of form: ', values);
-    alert(BACKEND_URL+'/auth/adlogin')
-    const response = await useFetch(BACKEND_URL+'/auth/adlogin',values)
-    alert(response)
-    console.log(response)
-    navigate('/')
+  const navigate = useNavigate();
+  const { isLoading, error, data, postData } = useApiPost();
+  const onFinish = (values) => {
+    // Call the postData function from the custom hook
+    alert(BACKEND_URL + '/auth/adlogin');
+    const endpoint = BACKEND_URL + '/auth/adlogin';
+    postData(endpoint, values)
+      .then((response) => {
+        // Handle successful response
+        console.log(response);
+        alert(response.data);
+        navigate('/');
+      })
+      .catch((error) => {
+        // Handle error
+        alert(error);
+        console.error(error);
+        navigate('/');
+      });
   };
-
-  // const callAPi  = (data) => {
-  //   useFetch(BACKEND_URL+'/auth/adlogin',data)
-  // }
-
-
 
   return (
     <div style={{ maxWidth: 300, margin: '0 auto', marginTop: 200 }}>
       <div style={{ textAlign: 'center', marginBottom: 24 }}>
-        <img src="https://www.ctznbank.com/assets/backend/uploads/logo-new.png" alt="Logo" style={{ height: 80 }} />
+        <img
+          src="https://www.ctznbank.com/assets/backend/uploads/logo-new.png"
+          alt="Logo"
+          style={{ height: 80 }}
+        />
       </div>
-      <u><h3>Audit Tracking System</h3></u>
-      <Form name="login-form" onFinish={onSubmit}>
+      <u>
+        <h3>Audit Tracking System</h3>
+      </u>
+
+      <Form name="login-form" onFinish={onFinish}>
         <Form.Item
           name="username"
           rules={[
@@ -57,6 +70,7 @@ const LoginPage = () => {
             Log In
           </Button>
         </Form.Item>
+        {isLoading && <Spinner />}
       </Form>
     </div>
   );

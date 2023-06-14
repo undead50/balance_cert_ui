@@ -1,54 +1,30 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState } from 'react';
+import axios from 'axios';
+import { timeout } from '../config';
 
-const useFetch = (url) => {
+const useApiPost = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await axios.get(url);
-        console.log(data);
-        setData(data);
-          setLoading(false);
-          setError(false)
-      } catch (err) {
-          console.log(err)
-        setError(true);
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [url]);
-    
-  return {data, loading, error}
+  const postData = async (url, reqData) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await axios.post(url, reqData, {
+        timeout: timeout, // Timeout value in milliseconds (5 seconds in this example)
+      });
+      setData(response.data);
+      return response.data;
+    } catch (error) {
+      setError(error.response.data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { isLoading, error, data, postData };
 };
 
-// const useFetchpost = (url,reqData)=> {
-//   const [data, setData] = useState(null);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(false);
-
-//   useEffect((url,reqData) => {
-//     const fetchDatapost = async () => {
-//       try {
-//         const { data } = await axios.post(url,reqData);
-//         console.log(data);
-//         setData(data);
-//         setLoading(false);
-//         setError(false)
-//       } catch (err) {
-//         console.log(err)
-//         setError(true);
-//         setLoading(false);
-//       }
-//     };
-//     fetchDatapost();
-//   }, [url]);
-    
-//   return {data, loading, error}
-// }
-
-export { useFetch };
+export default useApiPost;
