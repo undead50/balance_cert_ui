@@ -1,4 +1,5 @@
 import { Menu } from 'antd';
+import { Link } from 'react-router-dom';
 
 import {
     DesktopOutlined,
@@ -11,12 +12,18 @@ import {
   const { SubMenu } = Menu;
 
 function SideBard() {
+
+
     return (<Menu theme='light' defaultSelectedKeys={['1']} mode="inline">
     <Menu.Item key="1" icon={<PieChartOutlined />}>
+      <Link to={"/"}>  
       Dashboard
+      </Link>
     </Menu.Item>
     <Menu.Item key="2" icon={<DesktopOutlined />}>
-      Option 1
+      <Link to={'/createAudit'}>  
+      Create Audit Request
+      </Link>
     </Menu.Item>
     <Menu.Item key="3" icon={<DesktopOutlined />}>
       Option 2
