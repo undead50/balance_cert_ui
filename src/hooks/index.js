@@ -10,12 +10,10 @@ const useApiPost = () => {
   const postData = async (url, reqData) => {
     setIsLoading(true);
     setError(null);
-
     try {
-      const response = await axios.post(url, reqData, {
-        timeout: timeout, // Timeout value in milliseconds (5 seconds in this example)
-      });
+      const response = await axios.post(url, reqData);
       setData(response.data);
+      // alert(response.data.Code)
       return response.data;
     } catch (error) {
       setError(error.response.data);

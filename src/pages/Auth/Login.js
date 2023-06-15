@@ -6,19 +6,44 @@ import useApiPost from '../../hooks/index';
 import { BACKEND_URL } from './../../config';
 import './index.css';
 import Spinner from '../../components/Spinner';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../store';
+import { login } from '../../store';
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const { isLoading, error, data, postData } = useApiPost();
   const onFinish = (values) => {
     // Call the postData function from the custom hook
-    alert(BACKEND_URL + '/auth/adlogin');
     const endpoint = BACKEND_URL + '/auth/adlogin';
-    postData(endpoint, values)
+    const reqData = {
+      username:values.username,
+      password:values.password
+    }
+    postData(endpoint,reqData)
       .then((response) => {
         // Handle successful response
         console.log(response);
-        alert(response);
+        // dispatch(setUser({
+        //     userName: 'test',
+        //     solId:'test',
+        //     email:'test',
+        //     departmentName:'test'
+        // }))
+        // dispatch(login())
+        if(response.Code === "0"){
+          dispatch(login())
+          dispatch(setUser({
+              userName: response.Data.userName,
+              solId:response.Data.solId,
+              email:response.Data.email,
+              departmentName:response.Data.departmentName,
+              token:response.Data.token
+          }))
+        }
+        
         navigate('/');
       })
       .catch((error) => {
