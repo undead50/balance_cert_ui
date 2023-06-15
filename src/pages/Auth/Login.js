@@ -18,7 +18,7 @@ const LoginPage = () => {
       .then((response) => {
         // Handle successful response
         console.log(response);
-        alert(response.data);
+        alert(response);
         navigate('/');
       })
       .catch((error) => {

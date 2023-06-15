@@ -11,9 +11,7 @@ function MyRoutes() {
     <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route element={<LoginPage/>}>
-          <Route path='/login' element={<LoginPage/>}></Route>
-        </Route>
+        <Route path = "/login" element={<LoginPage/>}></Route>
         <Route element={<AdminLayout/>}>
           <Route path='/' element={<Dashboard/>}></Route>
           <Route path='/createAudit' element={<Create/>}></Route>
