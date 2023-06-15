@@ -3,13 +3,12 @@ import { Layout, Breadcrumb, Button } from 'antd';
 import {
   LogoutOutlined,
 } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import SideBard from '../../components/Sidebar';
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const AdminLayout = (props) => {
-  const content = props.content 
+const AdminLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
 
@@ -70,7 +69,7 @@ const AdminLayout = (props) => {
             className="site-layout-background"
             style={{ padding: 24, minHeight: 360 }}
           >
-            {content}
+            <Outlet/>
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>

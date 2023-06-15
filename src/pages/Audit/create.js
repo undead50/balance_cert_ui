@@ -1,5 +1,4 @@
 import { Form, Select, Radio, DatePicker, Input, Button } from 'antd';
-import AdminLayout from "../../containers/AdminLayout";
 
 
 const { Option } = Select;
@@ -89,7 +88,7 @@ function Create() {
             <Button type="primary" htmlType="submit">Submit</Button>
             </Form.Item>
         </Form>
-    return ( <AdminLayout content= {content}/> );
+    return (content);
 }
 
 export default Create;

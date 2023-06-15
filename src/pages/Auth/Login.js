@@ -1,7 +1,7 @@
 import React from 'react';
-import { Form, Input, Button, Spin } from 'antd';
+import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import useApiPost from '../../hooks/index';
 import { BACKEND_URL } from './../../config';
 import './index.css';
@@ -71,6 +71,7 @@ const LoginPage = () => {
           </Button>
         </Form.Item>
         {isLoading && <Spinner />}
+        <Outlet/>
       </Form>
     </div>
   );

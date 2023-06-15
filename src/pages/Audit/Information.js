@@ -1,5 +1,6 @@
+
 function Information() {
-    return ( <>info</>);
+    return ( <>info</> );
 }
 
 export default Information;

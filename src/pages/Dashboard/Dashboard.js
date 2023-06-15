@@ -1,8 +1,8 @@
-import AdminLayout from "../../containers/AdminLayout";
+
 
 function Dashboard() {
-    const content = 'dashboard'
-    return (<AdminLayout content = {content}/> );
+    const content = "dashboard"
+    return (content);
 }
 
 export default Dashboard;
