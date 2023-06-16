@@ -2,56 +2,38 @@ import React from 'react';
 import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Outlet, useNavigate } from 'react-router-dom';
-import useApiPost from '../../hooks/index';
-import { BACKEND_URL } from './../../config';
 import './index.css';
 import Spinner from '../../components/Spinner';
-import { useDispatch } from 'react-redux';
 import { setUser } from '../../store';
-import { login } from '../../store';
+import {useSelector,useDispatch} from 'react-redux'
+import { postLoginData } from '../../store/slices/authSlice';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { isLoading, error, data, postData } = useApiPost();
-  const onFinish = (values) => {
+
+    const { data, loading, error } = useSelector((state) => state.auth);
+
+    const onFinish = (values) => {
     // Call the postData function from the custom hook
-    const endpoint = BACKEND_URL + '/auth/adlogin';
     const reqData = {
       username:values.username,
       password:values.password
     }
-    postData(endpoint,reqData)
-      .then((response) => {
-        // Handle successful response
-        console.log(response);
-        // dispatch(setUser({
-        //     userName: 'test',
-        //     solId:'test',
-        //     email:'test',
-        //     departmentName:'test'
-        // }))
-        // dispatch(login())
-        if(response.Code === "0"){
-          dispatch(login())
-          dispatch(setUser({
-              userName: response.Data.userName,
-              solId:response.Data.solId,
-              email:response.Data.email,
-              departmentName:response.Data.departmentName,
-              token:response.Data.token
-          }))
-        }
-        
-        navigate('/');
-      })
-      .catch((error) => {
-        // Handle error
-        alert(error);
-        console.error(error);
-        navigate('/');
-      });
+    dispatch(postLoginData(reqData))
+    alert(data)
+    console.log(data)
+    if (data.Code === "0"){
+        dispatch(setUser({
+          userName: data.Data.userName,
+          solId:data.Data.solId,
+          email:data.Data.email,
+          departmentName:data.Data.departmentName,
+          token:data.Data.token
+      }))
+      navigate('/');
+    }
   };
 
   return (
@@ -95,7 +77,7 @@ const LoginPage = () => {
             Log In
           </Button>
         </Form.Item>
-        {isLoading && <Spinner />}
+        {loading && <Spinner />}
         <Outlet/>
       </Form>
     </div>
