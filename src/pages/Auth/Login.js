@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button  } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Outlet, useNavigate } from 'react-router-dom';
 import './index.css';
@@ -7,14 +7,18 @@ import Spinner from '../../components/Spinner';
 import { setUser } from '../../store';
 import {useSelector,useDispatch} from 'react-redux'
 import { postLoginData } from '../../store/slices/authSlice';
+import {useNotification} from '../../hooks/index'
 
 const LoginPage = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
+
+    const {callNotification} = useNotification();
 
     const { data, loading, error } = useSelector((state) => state.auth);
-
+    // useNotification('Login Denied','error')
+    
     const onFinish = (values) => {
     // Call the postData function from the custom hook
     const reqData = {
@@ -33,6 +37,9 @@ const LoginPage = () => {
           token:data.Data.token
       }))
       navigate('/');
+      callNotification('Login Success','success')
+    } else {
+      callNotification('Login Denied','error')
     }
   };
 
