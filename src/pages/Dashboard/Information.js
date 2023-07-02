@@ -1,5 +1,8 @@
+
 function Information() {
-    return ( <>info</>);
+    alert('info')
+    return ( <>info
+    </>);
 }
 
 export default Information;

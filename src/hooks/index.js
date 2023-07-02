@@ -53,7 +53,6 @@ export const useFetch = (url) => {
           'Authorization': `Bearer ${userInfo.token}`,
           'Content-Type': 'application/json',
         }});
-        alert('callapi'+url)
         console.log(data);
         setData(data);
         setLoading(false);

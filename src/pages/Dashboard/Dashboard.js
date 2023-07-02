@@ -1,9 +1,11 @@
+import { useEffect } from "react";
+import { useFetch } from "../../hooks";
 
-
-function Dashboard() {
+function Dashboard() { 
     
-    const content = "dashboard"
-    console.log(content)
+    const content = <>
+    <h1>dasboard</h1>
+    </>
     return (content);
 }
 

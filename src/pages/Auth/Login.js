@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Input, Button  } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { Outlet, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import './index.css';
 import Spinner from '../../components/Spinner';
 import { setUser } from '../../store';
@@ -10,9 +10,9 @@ import { postLoginData } from '../../store/slices/authSlice';
 import {useNotification} from '../../hooks/index'
 
 const LoginPage = () => {
+    // alert('login')
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
 
     const {callNotification} = useNotification();
 
@@ -85,7 +85,7 @@ const LoginPage = () => {
           </Button>
         </Form.Item>
         {loading && <Spinner />}
-        <Outlet/>
+        {/* <Outlet/> */}
       </Form>
     </div>
   );
