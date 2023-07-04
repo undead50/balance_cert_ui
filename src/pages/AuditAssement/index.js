@@ -19,12 +19,46 @@ const AccountOpeningForm = () => {
   return (
     <Form>
       <Steps current={currentStep}>
+        <Step title="Start Risk Assesment"/>
         <Step title="Account Opening Procedure" />
         <Step title="Account Closing Procedure" />
         <Step title="Cash at vault as Heading"/>
       </Steps>
       <br />
       {currentStep === 0 && (
+       <p>
+        Risk Assessment tool - Operational Risk Management
+
+Introduction
+
+The purpose of the Risk assessment is providing the bank insight in the level of Operational Risk Management in branches in an relatively easy way. The outcome of this risk assessment tool is indicative. Besides this, it would help the ORM-function to set priorities towards improvement and can be used to show improvements overtime. 
+
+Approach
+The first step is to fill in the  General Information tab. 
+
+Thereafter you can fill in the green tabs. Each tab covers a specific topic of Operational Risk Management consisting of several elements.  All related items per element should be scored on the scale 'Not comply' to 'Fully comply' or 'Don't know' by setting a 'x' in the right cell. After scoring an item, you will get a green sign. In case you missed an item or mistakenly provide more scores for the same item, the sign stays orange. 
+
+In the tab “scores”, weightage is given for each element of Operational Risk Management based on the severity of risk in each element and result is presented using weightage average score.
+
+In the tab Assessment Summary the overall outcome per topic are presented based on all the scores. To do so all scores are translated into an % for improvent on a scale of 0 - 100%. A high percentage indicates more room for improvement which also indicates more risk and vice versa. The outcomes are also visualized by graphs.
+
+The outcomes in each topic are then multiplied by the weightage given to each topics and final risk ranking is done based on weightage average score.
+
+If any topic in the tool is not applicable to any branch, score shall be given as “Fully comply” and Percentage of improvement shall be 0.
+
+The tab “Digitization of Documents” is incorporated in the Risk assessment tool however is not linked to the final assessment report. The same shall be linked to final report going further when required.
+
+Other Checklist Tab: Checklist that shall not deduct the marks of branch i.e., which are not in control of branch but branch faces risk due to non-compliance.
+
+Notes:
+1. In case of any non compliance of requirement by "Nepal Rastra Bank", Scaling shall be given as "Not Comply" irrespective of the result as per sample taken.
+
+2. In case of any non compliance of Bank's "Internal Policy/Guideline/Circular etc", Scaling can be lowered depending upon the severity of non compliance and risk faced by bank, if required.
+
+       </p>
+      )
+      }
+      {currentStep === 1 && (
         <>
           <h3>Observation as per manual/circulars/NRB Directives</h3>
           <Form.Item>
@@ -92,7 +126,7 @@ const AccountOpeningForm = () => {
           </Form.Item>
         </>
       )}
-      {currentStep === 1 && (
+      {currentStep === 2 && (
         <>
           <h3>Observation as per manual/circulars/NRB Directives</h3>
           <Form.Item>
@@ -133,7 +167,7 @@ const AccountOpeningForm = () => {
           </Form.Item>
         </>
       )}
-      {currentStep === 2 && (
+      {currentStep === 3 && (
         <>
           <h3>Observation as per manual/circulars/NRB Directives</h3>
           <Form.Item>
@@ -180,12 +214,12 @@ const AccountOpeningForm = () => {
             Previous
           </Button>
         )}
-        {currentStep < 2 && (
+        {currentStep < 3 && (
           <Button type="primary" onClick={handleNext}>
             Next
           </Button>
         )}
-        {currentStep === 2 && (
+        {currentStep === 3 && (
           <Button type="primary" onClick={handleSubmit}>
             Submit
           </Button>

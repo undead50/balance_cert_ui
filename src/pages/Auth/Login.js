@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Input, Button  } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import {  useNavigate } from 'react-router-dom';
@@ -18,6 +18,25 @@ const LoginPage = () => {
 
     const { data, loading, error } = useSelector((state) => state.auth);
     // useNotification('Login Denied','error')
+
+    useEffect(()=>{
+      if(data){
+        if (data.Code === "0"){
+          dispatch(setUser({
+            userName: data.Data.userName,
+            solId:data.Data.solId,
+            email:data.Data.email,
+            departmentName:data.Data.departmentName,
+            token:data.Data.token
+        }))
+        navigate('/');
+        callNotification('Login Success','success')
+      } else {
+        callNotification('Login Denied','error')
+      }
+      }
+    },[data])
+
     
     const onFinish = (values) => {
     // Call the postData function from the custom hook
@@ -28,32 +47,21 @@ const LoginPage = () => {
     dispatch(postLoginData(reqData))
     alert(data)
     console.log(data)
-    if (data.Code === "0"){
-        dispatch(setUser({
-          userName: data.Data.userName,
-          solId:data.Data.solId,
-          email:data.Data.email,
-          departmentName:data.Data.departmentName,
-          token:data.Data.token
-      }))
-      navigate('/');
-      callNotification('Login Success','success')
-    } else {
-      callNotification('Login Denied','error')
-    }
+    
+
   };
 
   return (
     <div style={{ maxWidth: 300, margin: '0 auto', marginTop: 200 }}>
       <div style={{ textAlign: 'center', marginBottom: 24 }}>
         <img
-          src="https://www.ctznbank.com/assets/backend/uploads/logo-new.png"
+          src= {process.env.PUBLIC_URL + '/images/citizens-logo.png'}
           alt="Logo"
           style={{ height: 80 }}
         />
       </div>
       <u>
-        <h3>Audit Tracking System</h3>
+        <h3>Risk Assessment tool </h3>
       </u>
 
       <Form name="login-form" onFinish={onFinish}>

@@ -1,6 +1,7 @@
 import { createSlice,createAsyncThunk } from '@reduxjs/toolkit';
-import { BACKEND_URL } from './../../config';
 import axios from 'axios';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 export const postLoginData = createAsyncThunk('auth/postLoginData',async(payload)=>{
   try {
@@ -30,6 +31,9 @@ const authSlice = createSlice({
         },
         logout: (state) => {
           state.isLoggedIn = false;
+        },
+        FlushUserData: (state) =>{
+          state.data = null;
         }
     },
     extraReducers: {
@@ -47,5 +51,5 @@ const authSlice = createSlice({
     }
 })
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout,FlushUserData } = authSlice.actions;
 export const authReducer = authSlice.reducer;

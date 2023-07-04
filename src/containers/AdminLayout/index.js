@@ -5,6 +5,9 @@ import {
 } from '@ant-design/icons';
 import { Outlet, useNavigate } from 'react-router-dom';
 import SideBard from '../../components/Sidebar';
+import { useDispatch } from 'react-redux';
+import { setUser,FlushUserData } from '../../store';
+
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -12,12 +15,22 @@ const AdminLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
   const handleCollapse = (collapsed) => {
     setCollapsed(collapsed);
   };
 
   const handleLogout = () => {
     // Handle logout logic here
+    dispatch(setUser({
+      userName: null,
+      solId:null,
+      email:null,
+      departmentName:null,
+      token:null
+  }))
+    dispatch(FlushUserData())
     navigate('/login')
     
   };
@@ -27,7 +40,7 @@ const AdminLayout = () => {
       <Sider collapsible collapsed={collapsed} onCollapse={handleCollapse} style={{background: 'white'}}>
         <div className="logo">
 
-        <img src="https://www.ctznbank.com/assets/backend/uploads/logo-new.png" alt="Company Logo"
+        <img src={process.env.PUBLIC_URL + '/images/citizens-logo.png'} alt="Company Logo"
         style={{
           height:'40px',
           width:'180px',

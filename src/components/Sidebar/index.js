@@ -23,9 +23,9 @@ function SideBard() {
       {/* <Menu.Item key="3" icon={<DesktopOutlined />}>
         <Link to={'/info'}>Option 2</Link>
       </Menu.Item> */}
-      <SubMenu key="sub1" icon={<UserOutlined />} title="Audit">
-        <Menu.Item key="4"><Link to = {'/createAudit'}>Create Audit</Link></Menu.Item>
-        <Menu.Item key="5"><Link to = {'/indexAudit'}>List Audit</Link></Menu.Item>
+      <SubMenu key="sub1" icon={<UserOutlined />} title="Risk Assesment">
+        {/* <Menu.Item key="4"><Link to = {'/createAudit'}>Create Audit</Link></Menu.Item>
+        <Menu.Item key="5"><Link to = {'/indexAudit'}>List Audit</Link></Menu.Item> */}
         <Menu.Item key="6"><Link to = {'/riskassessment'}>Risk Assessment</Link></Menu.Item>
       </SubMenu>
       {/* <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
@@ -33,6 +33,11 @@ function SideBard() {
         <Menu.Item key="8">Team 2</Menu.Item>
       </SubMenu> */}
       {/* <Menu.Item key="9" icon={<FileOutlined />} /> */}
+      <SubMenu key="sub2" icon={<UserOutlined />} title="Settings">
+        {/* <Menu.Item key="4"><Link to = {'/createAudit'}>Create Audit</Link></Menu.Item>
+        <Menu.Item key="5"><Link to = {'/indexAudit'}>List Audit</Link></Menu.Item> */}
+        <Menu.Item key="7"><Link to = {'/categoryIndex'}>Category</Link></Menu.Item>
+      </SubMenu>
     </Menu>
   );
 }
