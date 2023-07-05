@@ -27,6 +27,7 @@ function SideBard() {
         {/* <Menu.Item key="4"><Link to = {'/createAudit'}>Create Audit</Link></Menu.Item>
         <Menu.Item key="5"><Link to = {'/indexAudit'}>List Audit</Link></Menu.Item> */}
         <Menu.Item key="6"><Link to = {'/riskassessment'}>Risk Assessment</Link></Menu.Item>
+        <Menu.Item key="9"><Link to = {'/riskassessment'}>Assessment Status</Link></Menu.Item>
       </SubMenu>
       {/* <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
         <Menu.Item key="7">Team 1</Menu.Item>

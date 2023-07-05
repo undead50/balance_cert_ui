@@ -22,7 +22,7 @@ const AccountOpeningForm = () => {
     <Form>
       <Row>
     <Col span={5}>
-      <Steps current={currentStep} direction='vertical'>
+      <Steps current={currentStep} direction="vertical">
       <Step title="Start Risk Assesment"/>
         <Step title="Account Opening Procedure" />
         <Step title="Account Closing Procedure" />
@@ -68,7 +68,7 @@ Notes:
       }
       {currentStep === 1 && (
         <>
-          <h3>Observation as per manual/circulars/NRB Directives</h3>
+          <u><h2>Observation as per manual/circulars/NRB Directives</h2></u>
           <Form.Item>
             Obtained complete documents while account opening as per Operations manual point no. 1.2.2 & KYC guidelines.
             <Radio.Group>
@@ -136,7 +136,7 @@ Notes:
       )}
       {currentStep === 2 && (
         <>
-          <h3>Observation as per manual/circulars/NRB Directives</h3>
+          <u><h2>Observation as per manual/circulars/NRB Directives</h2></u>
           <Form.Item>
             Clearance from all department of branch (i.e TAD, CAD, Finance, Locker, Card, E-banking/Mobile banking) is obtained.(Operational Manual 1.4)
             <Radio.Group>
@@ -177,7 +177,7 @@ Notes:
       )}
       {currentStep === 3 && (
         <>
-          <h3>Observation as per manual/circulars/NRB Directives</h3>
+          <u><h2>Observation as per manual/circulars/NRB Directives</h2></u>
           <Form.Item>
             Clearance from all department of branch (i.e TAD, CAD, Finance, Locker, Card, E-banking/Mobile banking) is obtained.(Operational Manual 1.4)
             <Radio.Group>
@@ -216,6 +216,7 @@ Notes:
           </Form.Item>
         </>
       )}
+      <br/>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         {currentStep > 0 && (
           <Button type="primary" onClick={handlePrevious}>
