@@ -79,11 +79,13 @@ const CategoryIndex = () => {
   const dataSource = data;
 
   const dispatch = useDispatch();
+  // dispatch(getCategoryData());
 
   useEffect(() => {
     dispatch(getCategoryData());
-    console.log(data);
-  }, []);
+    // console.log(data);
+    // alert('hi')
+  }, [dispatch]);
 
   return (
     <div>
@@ -105,7 +107,7 @@ const CategoryIndex = () => {
       >
         <CategoryForm visible={handleCancel} />
       </Modal>
-      {loading && <Spinner />}
+      
     </div>
   );
 };

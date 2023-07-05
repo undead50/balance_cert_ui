@@ -10,20 +10,22 @@ import { persistStore, persistReducer,FLUSH,
 import { login, logout, FlushUserData,authReducer } from './slices/authSlice';
 import { setUser,userReducer } from "./slices/userSlice";
 import { categoryReducer } from "./slices/categorySlice";
+import { questionReducer } from "./slices/questionSlice";
 
 
 const ENCRYPTION_KEY = 'my-secret-key';
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['auth','user','category'],
+    whitelist: ['auth','user','category','question'],
   };
 
 
   const rootReducer = combineReducers({
     auth: authReducer,
     user: userReducer,
-    category: categoryReducer
+    category: categoryReducer,
+    question: questionReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

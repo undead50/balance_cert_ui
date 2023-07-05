@@ -8,6 +8,7 @@ import React from 'react';
 import AdminLayout from '../containers/AdminLayout';
 import AccountOpeningForm from '../pages/AuditAssement';
 import CategoryIndex from '../pages/Cateogry';
+import QuestionIndex from '../pages/Question';
 
 function MyRoutes() {
   return (
@@ -21,6 +22,7 @@ function MyRoutes() {
           <Route path="indexAudit" element={<Index/>}/>
           <Route path="riskassessment" element={<AccountOpeningForm/>}/>
           <Route path="categoryIndex" element={<CategoryIndex/>}/>
+          <Route path="questionIndex" element={<QuestionIndex/>}/>
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,5 +1,6 @@
 import { Form, Radio,Button,Steps } from 'antd';
 import { useState } from 'react';
+import { Col,  Row } from 'antd';
 const { Step } = Steps;
 
 const AccountOpeningForm = () => {
@@ -17,14 +18,21 @@ const AccountOpeningForm = () => {
   }
 
   return (
+    
     <Form>
-      <Steps current={currentStep}>
-        <Step title="Start Risk Assesment"/>
+      <Row>
+    <Col span={5}>
+      <Steps current={currentStep} direction='vertical'>
+      <Step title="Start Risk Assesment"/>
         <Step title="Account Opening Procedure" />
         <Step title="Account Closing Procedure" />
         <Step title="Cash at vault as Heading"/>
       </Steps>
-      <br />
+      </Col>
+      <Col span={2}>
+
+      </Col>
+      <Col span={12}>
       {currentStep === 0 && (
        <p>
         Risk Assessment tool - Operational Risk Management
@@ -225,7 +233,12 @@ Notes:
           </Button>
         )}
       </div>
+      </Col>
+      </Row>
     </Form>
+    
+    
+    
   );
 };
 
