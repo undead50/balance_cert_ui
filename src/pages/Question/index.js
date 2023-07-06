@@ -75,7 +75,7 @@ const handleView = (record) => {
 
 const QuestionIndex = () => {
     const dispatch = useDispatch()
-    const { data, loading, error } = useSelector((state) => state.question);
+    const { question, loading, error } = useSelector((state) => state.question);
     const [visible, setVisible] = useState(false);
     const handleAdd = () => {
         // Handle the action when the Add button is clicked
@@ -95,7 +95,7 @@ const QuestionIndex = () => {
     dispatch(fetchQuestions())
   },[])
 
-  const dataSource = data
+  const dataSource = question
 
 
   return (

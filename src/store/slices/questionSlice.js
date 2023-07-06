@@ -32,7 +32,7 @@ export const addQuestion = createAsyncThunk(
 const qusetionSlice = createSlice({
   name: 'question',
   initialState: {
-    data: null,
+    question: null,
     loading: false,
     error: false,
   },
@@ -44,7 +44,7 @@ const qusetionSlice = createSlice({
     },
     [fetchQuestions.fulfilled]: (state, action) => {
       state.loading = false;
-      state.data = action.payload;
+      state.question = action.payload;
     },
     [fetchQuestions.rejected]: (state, action) => {
       state.loading = false;
@@ -55,7 +55,7 @@ const qusetionSlice = createSlice({
     },
     [addQuestion.fulfilled]: (state, action) => {
       state.loading = false;
-      state.data.push(action.payload);
+      state.question.push(action.payload);
     },
     [addQuestion.rejected]: (state, action) => {
       state.loading = false;
