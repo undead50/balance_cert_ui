@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Input, Button } from 'antd';
 import { useDispatch } from 'react-redux';
-import { addCategory } from '../../store/slices/categorySlice';
+import { createCategoryAsync } from '../../store/slices/categorySlice';
 import { useNotification } from '../../hooks/index';
 
 const CategoryForm = (props) => {
@@ -12,7 +12,7 @@ const CategoryForm = (props) => {
   const onFinish = (values) => {
     // Handle form submission logic here
 
-    dispatch(addCategory({ categoryName: values.categoryName }));
+    dispatch(createCategoryAsync({ categoryName: values.categoryName }));
     form.resetFields();
     props.visible();
     callNotification('Category Added Successfully', 'success');

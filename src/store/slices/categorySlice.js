@@ -1,71 +1,129 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+const initialState = {
+  categorys: [],
+  loading: false,
+  error: null,
+};
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-export const getCategoryData = createAsyncThunk(
-  '/categoryData/list',
-  async (payload) => {
+export const fetchCategorysAsync = createAsyncThunk(
+  'category/fetchCategorys',
+  async () => {
     try {
-      const url = BACKEND_URL + '/categories';
-      const { data } = await axios.get(url, payload);
-      return data;
-    } catch (err) {
-      return err;
+      const url = BACKEND_URL + '/category/fetchCategorys';
+      const response = await axios.get(url);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.error);
     }
   }
 );
 
-export const addCategory = createAsyncThunk(
-  'categoryData/add',
-  async (payload) => {
+export const createCategoryAsync = createAsyncThunk(
+  'category/createCategory',
+  async (categoryData) => {
     try {
-      const url = BACKEND_URL + '/categories/create';
-      const { data } = await axios.post(url, payload);
-      return data;
-    } catch (err) {
-      return err;
+      const url = BACKEND_URL + '/category/createCategory';
+      const response = await axios.post(url, categoryData);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.error);
+    }
+  }
+);
+
+export const updateCategoryAsync = createAsyncThunk(
+  'category/updateCategory',
+  async (categoryData) => {
+    try {
+      const url = BACKEND_URL + `/category/updateCategory/${categoryData.id}`;
+      const response = await axios.put(url, categoryData);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.error);
+    }
+  }
+);
+
+export const deleteCategoryAsync = createAsyncThunk(
+  'category/deleteCategory',
+  async (categoryId) => {
+    try {
+      const url = BACKEND_URL + `/category/deleteCategory/${categoryId}`;
+      await axios.delete(url);
+      return categoryId;
+    } catch (error) {
+      throw new Error(error.response.data.error);
     }
   }
 );
 
 const categorySlice = createSlice({
   name: 'category',
-  initialState: {
-    data: null,
-    loading: false,
-    error: false,
-  },
-  reducers: {
-    setCategoryData: (state, action) => {
-      state.data = action.payload;
-    },
-  },
-  extraReducers: {
-    [getCategoryData.pending]: (state) => {
-      state.loading = true;
-    },
-    [getCategoryData.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.data = action.payload;
-    },
-    [getCategoryData.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = true;
-    },
-    [addCategory.pending]: (state) => {
-      state.loading = true;
-    },
-    [addCategory.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.data.push(action.payload);
-    },
-    [addCategory.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = true;
-    },
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchCategorysAsync.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCategorysAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        state.categorys = action.payload;
+      })
+      .addCase(fetchCategorysAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(createCategoryAsync.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createCategoryAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        state.categorys.push(action.payload);
+      })
+      .addCase(createCategoryAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(updateCategoryAsync.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateCategoryAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedCategory = action.payload;
+        const index = state.categorys.findIndex(
+          (category) => category.id === updatedCategory.id
+        );
+        if (index !== -1) {
+          state.categorys[index] = updatedCategory;
+        }
+      })
+      .addCase(updateCategoryAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(deleteCategoryAsync.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteCategoryAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        const categoryId = action.payload;
+        state.categorys = state.categorys.filter(
+          (category) => category.id !== categoryId
+        );
+      })
+      .addCase(deleteCategoryAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
   },
 });
 
-export const { setCategoryData } = categorySlice.actions;
 export const categoryReducer = categorySlice.reducer;

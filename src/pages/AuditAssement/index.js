@@ -1,8 +1,8 @@
 import { Form, Radio, Button, Steps } from 'antd';
 import { useEffect, useState } from 'react';
 import { Col, Row } from 'antd';
-import { getCategoryData } from '../../store/slices/categorySlice';
-import {fetchQuestions} from '../../store/slices/questionSlice';
+import { fetchCategorysAsync } from '../../store/slices/categorySlice';
+import { fetchQuestionsAsync } from '../../store/slices/questionSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { SaveOutlined } from '@ant-design/icons';
 
@@ -12,9 +12,8 @@ const AccountOpeningForm = () => {
   const dispatch = useDispatch();
   const [currentStep, setCurrentStep] = useState(0);
 
-  const { data, loading, error } = useSelector((state) => state.category);
-  const {question} = useSelector((state)=> state.question);
-  
+  const { categorys, loading, error } = useSelector((state) => state.category);
+  const { questions } = useSelector((state) => state.question);
 
   const handleNext = () => {
     setCurrentStep(currentStep + 1);
@@ -28,10 +27,10 @@ const AccountOpeningForm = () => {
   };
 
   useEffect(() => {
-    dispatch(getCategoryData());
-    dispatch(fetchQuestions());
-    console.log(data)
-    console.log(question);
+    dispatch(fetchCategorysAsync());
+    dispatch(fetchQuestionsAsync());
+    console.log(categorys);
+    console.log(questions);
   }, []);
 
   return (
@@ -40,7 +39,7 @@ const AccountOpeningForm = () => {
         <Col span={5}>
           <Steps current={currentStep} direction="vertical" size="small">
             <Step title="Start"></Step>
-            {data.map((category) => (
+            {categorys.map((category) => (
               <Step title={category.categoryName} />
             ))}
           </Steps>
@@ -90,34 +89,31 @@ const AccountOpeningForm = () => {
               required.
             </p>
           )}
-          {data.map(
+          {categorys.map(
             (key, index) =>
               currentStep === index + 1 && (
                 <>
                   <u>
                     <h2>Observation as per manual/circulars/NRB Directives</h2>
                   </u>
-                  {question.map((qdata)=>{
-                    if (qdata.category_name === key.categoryName){
-                       return <>
-                        <Form.Item>
-                    {qdata.question}
-                    <br/>
-                    <Radio.Group>
-                      <Radio value={1}>Not comply</Radio>
-                      <Radio value={2}>Partly Comply</Radio>
-                      <Radio value={3}>Fully comply</Radio>
-                      <Radio value={4}>Don't know</Radio>
-                    </Radio.Group>
-                  </Form.Item>
-        
-                       </> 
-
-
+                  {questions.map((qdata) => {
+                    if (qdata.category_name === key.categoryName) {
+                      return (
+                        <>
+                          <Form.Item>
+                            {qdata.question}
+                            <br />
+                            <Radio.Group>
+                              <Radio value={1}>Not comply</Radio>
+                              <Radio value={2}>Partly Comply</Radio>
+                              <Radio value={3}>Fully comply</Radio>
+                              <Radio value={4}>Don't know</Radio>
+                            </Radio.Group>
+                          </Form.Item>
+                        </>
+                      );
                     }
-
                   })}
-                 
                 </>
               )
           )}
@@ -140,12 +136,12 @@ const AccountOpeningForm = () => {
                 </Button>
               </>
             )}
-            {currentStep < data.length && (
+            {currentStep < categorys.length && (
               <Button type="primary" onClick={handleNext}>
                 Next
               </Button>
             )}
-            {currentStep === data.length && (
+            {currentStep === categorys.length && (
               <Button type="primary" onClick={handleSubmit}>
                 Submit
               </Button>

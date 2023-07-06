@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
-import { Table, Button,Modal } from 'antd';
+import { Table, Button, Modal } from 'antd';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import CreateQuestion from './create';
-import { fetchQuestions } from '../../store/slices/questionSlice';
-
+import { fetchQuestionsAsync } from '../../store/slices/questionSlice';
 
 // const dataSource = [
 //   {
@@ -71,17 +70,14 @@ const handleView = (record) => {
   console.log('View button clicked for record:', record);
 };
 
-
-
 const QuestionIndex = () => {
-    const dispatch = useDispatch()
-    const { question, loading, error } = useSelector((state) => state.question);
-    const [visible, setVisible] = useState(false);
-    const handleAdd = () => {
-        // Handle the action when the Add button is clicked
-        setVisible(true);
-        };
-     
+  const dispatch = useDispatch();
+  const { questions, loading, error } = useSelector((state) => state.question);
+  const [visible, setVisible] = useState(false);
+  const handleAdd = () => {
+    // Handle the action when the Add button is clicked
+    setVisible(true);
+  };
 
   const showModal = () => {
     setVisible(true);
@@ -91,16 +87,19 @@ const QuestionIndex = () => {
     setVisible(false);
   };
 
-  useEffect(()=>{
-    dispatch(fetchQuestions())
-  },[])
+  useEffect(() => {
+    dispatch(fetchQuestionsAsync());
+  }, []);
 
-  const dataSource = question
-
+  const dataSource = questions;
 
   return (
     <div>
-      <Button type="primary" onClick={handleAdd} style={{ marginBottom: '16px' }}>
+      <Button
+        type="primary"
+        onClick={handleAdd}
+        style={{ marginBottom: '16px' }}
+      >
         Add
       </Button>
       <Table dataSource={dataSource} columns={columns} />
