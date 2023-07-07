@@ -11,8 +11,9 @@ const CategoryForm = (props) => {
   const dispatch = useDispatch();
   const onFinish = (values) => {
     // Handle form submission logic here
-
-    dispatch(createCategoryAsync({ categoryName: values.categoryName }));
+    values.status = 'A'
+    values.created_at = new Date()
+    dispatch(createCategoryAsync(values));
     form.resetFields();
     props.visible();
     callNotification('Category Added Successfully', 'success');

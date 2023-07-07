@@ -39,6 +39,7 @@ function SideBard() {
         <Menu.Item key="5"><Link to = {'/indexAudit'}>List Audit</Link></Menu.Item> */}
         <Menu.Item key="7"><Link to = {'/categoryIndex'}>Category</Link></Menu.Item>
         <Menu.Item key="8"><Link to = {'/questionIndex'}>Qutestions</Link></Menu.Item>
+        <Menu.Item key="10"><Link to = {'/previlageIndex'}>Previlage</Link></Menu.Item>
       </SubMenu>
     </Menu>
   );

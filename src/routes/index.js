@@ -9,6 +9,7 @@ import AdminLayout from '../containers/AdminLayout';
 import AccountOpeningForm from '../pages/AuditAssement';
 import CategoryIndex from '../pages/Cateogry';
 import QuestionIndex from '../pages/Question';
+import UserPrivilegesTable from '../pages/Previlage';
 
 function MyRoutes() {
   return (
@@ -23,6 +24,7 @@ function MyRoutes() {
           <Route path="riskassessment" element={<AccountOpeningForm/>}/>
           <Route path="categoryIndex" element={<CategoryIndex/>}/>
           <Route path="questionIndex" element={<QuestionIndex/>}/>
+          <Route path="previlageIndex" element={<UserPrivilegesTable/>} />
         </Route>
       </Routes>
     </BrowserRouter>

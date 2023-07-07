@@ -11,13 +11,14 @@ import { login, logout, FlushUserData,authReducer } from './slices/authSlice';
 import { setUser,userReducer } from "./slices/userSlice";
 import { categoryReducer } from "./slices/categorySlice";
 import { questionReducer } from "./slices/questionSlice";
+import { privilegeReducer} from "./slices/privilegeSlice";
 
 
 const ENCRYPTION_KEY = 'my-secret-key';
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['auth','user','category','question'],
+    whitelist: ['auth','user','category','question','privilege'],
   };
 
 
@@ -26,6 +27,7 @@ const persistConfig = {
     user: userReducer,
     category: categoryReducer,
     question: questionReducer,
+    privilege: privilegeReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
