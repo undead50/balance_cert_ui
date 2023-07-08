@@ -1,48 +1,66 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Modal, Form, Input, DatePicker, Space } from 'antd';
-import { useSelector,useDispatch } from 'react-redux';
-import { fetchPrivilegesAsync } from '../../store/slices/privilegeSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  createPrivilegeAsync,
+  deletePrivilegeAsync,
+  fetchPrivilegesAsync,
+  updatePrivilegeAsync,
+} from '../../store/slices/privilegeSlice';
+import { useNotification } from '../../hooks/index';
 
 const UserPrivilegesTable = () => {
-  const [dataSource, setDataSource] = useState([]);
+  const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedRecord, setSelectedRecord] = useState(null);
+  const [formValues, setFormValues] = useState({});
+  const [editMode, setEditMode] = useState(false);
 
-  const dispatch = useDispatch()  
+  const { callNotification } = useNotification();
 
-  const { privileges, loading, error } = useSelector((state) => state.privilege);
+  const dispatch = useDispatch();
 
-
+  const { privileges, loading, error } = useSelector(
+    (state) => state.privilege
+  );
 
   // Function to handle opening the modal for adding/editing a record
-  const handleModalOpen = (record) => {
-    setSelectedRecord(record);
+  const handleEdit = (record) => {
+    form.setFieldsValue(record);
+    setEditMode(true);
     setIsModalVisible(true);
   };
 
-  // Function to handle saving the record
-  const handleSave = (record) => {
-    // Save the record to the backend or update the existing record in the dataSource
-    setIsModalVisible(false);
-    console.log(record);
+  const handleAdd = () => {
+    setEditMode(false);
+    form.setFieldsValue({});
+    setIsModalVisible(true);
   };
 
   // Function to handle deleting a record
   const handleDelete = (record) => {
-    // Delete the record from the backend or remove it from the dataSource
+    dispatch(deletePrivilegeAsync(record.id));
+    callNotification('Previlage deleted Successfully', 'success');
   };
 
-  useEffect(()=>{
-    dispatch(fetchPrivilegesAsync()
-    )
-    console.log(privileges)
-    setDataSource(privileges)
+  useEffect(() => {
+    dispatch(fetchPrivilegesAsync());
+    console.log(privileges);
+  }, []);
 
-  },[])
+  const dataSource = privileges;
 
-  const onFinish = (values)=>{
-    console.log(values)
-  }
+  const onFinish = (values) => {
+    console.log(values);
+    if (editMode) {
+      dispatch(updatePrivilegeAsync(values));
+      callNotification('Previlage Edited Successfully', 'success');
+    } else {
+      dispatch(createPrivilegeAsync(values));
+      callNotification('Previlage Created Successfully', 'success');
+    }
+    form.resetFields();
+    setIsModalVisible(false);
+  };
 
   const columns = [
     {
@@ -85,7 +103,7 @@ const UserPrivilegesTable = () => {
       key: 'action',
       render: (_, record) => (
         <Space>
-          <Button onClick={() => handleModalOpen(record)}>Update</Button>
+          <Button onClick={() => handleEdit(record)}>Update</Button>
           <Button onClick={() => handleDelete(record)}>Delete</Button>
         </Space>
       ),
@@ -96,7 +114,7 @@ const UserPrivilegesTable = () => {
     <div>
       <Button
         type="primary"
-        onClick={() => handleModalOpen(null)}
+        onClick={() => handleAdd()}
         style={{ marginBottom: '16px' }}
       >
         Add
@@ -105,30 +123,35 @@ const UserPrivilegesTable = () => {
 
       {/* Modal for adding/editing a record */}
       <Modal
-        title={selectedRecord ? 'Edit Record' : 'Add Record'}
-        visible={isModalVisible}
-        onCancel={() => setIsModalVisible(false)}
-        onOk={() => handleSave(selectedRecord)}
+        title={editMode ? 'Edit Record' : 'Add Record'}
+        open={isModalVisible}
+        onCancel={() => {
+          setIsModalVisible(false);
+          form.resetFields();
+        }}
+        footer={null}
       >
-        <Form onFinish={onFinish}>
+        <Form form={form} onFinish={onFinish}>
           {/* Add form fields here based on your column fields */}
+          <Form.Item name="id">
+            <Input type="hidden" />
+          </Form.Item>
           <Form.Item name="MemberName" label="Member Name">
-            <Input/>
-          </Form.Item>
-          <Form.Item label="Domain Username">
             <Input />
           </Form.Item>
-          <Form.Item label="Privilege">
+          <Form.Item name="DomainUsername" label="Domain Username">
             <Input />
           </Form.Item>
-          <Form.Item label="Email">
+          <Form.Item name="Privilege" label="Privilege">
             <Input />
           </Form.Item>
-          <Form.Item label="Created By">
+          <Form.Item name="Email" label="Email">
             <Input />
           </Form.Item>
-          <Form.Item label="Created Date">
-            <DatePicker />
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              {editMode ? 'Update' : 'Add'}
+            </Button>
           </Form.Item>
         </Form>
       </Modal>
