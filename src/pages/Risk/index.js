@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Modal, Form, Input, DatePicker, Space } from 'antd';
+import { Table, Button, Modal, Form, Input, Tag, Space } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   createRiskAsync,
@@ -19,9 +19,7 @@ const RiskTable = () => {
 
   const dispatch = useDispatch();
 
-  const { risks, loading, error } = useSelector(
-    (state) => state.risk
-  );
+  const { risks, loading, error } = useSelector((state) => state.risk);
 
   // Function to handle opening the modal for adding/editing a record
   const handleEdit = (record) => {
@@ -63,88 +61,69 @@ const RiskTable = () => {
   };
 
   const columns = [
+    {
+      title: 'id',
+      dataIndex: 'id',
+      key: 'id',
+    },
 
-      
+    {
+      title: 'created_at',
+      dataIndex: 'created_at',
+      key: 'created_at',
+    },
 
-      {
-        title: 'id',
-        dataIndex: 'id',
-        key: 'id',
+    {
+      title: 'created_by',
+      dataIndex: 'created_by',
+      key: 'created_by',
+    },
+
+    // {
+    //   title: 'updated_at',
+    //   dataIndex: 'updated_at',
+    //   key: 'updated_at',
+    // },
+
+    // {
+    //   title: 'updated_by',
+    //   dataIndex: 'updated_by',
+    //   key: 'updated_by',
+    // },
+
+    // {
+    //   title: 'approved_by',
+    //   dataIndex: 'approved_by',
+    //   key: 'approved_by',
+    // },
+
+    // {
+    //   title: 'approved_at',
+    //   dataIndex: 'approved_at',
+    //   key: 'approved_at',
+    // },
+
+    // {
+    //   title: 'reviewed_by',
+    //   dataIndex: 'reviewed_by',
+    //   key: 'reviewed_by',
+    // },
+
+    // {
+    //   title: 'reviewed_at',
+    //   dataIndex: 'reviewed_at',
+    //   key: 'reviewed_at',
+    // },
+
+    {
+      title: 'status',
+      dataIndex: 'status',
+      key: 'status',
+      render: (status) => {
+        let color = status === 'Active' ? 'green' : 'red';
+        return <Tag color={color}>{status}</Tag>;
       },
-
-      
-
-      {
-        title: 'assessment_data',
-        dataIndex: 'assessment_data',
-        key: 'assessment_data',
-      },
-
-      
-
-      {
-        title: 'created_at',
-        dataIndex: 'created_at',
-        key: 'created_at',
-      },
-
-      
-
-      {
-        title: 'created_by',
-        dataIndex: 'created_by',
-        key: 'created_by',
-      },
-
-      
-
-      {
-        title: 'updated_at',
-        dataIndex: 'updated_at',
-        key: 'updated_at',
-      },
-
-      
-
-      {
-        title: 'updated_by',
-        dataIndex: 'updated_by',
-        key: 'updated_by',
-      },
-
-      
-
-      {
-        title: 'approved_by',
-        dataIndex: 'approved_by',
-        key: 'approved_by',
-      },
-
-      
-
-      {
-        title: 'approved_at',
-        dataIndex: 'approved_at',
-        key: 'approved_at',
-      },
-
-      
-
-      {
-        title: 'reviewed_by',
-        dataIndex: 'reviewed_by',
-        key: 'reviewed_by',
-      },
-
-      
-
-      {
-        title: 'reviewed_at',
-        dataIndex: 'reviewed_at',
-        key: 'reviewed_at',
-      },
-
-      
+    },
 
     {
       title: 'Action',
@@ -181,47 +160,47 @@ const RiskTable = () => {
       >
         <Form form={form} onFinish={onFinish}>
           {/* Add form fields here based on your column fields */}
-          
+
           <Form.Item name="id" label="id">
-            <Input/>
+            <Input />
           </Form.Item>
-          
+
           <Form.Item name="assessment_data" label="assessment_data">
-            <Input/>
+            <Input />
           </Form.Item>
-          
+
           <Form.Item name="created_at" label="created_at">
-            <Input/>
+            <Input />
           </Form.Item>
-          
+
           <Form.Item name="created_by" label="created_by">
-            <Input/>
+            <Input />
           </Form.Item>
-          
+
           <Form.Item name="updated_at" label="updated_at">
-            <Input/>
+            <Input />
           </Form.Item>
-          
+
           <Form.Item name="updated_by" label="updated_by">
-            <Input/>
+            <Input />
           </Form.Item>
-          
+
           <Form.Item name="approved_by" label="approved_by">
-            <Input/>
+            <Input />
           </Form.Item>
-          
+
           <Form.Item name="approved_at" label="approved_at">
-            <Input/>
+            <Input />
           </Form.Item>
-          
+
           <Form.Item name="reviewed_by" label="reviewed_by">
-            <Input/>
+            <Input />
           </Form.Item>
-          
+
           <Form.Item name="reviewed_at" label="reviewed_at">
-            <Input/>
+            <Input />
           </Form.Item>
-          
+
           <Form.Item>
             <Button type="primary" htmlType="submit">
               {editMode ? 'Update' : 'Add'}
