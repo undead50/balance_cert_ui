@@ -5,25 +5,80 @@ import { fetchCategorysAsync } from '../../store/slices/categorySlice';
 import { fetchQuestionsAsync } from '../../store/slices/questionSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { SaveOutlined } from '@ant-design/icons';
+import { createRiskAsync } from '../../store/slices/riskSlice';
 
 const { Step } = Steps;
 
 const AccountOpeningForm = () => {
   const dispatch = useDispatch();
+  const [form] = Form.useForm();
   const [currentStep, setCurrentStep] = useState(0);
+  const [formValues, setFormValues] = useState({});
+  const [saveAsDraft,setsaveAsDraft] = useState(false);
 
   const { categorys, loading, error } = useSelector((state) => state.category);
   const { questions } = useSelector((state) => state.question);
-
+  const [value, setValue] = useState(1);
   const handleNext = () => {
-    setCurrentStep(currentStep + 1);
+    form.validateFields().then((values) => {
+      console.log(values)
+      setFormValues((prevFormValues) => ({
+        ...prevFormValues,
+        ...values,
+      }));
+      setCurrentStep(currentStep + 1);
+      console.log(form.getFieldsValue());
+      console.log(formValues)
+    }).catch((errors) => {
+      // Handle form validation errors
+      console.log('Form validation failed:', errors);
+    });
   };
 
   const handlePrevious = () => {
+
     setCurrentStep(currentStep - 1);
   };
+
+
+  const handleDraft = () => {
+    alert('draft')
+    form.validateFields().then((values) => {
+      console.log(values)
+      setsaveAsDraft(true)
+      setFormValues((prevFormValues) => ({
+        ...prevFormValues,
+        ...values,
+      }));
+      console.log(form.getFieldsValue());
+      console.log(formValues)      
+    }).catch((errors) => {
+      // Handle form validation errors
+      console.log('Form validation failed:', errors);
+    });
+  }
+
+useEffect(()=>{
+  const postData = {
+    assessment_data: formValues
+  }
+  if(saveAsDraft){
+    dispatch(createRiskAsync(postData))
+  }
+  setsaveAsDraft(false)
+  console.log(postData)
+},[formValues,saveAsDraft])  
+
+  
   const handleSubmit = () => {
-    alert('submit');
+    form.validateFields().then((values) => {
+      console.log(values)
+      const finalFormValues = {
+        ...formValues,
+        ...values,
+      };
+      console.log(finalFormValues);
+    });
   };
 
   useEffect(() => {
@@ -33,8 +88,16 @@ const AccountOpeningForm = () => {
     console.log(questions);
   }, []);
 
+  const handleRadioChange = (fieldName,selectedValue) => {
+    console.log('radio checked', selectedValue);
+    form.setFieldsValue({
+      [fieldName]: selectedValue,
+    });
+    // setValue(e.target.value);
+  };
+
   return (
-    <Form>
+    <Form form={form} onFinish={handleSubmit}>
       <Row>
         <Col span={5}>
           <Steps current={currentStep} direction="vertical" size="small">
@@ -100,10 +163,15 @@ const AccountOpeningForm = () => {
                     if (qdata.category_name === key.categoryName) {
                       return (
                         <>
-                          <Form.Item>
+                          <Form.Item name={qdata.ref} label={qdata.ref} rules={[
+                              {
+                                required: true,
+                                message: 'Please select an option',
+                              },
+                            ]}>
                             {qdata.question}
                             <br />
-                            <Radio.Group>
+                            <Radio.Group name={qdata.ref} defaultValue={formValues[qdata.ref]} onChange={(e) => handleRadioChange(qdata.ref, e.target.value)}>
                               <Radio value={1}>Not comply</Radio>
                               <Radio value={2}>Partly Comply</Radio>
                               <Radio value={3}>Fully comply</Radio>
@@ -128,9 +196,7 @@ const AccountOpeningForm = () => {
                 <Button
                   type="primary"
                   icon={<SaveOutlined />}
-                  onClick={() => {
-                    alert('saved as draft');
-                  }}
+                  onClick={handleDraft}
                 >
                   save as Draft
                 </Button>
@@ -142,7 +208,7 @@ const AccountOpeningForm = () => {
               </Button>
             )}
             {currentStep === categorys.length && (
-              <Button type="primary" onClick={handleSubmit}>
+              <Button type="primary" onClick={()=>handleSubmit()} >
                 Submit
               </Button>
             )}

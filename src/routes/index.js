@@ -10,6 +10,7 @@ import AccountOpeningForm from '../pages/AuditAssement';
 import CategoryIndex from '../pages/Cateogry';
 import QuestionIndex from '../pages/Question';
 import UserPrivilegesTable from '../pages/Previlage';
+import RiskTable from '../pages/Risk';
 
 function MyRoutes() {
   return (
@@ -22,6 +23,7 @@ function MyRoutes() {
           <Route path="info" element={<Information />}/>
           <Route path="indexAudit" element={<Index/>}/>
           <Route path="riskassessment" element={<AccountOpeningForm/>}/>
+          <Route path="assessmentindex" element={<RiskTable/>}/>
           <Route path="categoryIndex" element={<CategoryIndex/>}/>
           <Route path="questionIndex" element={<QuestionIndex/>}/>
           <Route path="previlageIndex" element={<UserPrivilegesTable/>} />
