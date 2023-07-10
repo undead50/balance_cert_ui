@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Modal, Form, Input, Tag, Space } from 'antd';
+import { Table, Button, Modal, Form, Input, Tag, Space,Card } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   createRiskAsync,
@@ -8,18 +8,37 @@ import {
   updateRiskAsync,
 } from '../../store/slices/riskSlice';
 import { useNotification } from '../../hooks/index';
+import './index.css'
 
 const RiskTable = () => {
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [formValues, setFormValues] = useState({});
   const [editMode, setEditMode] = useState(false);
+  const [tableData,setTableData] = useState([]);
 
   const { callNotification } = useNotification();
 
   const dispatch = useDispatch();
 
   const { risks, loading, error } = useSelector((state) => state.risk);
+
+  const { questions } = useSelector((state) => state.question);
+
+
+  const data = [
+    { Ref: 1, question: 'Record 1' ,Selected:'4','es':'sfdfewf'},
+    { Ref: 2, question: 'Record 2' ,Selected:'4','es':'sfdfewf'},
+    { Ref: 3, question: 'Record 3' ,Selected:'4','es':'sfdfewf'},
+  ];
+
+  const viewColumns = [
+    { title: 'Ref', dataIndex: 'Ref', key: 'Ref' },
+    { title: 'Category', dataIndex: 'Category', key: 'Ref' },
+    { title: 'Observation as per manual/circulars/NRB Directives', dataIndex: 'question', key: 'question' },
+    { title: 'Selected', dataIndex: 'Selected', key: 'Selected' },
+    { title: 'Explanation of score', dataIndex: 'es', key: 'es' },  
+  ];
 
   // Function to handle opening the modal for adding/editing a record
   const handleEdit = (record) => {
@@ -39,6 +58,33 @@ const RiskTable = () => {
     dispatch(deleteRiskAsync(record.id));
     callNotification('Risk deleted Successfully', 'success');
   };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+    setTableData([])
+  };
+
+
+  const handleView = (record)=>{
+    const risk = risks.filter(risk => risk.id === record.id);
+    const listData = []
+    const explation = []
+
+    setIsModalVisible(true)
+    // console.log(risk[0]['assessment_data'])
+    const selectedRecord = risk[0]['assessment_data']
+    Object.entries(risk[0]['assessment_data']).forEach(([key, value]) => {
+      questions.map((qkey)=>{
+        
+        if(qkey.ref === key){
+          const selectedValue = value == 1 ? 'Not comply':value == 2 ? 'Partly Comply':value == 3?'Fully comply':"Don't know";
+          listData.push({ Ref: qkey.ref,Category:qkey.category_name, question: qkey.question ,Selected:selectedValue,es:selectedRecord[`ES${qkey.ref}`]})
+          // console.log(`${qkey.question}:${value}`)
+        }
+      })
+    });
+    setTableData(listData)
+  }
 
   useEffect(() => {
     dispatch(fetchRisksAsync());
@@ -120,7 +166,7 @@ const RiskTable = () => {
       dataIndex: 'status',
       key: 'status',
       render: (status) => {
-        let color = status === 'Active' ? 'green' : 'red';
+        let color = status === 'CREATED' ? 'green' : 'red';
         return <Tag color={color}>{status}</Tag>;
       },
     },
@@ -130,8 +176,9 @@ const RiskTable = () => {
       key: 'action',
       render: (_, record) => (
         <Space>
-          <Button onClick={() => handleEdit(record)}>Update</Button>
+          {/* <Button onClick={() => handleEdit(record)}>Update</Button> */}
           <Button onClick={() => handleDelete(record)}>Delete</Button>
+          <Button onClick={()=>handleView(record)}>View</Button>
         </Space>
       ),
     },
@@ -139,74 +186,31 @@ const RiskTable = () => {
 
   return (
     <div>
-      <Button
+      {/* <Button
         type="primary"
         onClick={() => handleAdd()}
         style={{ marginBottom: '16px' }}
       >
         Add
-      </Button>
+      </Button> */}
       <Table dataSource={dataSource} columns={columns} />
 
       {/* Modal for adding/editing a record */}
       <Modal
-        title={editMode ? 'Edit Record' : 'Add Record'}
+        title="View Detail"
         open={isModalVisible}
-        onCancel={() => {
-          setIsModalVisible(false);
-          form.resetFields();
-        }}
+        onCancel={closeModal}
         footer={null}
+        width="1000px"
       >
-        <Form form={form} onFinish={onFinish}>
-          {/* Add form fields here based on your column fields */}
-
-          <Form.Item name="id" label="id">
-            <Input />
-          </Form.Item>
-
-          <Form.Item name="assessment_data" label="assessment_data">
-            <Input />
-          </Form.Item>
-
-          <Form.Item name="created_at" label="created_at">
-            <Input />
-          </Form.Item>
-
-          <Form.Item name="created_by" label="created_by">
-            <Input />
-          </Form.Item>
-
-          <Form.Item name="updated_at" label="updated_at">
-            <Input />
-          </Form.Item>
-
-          <Form.Item name="updated_by" label="updated_by">
-            <Input />
-          </Form.Item>
-
-          <Form.Item name="approved_by" label="approved_by">
-            <Input />
-          </Form.Item>
-
-          <Form.Item name="approved_at" label="approved_at">
-            <Input />
-          </Form.Item>
-
-          <Form.Item name="reviewed_by" label="reviewed_by">
-            <Input />
-          </Form.Item>
-
-          <Form.Item name="reviewed_at" label="reviewed_at">
-            <Input />
-          </Form.Item>
-
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              {editMode ? 'Update' : 'Add'}
-            </Button>
-          </Form.Item>
-        </Form>
+        <div
+          bordered={true}
+          style={{ overflow: "auto", height: "70vh", padding: "10px 0 0 0" }}
+        >
+        <Card>  
+        <Table dataSource={tableData} columns={viewColumns} pagination={false} />
+        </Card>
+        </div>
       </Modal>
     </div>
   );

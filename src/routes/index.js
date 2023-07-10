@@ -11,6 +11,7 @@ import CategoryIndex from '../pages/Cateogry';
 import QuestionIndex from '../pages/Question';
 import UserPrivilegesTable from '../pages/Previlage';
 import RiskTable from '../pages/Risk';
+import ProtectedRoute from '../components/ProtectedRoute';
 
 function MyRoutes() {
   return (
@@ -18,11 +19,11 @@ function MyRoutes() {
       <Routes>
         <Route path = "/login" element={<LoginPage/>}></Route>
         <Route  element={<AdminLayout/>}>
-          <Route path="/" element={<Dashboard/>}/>
+          <Route path="/" element={<ProtectedRoute><Dashboard/></ProtectedRoute>}/>
           <Route path="createAudit" element={<Create/>}/>
           <Route path="info" element={<Information />}/>
           <Route path="indexAudit" element={<Index/>}/>
-          <Route path="riskassessment" element={<AccountOpeningForm/>}/>
+          <Route path="riskassessment" element={<ProtectedRoute><AccountOpeningForm/></ProtectedRoute>}/>
           <Route path="assessmentindex" element={<RiskTable/>}/>
           <Route path="categoryIndex" element={<CategoryIndex/>}/>
           <Route path="questionIndex" element={<QuestionIndex/>}/>

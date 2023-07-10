@@ -29,6 +29,9 @@ const AdminLayout = () => {
       token:null
   }))
     dispatch(FlushUserData())
+
+    
+    alert('removed from localstorage')
     navigate('/login')
     
   };

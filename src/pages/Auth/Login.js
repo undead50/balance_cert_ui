@@ -23,7 +23,7 @@ const LoginPage = () => {
       if(data){
         if (data.Code === "0"){
           dispatch(setUser({
-            userName: data.Data.userName,
+            userName: data.Data.domainUserName,
             solId:data.Data.solId,
             email:data.Data.email,
             departmentName:data.Data.departmentName,

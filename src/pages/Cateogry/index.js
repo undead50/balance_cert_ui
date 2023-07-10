@@ -1,4 +1,4 @@
-import { Table, Button, Space, Modal } from 'antd';
+import { Table, Button, Space, Modal,Tag } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
@@ -40,6 +40,10 @@ const CategoryIndex = () => {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
+      render: (status) => {
+        let color = status === 'A' ? 'green' : 'red';
+        return <Tag color={color}>{status}</Tag>;
+      },
     },
     {
       title: 'Action',
