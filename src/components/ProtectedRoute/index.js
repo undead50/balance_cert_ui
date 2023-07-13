@@ -12,7 +12,7 @@ export default function ProtectedRoute({ children }) {
 
   console.log(userInfo)
    
-  if(userInfo.userName === null){
+  if(userInfo.userName === null || userInfo.userName == ""){
     return  <Navigate to={'/login'} replace />
   }
   return <>{children}</>;

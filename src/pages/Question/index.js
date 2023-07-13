@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Table, Button, Modal } from 'antd';
+import { Table, Button, Modal,Tag } from 'antd';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import CreateQuestion from './create';
@@ -33,6 +33,10 @@ const columns = [
     title: 'Status',
     dataIndex: 'status',
     key: 'status',
+    render: (status) => {
+      let color = status === 'A' ? 'green' : 'red';
+      return <Tag color={color}>{status}</Tag>;
+    },
   },
   {
     title: 'Category Name',

@@ -5,21 +5,38 @@ import { fetchCategorysAsync } from '../../store/slices/categorySlice';
 import { fetchQuestionsAsync } from '../../store/slices/questionSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { SaveOutlined } from '@ant-design/icons';
-import { createRiskAsync } from '../../store/slices/riskSlice';
+import { createRiskAsync, updateRiskAsync } from '../../store/slices/riskSlice';
 import { useNotification } from '../../hooks/index'
+import { useParams } from 'react-router-dom';
 
 const { Step } = Steps;
 
 const AccountOpeningForm = () => {
 
+  const { riskassessmentID } = useParams();
+  
+  useEffect(() => {
+    if (riskassessmentID) {
+      
+      const editRisk = risks.filter((risk)=>risk.id == riskassessmentID)
+      console.log('editRisk')
+      console.log(editRisk[0]['assessment_data'])
+      setFormValues(editRisk[0]['assessment_data'])
+      form.setFieldsValue(editRisk[0]['assessment_data']);
+      setIsDraft(true)
+    }
+  }, [riskassessmentID])
+
   const { callNotification } = useNotification();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [currentStep, setCurrentStep] = useState(0);
+  const [isDraft,setIsDraft] = useState(false);
   const [formValues, setFormValues] = useState({});
   const [saveAsDraft, setsaveAsDraft] = useState(false);
   const { TextArea } = Input;
   const { categorys, loading, error } = useSelector((state) => state.category);
+  const {risks} = useSelector((state)=> state.risk)
   const { questions } = useSelector((state) => state.question);
   const [value, setValue] = useState(1);
 
@@ -75,13 +92,26 @@ const AccountOpeningForm = () => {
       created_by: userInfo.userName,
     };
     if (saveAsDraft) {
+      if(isDraft){
+        try {
+          dispatch(updateRiskAsync(postData,riskassessmentID));
+          callNotification('Saved as Draft', 'success')
+        } catch (error) {
+          callNotification(`${error}`, 'error')
+        }
 
-      try {
-        dispatch(createRiskAsync(postData));
-        callNotification('Saved as Draft', 'success')
-      } catch (error) {
-        callNotification(`${error}`, 'error')
       }
+      else {
+
+        try {
+          dispatch(createRiskAsync(postData));
+          callNotification('Saved as Draft', 'success')
+        } catch (error) {
+          callNotification(`${error}`, 'error')
+        }
+      }
+
+      
 
     }
     setsaveAsDraft(false);
@@ -110,6 +140,9 @@ const AccountOpeningForm = () => {
         callNotification(`${error}`, 'error')
       }
 
+    }).catch((errors) => {
+      // Handle form validation errors
+      console.log('Form validation failed:', errors);
     });
   };
 
@@ -213,7 +246,7 @@ const AccountOpeningForm = () => {
                       if (qdata.category_name === key.categoryName) {
                         return (
                           <>
-                            <Card style={{ marginTop: '6px' }}>
+                            <Card style={{ marginTop: '6px' }} key={qdata.id}>
                               <Form.Item
                                 name={qdata.ref}
                                 label={qdata.ref}
@@ -241,6 +274,7 @@ const AccountOpeningForm = () => {
                               </Form.Item>
                               <Form.Item
                                 name={'ES' + qdata.ref}
+                                defaultValue={formValues[`ES${qdata.ref}`]}
                                 label="Explanation of score"
                                 rules={[
                                   {
@@ -249,7 +283,7 @@ const AccountOpeningForm = () => {
                                   },
                                 ]}
                               >
-                                <TextArea rows={4} />
+                                <TextArea rows={4}  defaultValue={formValues[`ES${qdata.ref}`]} />
                               </Form.Item>
                             </Card>
                           </>

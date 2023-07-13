@@ -8,15 +8,22 @@ import {
   updateRiskAsync,
 } from '../../store/slices/riskSlice';
 import { useNotification } from '../../hooks/index';
+import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import './index.css'
 
 const RiskTable = () => {
+
+  
+
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [formValues, setFormValues] = useState({});
   const [editMode, setEditMode] = useState(false);
   const [tableData,setTableData] = useState([]);
+  const [assesmentStatus,setAssessmentStatus] = useState({});
 
+  const navigate = useNavigate();
   const { callNotification } = useNotification();
 
   const dispatch = useDispatch();
@@ -25,12 +32,6 @@ const RiskTable = () => {
 
   const { questions } = useSelector((state) => state.question);
 
-
-  const data = [
-    { Ref: 1, question: 'Record 1' ,Selected:'4','es':'sfdfewf'},
-    { Ref: 2, question: 'Record 2' ,Selected:'4','es':'sfdfewf'},
-    { Ref: 3, question: 'Record 3' ,Selected:'4','es':'sfdfewf'},
-  ];
 
   const viewColumns = [
     { title: 'Ref', dataIndex: 'Ref', key: 'Ref' },
@@ -53,6 +54,11 @@ const RiskTable = () => {
     setIsModalVisible(true);
   };
 
+  const handleCompleteDraft = ()=>{
+    alert(assesmentStatus.id)
+    navigate(`/riskassessment/${assesmentStatus.id}`)
+  }
+
   // Function to handle deleting a record
   const handleDelete = (record) => {
     dispatch(deleteRiskAsync(record.id));
@@ -62,13 +68,19 @@ const RiskTable = () => {
   const closeModal = () => {
     setIsModalVisible(false);
     setTableData([])
+    setAssessmentStatus({})
+    console.log(assesmentStatus)
   };
+
+  // useEffect(()=>{
+  //   alert(assesmentStatus)
+  // },[assesmentStatus])
 
 
   const handleView = (record)=>{
+    setAssessmentStatus({record: record.status,id :record.id})
     const risk = risks.filter(risk => risk.id === record.id);
     const listData = []
-    const explation = []
 
     setIsModalVisible(true)
     // console.log(risk[0]['assessment_data'])
@@ -207,9 +219,11 @@ const RiskTable = () => {
           bordered={true}
           style={{ overflow: "auto", height: "70vh", padding: "10px 0 0 0" }}
         >
+        { assesmentStatus.record == 'DRAFT' ? <Button onClick={()=>handleCompleteDraft()}>Compete Draft</Button>:''}  
         <Card>  
         <Table dataSource={tableData} columns={viewColumns} pagination={false} />
         </Card>
+       
         </div>
       </Modal>
     </div>

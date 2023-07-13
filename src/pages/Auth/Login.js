@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Form, Input, Button  } from 'antd';
+import { Form, Input, Button ,Card } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import {  useNavigate } from 'react-router-dom';
 import './index.css';
@@ -45,23 +45,25 @@ const LoginPage = () => {
       password:values.password
     }
     dispatch(postLoginData(reqData))
-    alert(data)
+    // alert(data)
     console.log(data)
     
 
   };
 
   return (
-    <div style={{ maxWidth: 300, margin: '0 auto', marginTop: 200 }}>
-      <div style={{ textAlign: 'center', marginBottom: 24 }}>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(to right, #468CC1, #3EAB94)', display: 'flex',  alignItems:'center', justifyContent:'center' }}>
+    <Card style={{ maxWidth: '25%', margin: '0 auto'}}>
+
+      <div style={{ textAlign: 'center', marginBottom: 24 }}> 
         <img
           src= {process.env.PUBLIC_URL + '/images/citizens-logo.png'}
           alt="Logo"
-          style={{ height: 80 }}
+          style={{ height: 80, width: '90%',marginLeft:'20px',maxHeight:'10vh' }}
         />
       </div>
       <u>
-        <h3>Risk Assessment tool </h3>
+        <h3 style={{fontFamily:'cursive'}}>Risk Assessment tool </h3>
       </u>
 
       <Form name="login-form" onFinish={onFinish}>
@@ -95,6 +97,7 @@ const LoginPage = () => {
         {loading && <Spinner />}
         {/* <Outlet/> */}
       </Form>
+    </Card>
     </div>
   );
 };
