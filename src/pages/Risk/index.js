@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Modal, Form, Input, Tag, Space,Card } from 'antd';
+import { Table, Button, Modal, Form, Input, Tag, Space, Card } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   createRiskAsync,
@@ -10,18 +10,15 @@ import {
 import { useNotification } from '../../hooks/index';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import './index.css'
+import './index.css';
 
 const RiskTable = () => {
-
-  
-
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [formValues, setFormValues] = useState({});
   const [editMode, setEditMode] = useState(false);
-  const [tableData,setTableData] = useState([]);
-  const [assesmentStatus,setAssessmentStatus] = useState({});
+  const [tableData, setTableData] = useState([]);
+  const [assesmentStatus, setAssessmentStatus] = useState({});
 
   const navigate = useNavigate();
   const { callNotification } = useNotification();
@@ -32,13 +29,16 @@ const RiskTable = () => {
 
   const { questions } = useSelector((state) => state.question);
 
-
   const viewColumns = [
     { title: 'Ref', dataIndex: 'Ref', key: 'Ref' },
     { title: 'Category', dataIndex: 'Category', key: 'Ref' },
-    { title: 'Observation as per manual/circulars/NRB Directives', dataIndex: 'question', key: 'question' },
+    {
+      title: 'Observation as per manual/circulars/NRB Directives',
+      dataIndex: 'question',
+      key: 'question',
+    },
     { title: 'Selected', dataIndex: 'Selected', key: 'Selected' },
-    { title: 'Explanation of score', dataIndex: 'es', key: 'es' },  
+    { title: 'Explanation of score', dataIndex: 'es', key: 'es' },
   ];
 
   // Function to handle opening the modal for adding/editing a record
@@ -54,10 +54,10 @@ const RiskTable = () => {
     setIsModalVisible(true);
   };
 
-  const handleCompleteDraft = ()=>{
-    alert(assesmentStatus.id)
-    navigate(`/riskassessment/${assesmentStatus.id}`)
-  }
+  const handleCompleteDraft = () => {
+    alert(assesmentStatus.id);
+    navigate(`/riskassessment/${assesmentStatus.id}`);
+  };
 
   // Function to handle deleting a record
   const handleDelete = (record) => {
@@ -67,36 +67,47 @@ const RiskTable = () => {
 
   const closeModal = () => {
     setIsModalVisible(false);
-    setTableData([])
-    setAssessmentStatus({})
-    console.log(assesmentStatus)
+    setTableData([]);
+    setAssessmentStatus({});
+    console.log(assesmentStatus);
   };
 
   // useEffect(()=>{
   //   alert(assesmentStatus)
   // },[assesmentStatus])
 
+  const handleView = (record) => {
+    setAssessmentStatus({ record: record.status, id: record.id });
+    const risk = risks.filter((risk) => risk.id === record.id);
+    const listData = [];
 
-  const handleView = (record)=>{
-    setAssessmentStatus({record: record.status,id :record.id})
-    const risk = risks.filter(risk => risk.id === record.id);
-    const listData = []
-
-    setIsModalVisible(true)
+    setIsModalVisible(true);
     // console.log(risk[0]['assessment_data'])
-    const selectedRecord = risk[0]['assessment_data']
+    const selectedRecord = risk[0]['assessment_data'];
     Object.entries(risk[0]['assessment_data']).forEach(([key, value]) => {
-      questions.map((qkey)=>{
-        
-        if(qkey.ref === key){
-          const selectedValue = value == 1 ? 'Not comply':value == 2 ? 'Partly Comply':value == 3?'Fully comply':"Don't know";
-          listData.push({ Ref: qkey.ref,Category:qkey.category_name, question: qkey.question ,Selected:selectedValue,es:selectedRecord[`ES${qkey.ref}`]})
+      questions.map((qkey) => {
+        if (qkey.ref === key) {
+          const selectedValue =
+            value == 1
+              ? 'Not comply'
+              : value == 2
+              ? 'Partly Comply'
+              : value == 3
+              ? 'Fully comply'
+              : "Don't know";
+          listData.push({
+            Ref: qkey.ref,
+            Category: qkey.category_name,
+            question: qkey.question,
+            Selected: selectedValue,
+            es: selectedRecord[`ES${qkey.ref}`],
+          });
           // console.log(`${qkey.question}:${value}`)
         }
-      })
+      });
     });
-    setTableData(listData)
-  }
+    setTableData(listData);
+  };
 
   useEffect(() => {
     dispatch(fetchRisksAsync());
@@ -190,7 +201,7 @@ const RiskTable = () => {
         <Space>
           {/* <Button onClick={() => handleEdit(record)}>Update</Button> */}
           <Button onClick={() => handleDelete(record)}>Delete</Button>
-          <Button onClick={()=>handleView(record)}>View</Button>
+          <Button onClick={() => handleView(record)}>View</Button>
         </Space>
       ),
     },
@@ -215,15 +226,29 @@ const RiskTable = () => {
         footer={null}
         width="1000px"
       >
+        {assesmentStatus.record == 'DRAFT' ? (
+          <Button
+            type="primary"
+            size="small"
+            style={{ marginBottom: '3' }}
+            onClick={() => handleCompleteDraft()}
+          >
+            Complete Draft
+          </Button>
+        ) : (
+          ''
+        )}
         <div
           bordered={true}
-          style={{ overflow: "auto", height: "70vh", padding: "10px 0 0 0" }}
+          style={{ overflow: 'auto', height: '70vh', padding: '10px 0 0 0' }}
         >
-        { assesmentStatus.record == 'DRAFT' ? <Button onClick={()=>handleCompleteDraft()}>Compete Draft</Button>:''}  
-        <Card>  
-        <Table dataSource={tableData} columns={viewColumns} pagination={false} />
-        </Card>
-       
+          <Card>
+            <Table
+              dataSource={tableData}
+              columns={viewColumns}
+              pagination={false}
+            />
+          </Card>
         </div>
       </Modal>
     </div>
