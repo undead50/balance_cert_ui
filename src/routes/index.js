@@ -18,7 +18,7 @@ function MyRoutes() {
     <BrowserRouter>
       <Routes>
         <Route path = "/login" element={<LoginPage/>}></Route>
-        <Route  element={<AdminLayout/>}>
+        <Route  element={<ProtectedRoute><AdminLayout/></ProtectedRoute>}>
           <Route path="/" element={<Dashboard/>}/>
           <Route path="createAudit" element={<Create/>}/>
           <Route path="info" element={<Information />}/>

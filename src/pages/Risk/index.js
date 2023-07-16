@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Modal, Form, Input, Tag, Space, Card } from 'antd';
+import { Table, Button, Modal, Form, Tag, Space, Card } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   createRiskAsync,
@@ -55,7 +55,7 @@ const RiskTable = () => {
   };
 
   const handleCompleteDraft = () => {
-    alert(assesmentStatus.id);
+    // alert(assesmentStatus.id);
     navigate(`/riskassessment/${assesmentStatus.id}`);
   };
 
@@ -230,7 +230,7 @@ const RiskTable = () => {
           <Button
             type="primary"
             size="small"
-            style={{ marginBottom: '3' }}
+            style={{ marginBottom: '10px' }}
             onClick={() => handleCompleteDraft()}
           >
             Complete Draft
@@ -238,10 +238,7 @@ const RiskTable = () => {
         ) : (
           ''
         )}
-        <div
-          bordered={true}
-          style={{ overflow: 'auto', height: '70vh', padding: '10px 0 0 0' }}
-        >
+        <div className="custom-scrollbar">
           <Card>
             <Table
               dataSource={tableData}

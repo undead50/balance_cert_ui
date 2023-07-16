@@ -9,6 +9,7 @@ import { createRiskAsync, updateRiskAsync } from '../../store/slices/riskSlice';
 import { useNotification } from '../../hooks/index';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import './index.css';
 
 const { Step } = Steps;
 
@@ -40,6 +41,7 @@ const AccountOpeningForm = () => {
   const { risks } = useSelector((state) => state.risk);
   const { questions } = useSelector((state) => state.question);
   const [value, setValue] = useState(1);
+  const [requiredExplation,setRequiredExplation] = useState({})
 
   const { userInfo } = useSelector((state) => state.user);
 
@@ -112,7 +114,7 @@ const AccountOpeningForm = () => {
         }
       } else {
         try {
-          alert('postData');
+          // alert('postData');
           dispatch(createRiskAsync(postData));
           callNotification('Saved as Draft', 'success');
         } catch (error) {
@@ -171,11 +173,35 @@ const AccountOpeningForm = () => {
     console.log(questions);
   }, []);
 
+  useEffect(()=>{
+    console.log(requiredExplation)
+  },[requiredExplation])
+
   const handleRadioChange = (fieldName, selectedValue) => {
     console.log('radio checked', selectedValue);
+    let value = selectedValue === 3 ? false: true
     form.setFieldsValue({
       [fieldName]: selectedValue,
     });
+    // form.setFieldsValue({ input: value === 3 ? false : true });
+    console.log('formvalues')
+    
+    // console.log(form.getFieldsValue()[fieldName])
+    // alert(value)
+
+    setRequiredExplation(prevData => ({
+      ...prevData,
+      [fieldName]: selectedValue === 3 ? false: true
+    }));
+
+    // alert(form.getFieldValue(`requireExplanation_${fieldName}`))
+    // console.log(form.getFieldValue())
+    // if(selectedValue === 3){
+    //   setRequiredExplation(false)
+    // }
+    // else {
+    //   setRequiredExplation(true)
+    // }
     // setValue(e.target.value);
   };
 
@@ -193,7 +219,7 @@ const AccountOpeningForm = () => {
         <Col span={1}></Col>
         <Col span={12}>
           {currentStep === 0 && (
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            
               <Card style={{ width: '140%' }}>
                 <>
                   <p style={{ marginTop: '0px', marginBottom: '10px' }}>
@@ -301,7 +327,6 @@ const AccountOpeningForm = () => {
                   </p>
                 </>
               </Card>
-            </div>
           )}
           {currentStep == 0 && (
             <div style={{ marginTop: '8px' }}>
@@ -313,14 +338,7 @@ const AccountOpeningForm = () => {
 
           {currentStep != 0 && (
             <Card style={{ width: '140%', marginTop: '9px' }}>
-              <div
-                bordered={true}
-                style={{
-                  overflow: 'auto',
-                  height: '70vh',
-                  padding: '10px 0 0 0',
-                }}
-              >
+              <div className="custom-scrollbar">
                 {categorys.map(
                   (key, index) =>
                     currentStep === index + 1 && (
@@ -369,11 +387,11 @@ const AccountOpeningForm = () => {
                                   <Form.Item
                                     name={'ES' + qdata.ref}
                                     defaultValue={formValues[`ES${qdata.ref}`]}
-                                    label="Explanation of score"
+                                    label="Explanation of Score"
                                     rules={[
                                       {
-                                        required: true,
-                                        message: 'Please enter a Explanation',
+                                        required: requiredExplation[qdata.ref],
+                                        message: 'Please provide an Explanation',
                                       },
                                     ]}
                                   >
@@ -395,7 +413,7 @@ const AccountOpeningForm = () => {
 
                 <br />
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex',marginTop:'50px', justifyContent: 'space-between' }}>
                 {currentStep > 0 && (
                   <>
                     <Button type="primary" onClick={handlePrevious}>
@@ -426,7 +444,7 @@ const AccountOpeningForm = () => {
                     okText="Yes"
                     cancelText="No"
                   >
-                    <Button style={{ backgroundColor: '#40A3A1' }}>
+                    <Button style={{ backgroundColor: '#40A3A1',color:'white' }}>
                       Submit
                     </Button>
                   </Popconfirm>
