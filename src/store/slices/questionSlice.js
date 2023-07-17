@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axiosInstance from '../../hooks/axiosInstance';
+// import axiosInstance from 'axiosInstance';
+
 
 const initialState = {
   questions: [],
@@ -13,7 +15,7 @@ export const fetchQuestionsAsync = createAsyncThunk(
   async () => {
     try {
       const url = BACKEND_URL + '/question/fetchQuestions';
-      const response = await axios.get(url);
+      const response = await axiosInstance.get(url);
       return response.data;
     } catch (error) {
       throw new Error(error.response.data.error);
@@ -26,7 +28,7 @@ export const createQuestionAsync = createAsyncThunk(
   async (questionData) => {
     try {
       const url = BACKEND_URL + '/question/createQuestion';
-      const response = await axios.post(url, questionData);
+      const response = await axiosInstance.post(url, questionData);
       return response.data;
     } catch (error) {
       throw new Error(error.response.data.error);
@@ -39,7 +41,7 @@ export const updateQuestionAsync = createAsyncThunk(
   async (questionData) => {
     try {
       const url = BACKEND_URL + `/question/updateQuestion/${questionData.id}`;
-      const response = await axios.put(url, questionData);
+      const response = await axiosInstance.put(url, questionData);
       return response.data;
     } catch (error) {
       throw new Error(error.response.data.error);
@@ -52,7 +54,7 @@ export const deleteQuestionAsync = createAsyncThunk(
   async (questionId) => {
     try {
       const url = BACKEND_URL + `/question/deleteQuestion/${questionId}`;
-      await axios.delete(url);
+      await axiosInstance.delete(url);
       return questionId;
     } catch (error) {
       throw new Error(error.response.data.error);

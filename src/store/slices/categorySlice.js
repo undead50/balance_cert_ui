@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axiosInstance from '../../hooks/axiosInstance';
+import { useSelector } from 'react-redux';
 
 const initialState = {
   categorys: [],
@@ -8,12 +9,14 @@ const initialState = {
 };
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
+
+
 export const fetchCategorysAsync = createAsyncThunk(
   'category/fetchCategorys',
   async () => {
     try {
       const url = BACKEND_URL + '/category/fetchCategorys';
-      const response = await axios.get(url);
+      const response = await axiosInstance.get(url);
       return response.data;
     } catch (error) {
       throw new Error(error.response.data.error);
@@ -26,7 +29,7 @@ export const createCategoryAsync = createAsyncThunk(
   async (categoryData) => {
     try {
       const url = BACKEND_URL + '/category/createCategory';
-      const response = await axios.post(url, categoryData);
+      const response = await axiosInstance.post(url, categoryData);
       return response.data;
     } catch (error) {
       throw new Error(error.response.data.error);
@@ -39,7 +42,7 @@ export const updateCategoryAsync = createAsyncThunk(
   async (categoryData) => {
     try {
       const url = BACKEND_URL + `/category/updateCategory/${categoryData.id}`;
-      const response = await axios.put(url, categoryData);
+      const response = await axiosInstance.put(url, categoryData);
       return response.data;
     } catch (error) {
       throw new Error(error.response.data.error);
@@ -52,7 +55,7 @@ export const deleteCategoryAsync = createAsyncThunk(
   async (categoryId) => {
     try {
       const url = BACKEND_URL + `/category/deleteCategory/${categoryId}`;
-      await axios.delete(url);
+      await axiosInstance.delete(url);
       return categoryId;
     } catch (error) {
       throw new Error(error.response.data.error);

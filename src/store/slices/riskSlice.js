@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axiosInstance from '../../hooks/axiosInstance';
 
 const initialState = {
   risks: [],
@@ -11,7 +11,7 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const fetchRisksAsync = createAsyncThunk('risk/fetchRisks', async () => {
   try {
     const url = BACKEND_URL + '/risk/fetchRisks';
-    const response = await axios.get(url);
+    const response = await axiosInstance.get(url);
     return response.data;
   } catch (error) {
     throw new Error(error.response.data.error);
@@ -23,7 +23,7 @@ export const createRiskAsync = createAsyncThunk(
   async (riskData) => {
     try {
       const url = BACKEND_URL + '/risk/createRisk';
-      const response = await axios.post(url, riskData);
+      const response = await axiosInstance.post(url, riskData);
       return response.data;
     } catch (error) {
       throw new Error(error.response.data.error);
@@ -36,7 +36,7 @@ export const updateRiskAsync = createAsyncThunk(
   async (riskData) => {
     try {
       const url = BACKEND_URL + `/risk/updateRisk/${riskData.id}`;
-      const response = await axios.put(url, riskData);
+      const response = await axiosInstance.put(url, riskData);
       return response.data;
     } catch (error) {
       throw new Error(error.response.data.error);
@@ -49,7 +49,7 @@ export const deleteRiskAsync = createAsyncThunk(
   async (riskId) => {
     try {
       const url = BACKEND_URL + `/risk/deleteRisk/${riskId}`;
-      await axios.delete(url);
+      await axiosInstance.delete(url);
       return riskId;
     } catch (error) {
       throw new Error(error.response.data.error);

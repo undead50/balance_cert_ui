@@ -28,6 +28,13 @@ const CategoryForm = (props) => {
       >
         <Input placeholder="Enter category name" />
       </Form.Item>
+      <Form.Item
+        name="weightOfelement"
+        label="weightOfelement"
+        rules={[{ required: true, message: 'Please enter the Weight of Category' }]}
+      >
+        <Input placeholder="Enter weightOfelement" />
+      </Form.Item>
 
       <Form.Item>
         <Button type="primary" htmlType="submit">

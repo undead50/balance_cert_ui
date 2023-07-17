@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+// import axiosInstance from 'axiosInstance';
+import axiosInstance from '../../hooks/axiosInstance';
 
 const initialState = {
   privileges: [],
@@ -11,7 +12,7 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const fetchPrivilegesAsync = createAsyncThunk('privilege/fetchPrivileges', async () => {
   try {
     const url = BACKEND_URL + '/privilege/fetchPrivileges';
-    const response = await axios.get(url);
+    const response = await axiosInstance.get(url);
     return response.data;
   } catch (error) {
     throw new Error(error.response.data.error);
@@ -23,7 +24,7 @@ export const createPrivilegeAsync = createAsyncThunk(
   async (privilegeData) => {
     try {
       const url = BACKEND_URL + '/privilege/createPrivilege';
-      const response = await axios.post(url, privilegeData);
+      const response = await axiosInstance.post(url, privilegeData);
       return response.data;
     } catch (error) {
       throw new Error(error.response.data.error);
@@ -36,7 +37,7 @@ export const updatePrivilegeAsync = createAsyncThunk(
   async (privilegeData) => {
     try {
       const url = BACKEND_URL + `/privilege/updatePrivilege/${privilegeData.id}`;
-      const response = await axios.put(url, privilegeData);
+      const response = await axiosInstance.put(url, privilegeData);
       return response.data;
     } catch (error) {
       throw new Error(error.response.data.error);
@@ -49,7 +50,7 @@ export const deletePrivilegeAsync = createAsyncThunk(
   async (privilegeId) => {
     try {
       const url = BACKEND_URL + `/privilege/deletePrivilege/${privilegeId}`;
-      await axios.delete(url);
+      await axiosInstance.delete(url);
       return privilegeId;
     } catch (error) {
       throw new Error(error.response.data.error);

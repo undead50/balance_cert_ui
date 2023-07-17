@@ -5,8 +5,10 @@ import App from './App';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import {store,persistor} from './store/index'
+import { injectStore } from './hooks/axiosInstance';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+injectStore(store)
 root.render(
     <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
