@@ -2,6 +2,9 @@
 
 import axios from 'axios';
 import { NavLink, Navigate } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+
+const history = createBrowserHistory();
 
 
 let store
@@ -42,13 +45,22 @@ axiosInstance.interceptors.response.use(
     if (response && response.status === 200) {
       // Handle the 404 error by redirecting to the specified URL
       // window.history.pushState(null, null,'/login')
-      alert('h')
-      return (<><Navigate to="/dashboard" replace={true} /></>)
-    } else{
+
+      // userInfo.userName === null
+      // alert(store.getState().user.userInfo.token)
+      const action = { type: 'user/setUser', payload: { 
+        userName: null,
+        solId:null,
+        email:null,
+        departmentName:null,
+        token:null
+        } };
+      store.dispatch(action);      
+    } 
 
       
       return response;
-    }
+    
   },
   error => {
     // Handle response error
