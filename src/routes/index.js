@@ -12,6 +12,7 @@ import QuestionIndex from '../pages/Question';
 import UserPrivilegesTable from '../pages/Previlage';
 import RiskTable from '../pages/Risk';
 import ProtectedRoute from '../components/ProtectedRoute';
+import MarkTable from '../pages/Mark';
 
 function MyRoutes() {
   return (
@@ -29,6 +30,7 @@ function MyRoutes() {
           <Route path="categoryIndex" element={<CategoryIndex/>}/>
           <Route path="questionIndex" element={<QuestionIndex/>}/>
           <Route path="previlageIndex" element={<UserPrivilegesTable/>} />
+          <Route path="markingIndex" element={<MarkTable/>}/>
         </Route>
       </Routes>
     </BrowserRouter>

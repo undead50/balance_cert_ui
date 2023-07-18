@@ -13,13 +13,14 @@ import { categoryReducer } from "./slices/categorySlice";
 import { questionReducer } from "./slices/questionSlice";
 import { privilegeReducer} from "./slices/privilegeSlice";
 import { riskReducer } from "./slices/riskSlice";
+import { markReducer } from "./slices/markSlice";
 
 
 const ENCRYPTION_KEY = 'my-secret-key';
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['auth','user','category','question','privilege','risk'],
+    whitelist: ['auth','user','category','question','privilege','risk','mark'],
   };
 
 
@@ -30,6 +31,7 @@ const persistConfig = {
     question: questionReducer,
     privilege: privilegeReducer,
     risk:riskReducer,
+    mark:markReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

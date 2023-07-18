@@ -5,6 +5,7 @@ const initialState = {
   risks: [],
   loading: false,
   error: null,
+  assSummary:[]
 };
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -36,6 +37,19 @@ export const updateRiskAsync = createAsyncThunk(
   async (riskData) => {
     try {
       const url = BACKEND_URL + `/risk/updateRisk/${riskData.id}`;
+      const response = await axiosInstance.put(url, riskData);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.error);
+    }
+  }
+);
+
+export const calculateRiskAsync = createAsyncThunk(
+  'risk/calculateRisk',
+  async (riskData) => {
+    try {
+      const url = BACKEND_URL + `/risk/calculateScore/${riskData.id}`;
       const response = await axiosInstance.put(url, riskData);
       return response.data;
     } catch (error) {
@@ -117,7 +131,19 @@ const riskSlice = createSlice({
       .addCase(deleteRiskAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
-      });
+      })
+      .addCase(calculateRiskAsync.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(calculateRiskAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        state.assSummary = action.payload;
+      })
+      .addCase(calculateRiskAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
   },
 });
 

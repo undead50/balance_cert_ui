@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Modal, Form, Tag, Space, Card } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
+
 import {
+  calculateRiskAsync,
   createRiskAsync,
   deleteRiskAsync,
   fetchRisksAsync,
@@ -9,8 +11,8 @@ import {
 } from '../../store/slices/riskSlice';
 import { useNotification } from '../../hooks/index';
 import { useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
 import './index.css';
+import AssessmentSummary from './AssessmentSummary';
 
 const RiskTable = () => {
   const [form] = Form.useForm();
@@ -19,6 +21,7 @@ const RiskTable = () => {
   const [editMode, setEditMode] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [assesmentStatus, setAssessmentStatus] = useState({});
+  const [visible, setVisible] = useState(false);
 
   const navigate = useNavigate();
   const { callNotification } = useNotification();
@@ -41,6 +44,7 @@ const RiskTable = () => {
     { title: 'Explanation of score', dataIndex: 'es', key: 'es' },
   ];
 
+
   // Function to handle opening the modal for adding/editing a record
   const handleEdit = (record) => {
     form.setFieldsValue(record);
@@ -53,6 +57,11 @@ const RiskTable = () => {
     form.setFieldsValue({});
     setIsModalVisible(true);
   };
+
+  const handleViewAssessment = (record) =>{
+    dispatch(calculateRiskAsync(record))
+    setVisible(true)
+  }
 
   const handleCompleteDraft = () => {
     // alert(assesmentStatus.id);
@@ -71,6 +80,10 @@ const RiskTable = () => {
     setAssessmentStatus({});
     console.log(assesmentStatus);
   };
+
+  const onCancel = ()=>{
+    setVisible(false)
+  }
 
   // useEffect(()=>{
   //   alert(assesmentStatus)
@@ -202,6 +215,7 @@ const RiskTable = () => {
           {/* <Button onClick={() => handleEdit(record)}>Update</Button> */}
           <Button onClick={() => handleDelete(record)}>Delete</Button>
           <Button onClick={() => handleView(record)}>View</Button>
+          {record.status === 'CREATED' ? <Button onClick={() => handleViewAssessment(record)}>View Summary</Button>:''}
         </Space>
       ),
     },
@@ -248,6 +262,7 @@ const RiskTable = () => {
           </Card>
         </div>
       </Modal>
+      <AssessmentSummary visible={visible} onCancel={onCancel}/>
     </div>
   );
 };
