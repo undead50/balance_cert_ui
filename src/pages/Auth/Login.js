@@ -29,6 +29,7 @@ const LoginPage = () => {
             email: data.Data.email,
             departmentName: data.Data.departmentName,
             token: data.Data.token,
+            isBranchManager: data.Data.isBranchManager
           })
         );
         navigate('/');

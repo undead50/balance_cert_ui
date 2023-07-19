@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Modal, Form, Tag, Space, Card } from 'antd';
+import { Table, Button, Modal, Form, Tag, Space, Card, List } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
+import { DeleteOutlined, EyeOutlined } from '@ant-design/icons'
 
 import {
   calculateRiskAsync,
@@ -13,6 +14,7 @@ import { useNotification } from '../../hooks/index';
 import { useNavigate } from 'react-router-dom';
 import './index.css';
 import AssessmentSummary from './AssessmentSummary';
+import CommentModal from './CommentModal ';
 
 const RiskTable = () => {
   const [form] = Form.useForm();
@@ -22,15 +24,19 @@ const RiskTable = () => {
   const [tableData, setTableData] = useState([]);
   const [assesmentStatus, setAssessmentStatus] = useState({});
   const [visible, setVisible] = useState(false);
+  const [commentVisible, setCommentVisible] = useState(false);
+  const [commentRecord, setCommentRecord] = useState({});
+  const [auditAssessmentRecord, setAuditAssessmentRecord] = useState([]);
 
   const navigate = useNavigate();
-  const { callNotification } = useNotification();
+  // const { callNotification } = useNotification();
 
   const dispatch = useDispatch();
 
   const { risks, loading, error } = useSelector((state) => state.risk);
 
   const { questions } = useSelector((state) => state.question);
+  const [auditHistoty, setAuditHistory] = useState([])
 
   const viewColumns = [
     { title: 'Ref', dataIndex: 'Ref', key: 'Ref' },
@@ -46,21 +52,28 @@ const RiskTable = () => {
 
 
   // Function to handle opening the modal for adding/editing a record
-  const handleEdit = (record) => {
-    form.setFieldsValue(record);
-    setEditMode(true);
-    setIsModalVisible(true);
-  };
+  const handleAction = (record) => {
+    setCommentVisible(true)
+    setCommentRecord(record)
+  }
 
-  const handleAdd = () => {
-    setEditMode(false);
-    form.setFieldsValue({});
-    setIsModalVisible(true);
-  };
+  const closeComment = () => {
+    setCommentVisible(false)
+  }
 
-  const handleViewAssessment = (record) =>{
+  const data = auditHistoty
+
+  const handleViewAssessment = (record) => {
+
     dispatch(calculateRiskAsync(record))
     setVisible(true)
+    let auditAssessmentList = []
+    record.created_by !== null ? auditAssessmentList.push(`created_by : ${record.created_by}`) : console.log('')
+    record.reviewed_by !== null ? auditAssessmentList.push(`reviewed_by : ${record.reviewed_by} ,reviewed_comment: ${record.reviewed_comment}`) : console.log('')
+    record.approved_by !== null ? auditAssessmentList.push(`approved_by : ${record.approved_by} ,approved_comment: ${record.approved_comment}`) : console.log('')
+    record.rejected_by !== null ? auditAssessmentList.push(`rejected_by : ${record.rejected_by} ,rejected_comment: ${record.rejected_comment}`) : console.log('')
+    setAuditAssessmentRecord(auditAssessmentList)
+
   }
 
   const handleCompleteDraft = () => {
@@ -71,7 +84,7 @@ const RiskTable = () => {
   // Function to handle deleting a record
   const handleDelete = (record) => {
     dispatch(deleteRiskAsync(record.id));
-    callNotification('Risk deleted Successfully', 'success');
+    // callNotification('Risk deleted Successfully', 'success');
   };
 
   const closeModal = () => {
@@ -79,17 +92,28 @@ const RiskTable = () => {
     setTableData([]);
     setAssessmentStatus({});
     console.log(assesmentStatus);
+    setAuditHistory([])
   };
 
-  const onCancel = ()=>{
+  const onCancel = () => {
     setVisible(false)
+    setAuditAssessmentRecord([])
   }
+
+
 
   // useEffect(()=>{
   //   alert(assesmentStatus)
   // },[assesmentStatus])
 
   const handleView = (record) => {
+    console.log([record.created_by, record.reviewed_by, record.approved_by])
+    let auditList = []
+    record.created_by !== null ? auditList.push(`created_by : ${record.created_by}`) : console.log('')
+    record.reviewed_by !== null ? auditList.push(`reviewed_by : ${record.reviewed_by} ,reviewed_comment: ${record.reviewed_comment}`) : console.log('')
+    record.approved_by !== null ? auditList.push(`approved_by : ${record.approved_by} ,approved_comment: ${record.approved_comment}`) : console.log('')
+    record.rejected_by !== null ? auditList.push(`rejected_by : ${record.rejected_by} ,rejected_comment: ${record.rejected_comment}`) : console.log('')
+    setAuditHistory(auditList)
     setAssessmentStatus({ record: record.status, id: record.id });
     const risk = risks.filter((risk) => risk.id === record.id);
     const listData = [];
@@ -104,10 +128,10 @@ const RiskTable = () => {
             value == 1
               ? 'Not comply'
               : value == 2
-              ? 'Partly Comply'
-              : value == 3
-              ? 'Fully comply'
-              : "Don't know";
+                ? 'Partly Comply'
+                : value == 3
+                  ? 'Fully comply'
+                  : "Don't know";
           listData.push({
             Ref: qkey.ref,
             Category: qkey.category_name,
@@ -133,10 +157,11 @@ const RiskTable = () => {
     console.log(values);
     if (editMode) {
       dispatch(updateRiskAsync(values));
-      callNotification('Risk Edited Successfully', 'success');
+      // callNotification('Risk Edited Successfully', 'success');
     } else {
       dispatch(createRiskAsync(values));
-      callNotification('Risk Created Successfully', 'success');
+
+      // callNotification('Risk Created Successfully', 'success');
     }
     form.resetFields();
     setIsModalVisible(false);
@@ -202,8 +227,8 @@ const RiskTable = () => {
       dataIndex: 'status',
       key: 'status',
       render: (status) => {
-        let color = status === 'CREATED' ? 'green' : 'red';
-        return <Tag color={color}>{status}</Tag>;
+        let color = status === 'APPROVED' ? 'green' : status === 'REVIEWED' ? 'yellow' : status === 'CREATED' ? 'blue' : 'red';
+        return <Tag color={color} >{status}</Tag>;
       },
     },
 
@@ -213,9 +238,10 @@ const RiskTable = () => {
       render: (_, record) => (
         <Space>
           {/* <Button onClick={() => handleEdit(record)}>Update</Button> */}
-          <Button onClick={() => handleDelete(record)}>Delete</Button>
-          <Button onClick={() => handleView(record)}>View</Button>
-          {record.status === 'CREATED' ? <Button onClick={() => handleViewAssessment(record)}>View Summary</Button>:''}
+          <Button onClick={() => handleDelete(record)}><DeleteOutlined /></Button>
+          <Button onClick={() => handleView(record)}><EyeOutlined /></Button>
+          {['CREATED', 'REVIEWED'].includes(record.status) ? <Button onClick={() => handleAction(record)}>{record.status === 'CREATED' ? 'Review' : record.status === 'REVIEWED' ? 'Approve' : null}</Button> : null}
+          {record.status === 'APPROVED' ? <Button onClick={() => handleViewAssessment(record)}><EyeOutlined /> Summary</Button> : null}
         </Space>
       ),
     },
@@ -252,8 +278,17 @@ const RiskTable = () => {
         ) : (
           ''
         )}
+
         <div className="custom-scrollbar">
+
           <Card>
+            <List
+              size="small"
+              bordered={true}
+              dataSource={data}
+              style={{ marginBottom: '50px', width: '500px', backgroundColor: '#FAFAFA' }}
+              renderItem={(item) => <List.Item>{item}</List.Item>}
+            />
             <Table
               dataSource={tableData}
               columns={viewColumns}
@@ -262,7 +297,8 @@ const RiskTable = () => {
           </Card>
         </div>
       </Modal>
-      <AssessmentSummary visible={visible} onCancel={onCancel}/>
+      <AssessmentSummary visible={visible} onCancel={onCancel} auditAssessmentRecord={auditAssessmentRecord} />
+      <CommentModal commentVisible={commentVisible} closeComment={closeComment} commentRecord={commentRecord} />
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Modal, Form, Input, DatePicker, Space } from 'antd';
+import { Table, Button, Modal, Form, Input, Select, Space } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   createPrivilegeAsync,
@@ -10,6 +10,7 @@ import {
 import { useNotification } from '../../hooks/index';
 
 const UserPrivilegesTable = () => {
+  const { Option } = Select;
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [formValues, setFormValues] = useState({});
@@ -143,7 +144,13 @@ const UserPrivilegesTable = () => {
             <Input />
           </Form.Item>
           <Form.Item name="Privilege" label="Privilege">
-            <Input />
+            <Select mode="single">
+              <Option value="Creator">Creator</Option>
+              <Option value="Reviewer">Reviewer</Option>
+              <Option value="Approver">Approver</Option>
+              <Option value="Superadmin">Superadmin</Option>
+              {/* Add more options as needed */}
+            </Select>
           </Form.Item>
           <Form.Item name="Email" label="Email">
             <Input />

@@ -6,7 +6,6 @@ import { fetchQuestionsAsync } from '../../store/slices/questionSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { SaveOutlined } from '@ant-design/icons';
 import { createRiskAsync, updateRiskAsync } from '../../store/slices/riskSlice';
-import { useNotification } from '../../hooks/index';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import './index.css';
@@ -29,7 +28,7 @@ const AccountOpeningForm = () => {
     }
   }, [riskassessmentID]);
 
-  const { callNotification } = useNotification();
+  // const { callNotification } = useNotification();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [currentStep, setCurrentStep] = useState(0);
@@ -41,7 +40,7 @@ const AccountOpeningForm = () => {
   const { risks } = useSelector((state) => state.risk);
   const { questions } = useSelector((state) => state.question);
   const [value, setValue] = useState(1);
-  const [requiredExplation,setRequiredExplation] = useState({})
+  const [requiredExplation, setRequiredExplation] = useState({})
 
   const { userInfo } = useSelector((state) => state.user);
 
@@ -108,17 +107,17 @@ const AccountOpeningForm = () => {
       if (isDraft) {
         try {
           dispatch(updateRiskAsync(postDataEdit));
-          callNotification('Saved as Draft', 'success');
+          // callNotification('Saved as Draft', 'success');
         } catch (error) {
-          callNotification(`${error}`, 'error');
+          // callNotification(`${error}`, 'error');
         }
       } else {
         try {
           // alert('postData');
           dispatch(createRiskAsync(postData));
-          callNotification('Saved as Draft', 'success');
+          // callNotification('Saved as Draft', 'success');
         } catch (error) {
-          callNotification(`${error}`, 'error');
+          // callNotification(`${error}`, 'error');
         }
       }
     }
@@ -154,10 +153,11 @@ const AccountOpeningForm = () => {
             dispatch(createRiskAsync(postData));
           }
 
-          callNotification('Form Submitted SuccessFully', 'success');
+          // callNotification('Form Submitted SuccessFully', 'success');
           navigate('/assessmentindex');
         } catch (error) {
-          callNotification(`${error}`, 'error');
+
+          // callNotification(`${error}`, 'error');
         }
       })
       .catch((errors) => {
@@ -173,25 +173,25 @@ const AccountOpeningForm = () => {
     console.log(questions);
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(requiredExplation)
-  },[requiredExplation])
+  }, [requiredExplation])
 
   const handleRadioChange = (fieldName, selectedValue) => {
     console.log('radio checked', selectedValue);
-    let value = selectedValue === 3 ? false: true
+    let value = selectedValue === 3 ? false : true
     form.setFieldsValue({
       [fieldName]: selectedValue,
     });
     // form.setFieldsValue({ input: value === 3 ? false : true });
     console.log('formvalues')
-    
+
     // console.log(form.getFieldsValue()[fieldName])
     // alert(value)
 
     setRequiredExplation(prevData => ({
       ...prevData,
-      [fieldName]: selectedValue === 3 ? false: true
+      [fieldName]: selectedValue === 3 ? false : true
     }));
 
     // alert(form.getFieldValue(`requireExplanation_${fieldName}`))
@@ -219,114 +219,114 @@ const AccountOpeningForm = () => {
         <Col span={1}></Col>
         <Col span={12}>
           {currentStep === 0 && (
-            
-              <Card style={{ width: '140%' }}>
-                <>
-                  <p style={{ marginTop: '0px', marginBottom: '10px' }}>
-                    <strong>
-                      Risk Assessment tool - Operational Risk Management
-                    </strong>
-                  </p>
-                  <p style={{ marginTop: '0px', marginBottom: '10px' }}>
-                    <strong>Introduction</strong>
-                  </p>
-                  <p style={{ marginTop: '0px', marginBottom: '10px' }}>
-                    <strong>The purpose </strong>of the Risk assessment is
-                    providing the bank insight in the level of Operational Risk
-                    Management in branches in an relatively easy way. The
-                    outcome of this risk assessment tool is indicative. Besides
-                    this, it would help the ORM-function to set priorities
-                    towards improvement and can be used to show improvements
-                    overtime.
-                  </p>
-                  <p style={{ marginTop: '0px', marginBottom: '10px' }}>
-                    <strong>Approach</strong>
-                  </p>
-                  <p style={{ marginTop: '0px', marginBottom: '10px' }}>
-                    The first step is to fill in the&#xa0;{' '}
-                    <u>General Information</u> tab.
-                  </p>
-                  <p style={{ marginTop: '0px', marginBottom: '10px' }}>
-                    Thereafter you can fill in the <u>green tabs</u>. Each tab
-                    covers a specific topic of Operational Risk Management
-                    consisting of several elements.&#xa0; All related items per
-                    element should be scored on the scale 'Not comply' to 'Fully
-                    comply' or 'Don't know' by setting a 'x' in the right cell.
-                    After scoring an item, you will get a green sign. In case
-                    you missed an item or mistakenly provide more scores for the
-                    same item, the sign stays orange.
-                  </p>
-                  <p style={{ marginTop: '0px', marginBottom: '10px' }}>
-                    In the tab “scores”, weightage is given for each element of
-                    Operational Risk Management based on the severity of risk in
-                    each element and result is presented using weightage average
-                    score.
-                  </p>
-                  <p style={{ marginTop: '0px', marginBottom: '10px' }}>
-                    In the tab Assessment Summary the overall outcome per topic
-                    are presented based on all the scores. To do so all scores
-                    are translated into an % for improvent on a scale of 0 -
-                    100%. A high percentage indicates more room for improvement
-                    which also indicates more risk and vice versa. The outcomes
-                    are also visualized by graphs.
-                  </p>
-                  <p style={{ marginTop: '0px', marginBottom: '10px' }}>
-                    The outcomes in each topic are then multiplied by the
-                    weightage given to each topics and final risk ranking is
-                    done based on weightage average score.
-                  </p>
-                  <p style={{ marginTop: '0px', marginBottom: '10px' }}>
-                    If any topic in the tool is not applicable to any branch,
-                    score shall be given as “Fully comply” and Percentage of
-                    improvement shall be 0.
-                  </p>
-                  <p style={{ marginTop: '0px', marginBottom: '10px' }}>
-                    The tab “Digitization of Documents” is incorporated in the
-                    Risk assessment tool however is not linked to the final
-                    assessment report. The same shall be linked to final report
-                    going further when required.
-                  </p>
-                  <p style={{ marginTop: '0px', marginBottom: '10px' }}>
-                    Other Checklist Tab: Checklist that shall not deduct the
-                    marks of branch i.e., which are not in control of branch but
-                    branch faces risk due to non-compliance.
-                  </p>
-                  <p style={{ marginTop: '0px', marginBottom: '10px' }}>
-                    <strong>
-                      <em>
-                        <u>Notes:</u>
-                      </em>
-                    </strong>
-                  </p>
-                  <p style={{ marginTop: '0px', marginBottom: '10px' }}>
-                    <strong>
-                      <em>
-                        <u>
-                          1. In case of any non compliance of requirement by
-                          "Nepal Rastra Bank", Scaling shall be given as "Not
-                          Comply" irrespective of the result as per sample
-                          taken.
-                        </u>
-                      </em>
-                    </strong>
-                  </p>
-                  <p style={{ marginTop: '0px', marginBottom: '10px' }}>
-                    <strong>
-                      <em>
-                        <u>
-                          2. In case of any non compliance of Bank's "Internal
-                          Policy/Guideline/Circular etc", Scaling can be lowered
-                          depending upon the severity of non compliance and risk
-                          faced by bank, if required.
-                        </u>
-                      </em>
-                    </strong>
-                  </p>
-                  <p style={{ marginTop: '0px', marginBottom: '10px' }}>
-                    &#xa0;
-                  </p>
-                </>
-              </Card>
+
+            <Card style={{ width: '140%' }}>
+              <>
+                <p style={{ marginTop: '0px', marginBottom: '10px' }}>
+                  <strong>
+                    Risk Assessment tool - Operational Risk Management
+                  </strong>
+                </p>
+                <p style={{ marginTop: '0px', marginBottom: '10px' }}>
+                  <strong>Introduction</strong>
+                </p>
+                <p style={{ marginTop: '0px', marginBottom: '10px' }}>
+                  <strong>The purpose </strong>of the Risk assessment is
+                  providing the bank insight in the level of Operational Risk
+                  Management in branches in an relatively easy way. The
+                  outcome of this risk assessment tool is indicative. Besides
+                  this, it would help the ORM-function to set priorities
+                  towards improvement and can be used to show improvements
+                  overtime.
+                </p>
+                <p style={{ marginTop: '0px', marginBottom: '10px' }}>
+                  <strong>Approach</strong>
+                </p>
+                <p style={{ marginTop: '0px', marginBottom: '10px' }}>
+                  The first step is to fill in the&#xa0;{' '}
+                  <u>General Information</u> tab.
+                </p>
+                <p style={{ marginTop: '0px', marginBottom: '10px' }}>
+                  Thereafter you can fill in the <u>green tabs</u>. Each tab
+                  covers a specific topic of Operational Risk Management
+                  consisting of several elements.&#xa0; All related items per
+                  element should be scored on the scale 'Not comply' to 'Fully
+                  comply' or 'Don't know' by setting a 'x' in the right cell.
+                  After scoring an item, you will get a green sign. In case
+                  you missed an item or mistakenly provide more scores for the
+                  same item, the sign stays orange.
+                </p>
+                <p style={{ marginTop: '0px', marginBottom: '10px' }}>
+                  In the tab “scores”, weightage is given for each element of
+                  Operational Risk Management based on the severity of risk in
+                  each element and result is presented using weightage average
+                  score.
+                </p>
+                <p style={{ marginTop: '0px', marginBottom: '10px' }}>
+                  In the tab Assessment Summary the overall outcome per topic
+                  are presented based on all the scores. To do so all scores
+                  are translated into an % for improvent on a scale of 0 -
+                  100%. A high percentage indicates more room for improvement
+                  which also indicates more risk and vice versa. The outcomes
+                  are also visualized by graphs.
+                </p>
+                <p style={{ marginTop: '0px', marginBottom: '10px' }}>
+                  The outcomes in each topic are then multiplied by the
+                  weightage given to each topics and final risk ranking is
+                  done based on weightage average score.
+                </p>
+                <p style={{ marginTop: '0px', marginBottom: '10px' }}>
+                  If any topic in the tool is not applicable to any branch,
+                  score shall be given as “Fully comply” and Percentage of
+                  improvement shall be 0.
+                </p>
+                <p style={{ marginTop: '0px', marginBottom: '10px' }}>
+                  The tab “Digitization of Documents” is incorporated in the
+                  Risk assessment tool however is not linked to the final
+                  assessment report. The same shall be linked to final report
+                  going further when required.
+                </p>
+                <p style={{ marginTop: '0px', marginBottom: '10px' }}>
+                  Other Checklist Tab: Checklist that shall not deduct the
+                  marks of branch i.e., which are not in control of branch but
+                  branch faces risk due to non-compliance.
+                </p>
+                <p style={{ marginTop: '0px', marginBottom: '10px' }}>
+                  <strong>
+                    <em>
+                      <u>Notes:</u>
+                    </em>
+                  </strong>
+                </p>
+                <p style={{ marginTop: '0px', marginBottom: '10px' }}>
+                  <strong>
+                    <em>
+                      <u>
+                        1. In case of any non compliance of requirement by
+                        "Nepal Rastra Bank", Scaling shall be given as "Not
+                        Comply" irrespective of the result as per sample
+                        taken.
+                      </u>
+                    </em>
+                  </strong>
+                </p>
+                <p style={{ marginTop: '0px', marginBottom: '10px' }}>
+                  <strong>
+                    <em>
+                      <u>
+                        2. In case of any non compliance of Bank's "Internal
+                        Policy/Guideline/Circular etc", Scaling can be lowered
+                        depending upon the severity of non compliance and risk
+                        faced by bank, if required.
+                      </u>
+                    </em>
+                  </strong>
+                </p>
+                <p style={{ marginTop: '0px', marginBottom: '10px' }}>
+                  &#xa0;
+                </p>
+              </>
+            </Card>
           )}
           {currentStep == 0 && (
             <div style={{ marginTop: '8px' }}>
@@ -413,7 +413,7 @@ const AccountOpeningForm = () => {
 
                 <br />
               </div>
-              <div style={{ display: 'flex',marginTop:'50px', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', marginTop: '50px', justifyContent: 'space-between' }}>
                 {currentStep > 0 && (
                   <>
                     <Button type="primary" onClick={handlePrevious}>
@@ -424,7 +424,8 @@ const AccountOpeningForm = () => {
                       icon={<SaveOutlined />}
                       onClick={handleDraft}
                     >
-                      save as Draft
+
+                      Save as Draft
                     </Button>
                   </>
                 )}
@@ -444,7 +445,7 @@ const AccountOpeningForm = () => {
                     okText="Yes"
                     cancelText="No"
                   >
-                    <Button style={{ backgroundColor: '#40A3A1',color:'white' }}>
+                    <Button style={{ backgroundColor: '#40A3A1', color: 'white' }}>
                       Submit
                     </Button>
                   </Popconfirm>

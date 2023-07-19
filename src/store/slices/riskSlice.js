@@ -1,13 +1,26 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '../../hooks/axiosInstance';
+import { notification } from 'antd';
+
+const callNotification = ((description, type) => {
+  notification.open({
+    message: 'info',
+    description: description,
+    duration: 3, // Duration in seconds, 0 means the notification won't close automatically,
+    type: type,
+  });
+})
+
 
 const initialState = {
   risks: [],
   loading: false,
   error: null,
-  assSummary:[]
+  assSummary: []
 };
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
+
 
 export const fetchRisksAsync = createAsyncThunk('risk/fetchRisks', async () => {
   try {
@@ -96,10 +109,12 @@ const riskSlice = createSlice({
       .addCase(createRiskAsync.fulfilled, (state, action) => {
         state.loading = false;
         state.risks.push(action.payload);
+        callNotification('Operation Successfull', 'success');
       })
       .addCase(createRiskAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        callNotification(state.error, 'error');
       })
       .addCase(updateRiskAsync.pending, (state) => {
         state.loading = true;
@@ -114,10 +129,12 @@ const riskSlice = createSlice({
         if (index !== -1) {
           state.risks[index] = updatedRisk;
         }
+        callNotification('Operation Successfull', 'success');
       })
       .addCase(updateRiskAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        callNotification(state.error, 'error');
       })
       .addCase(deleteRiskAsync.pending, (state) => {
         state.loading = true;
@@ -127,10 +144,12 @@ const riskSlice = createSlice({
         state.loading = false;
         const riskId = action.payload;
         state.risks = state.risks.filter((risk) => risk.id !== riskId);
+        callNotification('Operation Successfull', 'success');
       })
       .addCase(deleteRiskAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        callNotification(state.error, 'error');
       })
       .addCase(calculateRiskAsync.pending, (state) => {
         state.loading = true;
