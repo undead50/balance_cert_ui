@@ -1,4 +1,4 @@
-import { Table, Button, Space, Modal,Tag } from 'antd';
+import { Table, Button, Space, Modal, Tag } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
@@ -20,6 +20,11 @@ import Spinner from '../../components/Spinner';
 // ];
 
 const CategoryIndex = () => {
+
+
+  const [editMode, setEditMode] = useState(false)
+  const [categoryRecord, setCategoryRecord] = useState({})
+
   const columns = [
     {
       title: 'ID',
@@ -42,7 +47,7 @@ const CategoryIndex = () => {
       key: 'status',
       render: (status) => {
         let color = status === 'A' ? 'green' : 'red';
-        return <Tag color={color}>{status}</Tag>;
+        return <Tag color={color}>{status == 'A' ? 'Active' : 'Deleted'}</Tag>;
       },
     },
     {
@@ -50,17 +55,25 @@ const CategoryIndex = () => {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
+
+          <Button onClick={() => handeEdit(record)}>Update</Button>
           <Button
             type="link"
-            icon={<DeleteOutlined />}
+            icon={<DeleteOutlined style={{ color: 'red' }} />}
             onClick={() => handleDelete(record.id)}
           >
-            Delete
+
           </Button>
         </Space>
       ),
     },
   ];
+
+  const handeEdit = (record) => {
+    setVisible(true)
+    setEditMode(true)
+    setCategoryRecord(record)
+  }
 
   const handleDelete = (id) => {
     // Handle delete action
@@ -79,9 +92,11 @@ const CategoryIndex = () => {
 
   const handleCancel = () => {
     setVisible(false);
+    setEditMode(false);
   };
 
   const handleAddButtonClick = () => {
+    setEditMode(false)
     setVisible(true);
   };
 
@@ -108,12 +123,12 @@ const CategoryIndex = () => {
       </Button>
       <Table dataSource={dataSource} columns={columns} />
       <Modal
-        title="Category Add Form"
+        title={editMode ? "Category Edit Mode" : "Category Add Form"}
         open={visible}
         onCancel={handleCancel}
         footer={null}
       >
-        <CategoryForm visible={handleCancel} />
+        <CategoryForm visible={handleCancel} categoryRecord={categoryRecord} editMode={editMode} />
       </Modal>
     </div>
   );

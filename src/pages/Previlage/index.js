@@ -8,6 +8,7 @@ import {
   updatePrivilegeAsync,
 } from '../../store/slices/privilegeSlice';
 import { useNotification } from '../../hooks/index';
+import { DeleteOutlined } from '@ant-design/icons';
 
 const UserPrivilegesTable = () => {
   const { Option } = Select;
@@ -105,7 +106,7 @@ const UserPrivilegesTable = () => {
       render: (_, record) => (
         <Space>
           <Button onClick={() => handleEdit(record)}>Update</Button>
-          <Button onClick={() => handleDelete(record)}>Delete</Button>
+          <Button onClick={() => handleDelete(record)}><DeleteOutlined style={{ color: 'red' }} /></Button>
         </Space>
       ),
     },
@@ -134,9 +135,10 @@ const UserPrivilegesTable = () => {
       >
         <Form form={form} onFinish={onFinish}>
           {/* Add form fields here based on your column fields */}
-          <Form.Item name="id">
+          {editMode && (<Form.Item name="id">
             <Input type="hidden" />
-          </Form.Item>
+          </Form.Item>)}
+
           <Form.Item name="MemberName" label="Member Name">
             <Input />
           </Form.Item>

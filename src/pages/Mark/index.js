@@ -8,6 +8,7 @@ import {
   updateMarkAsync,
 } from '../../store/slices/markSlice';
 import { useNotification } from '../../hooks/index';
+import { DeleteOutlined } from '@ant-design/icons';
 
 const MarkTable = () => {
   const [form] = Form.useForm();
@@ -66,47 +67,47 @@ const MarkTable = () => {
 
   const columns = [
 
-      
 
-      {
-        title: 'id',
-        dataIndex: 'id',
-        key: 'id',
-      },
 
-      
+    {
+      title: 'id',
+      dataIndex: 'id',
+      key: 'id',
+    },
 
-      {
-        title: 'Description',
-        dataIndex: 'Description',
-        key: 'Description',
-      },
 
-      
 
-      {
-        title: 'WeightOfelement',
-        dataIndex: 'WeightOfelement',
-        key: 'WeightOfelement',
-      },
+    {
+      title: 'Description',
+      dataIndex: 'Description',
+      key: 'Description',
+    },
 
-      
 
-      {
-        title: 'CreatedBy',
-        dataIndex: 'CreatedBy',
-        key: 'CreatedBy',
-      },
 
-      
+    {
+      title: 'WeightOfelement',
+      dataIndex: 'WeightOfelement',
+      key: 'WeightOfelement',
+    },
 
-      {
-        title: 'CreatedDate',
-        dataIndex: 'CreatedDate',
-        key: 'CreatedDate',
-      },
 
-      
+
+    {
+      title: 'CreatedBy',
+      dataIndex: 'CreatedBy',
+      key: 'CreatedBy',
+    },
+
+
+
+    {
+      title: 'CreatedDate',
+      dataIndex: 'CreatedDate',
+      key: 'CreatedDate',
+    },
+
+
 
     {
       title: 'Action',
@@ -114,7 +115,7 @@ const MarkTable = () => {
       render: (_, record) => (
         <Space>
           <Button onClick={() => handleEdit(record)}>Update</Button>
-          <Button onClick={() => handleDelete(record)}>Delete</Button>
+          <Button onClick={() => handleDelete(record)}><DeleteOutlined style={{ color: 'red' }} /></Button>
         </Space>
       ),
     },
@@ -143,19 +144,20 @@ const MarkTable = () => {
       >
         <Form form={form} onFinish={onFinish}>
           {/* Add form fields here based on your column fields */}
-          
-          <Form.Item name="id">
-            <Input type='hidden'/>
-          </Form.Item>
-          
+
+          {editMode && (<Form.Item name="id">
+            <Input type='hidden' />
+          </Form.Item>)}
+
+
           <Form.Item name="Description" label="Description">
-            <Input/>
+            <Input />
           </Form.Item>
-          
+
           <Form.Item name="WeightOfelement" label="WeightOfelement">
-            <Input/>
+            <Input />
           </Form.Item>
-          
+
           {/* <Form.Item name="CreatedBy" label="CreatedBy">
             <Input/>
           </Form.Item>
@@ -163,7 +165,7 @@ const MarkTable = () => {
           <Form.Item name="CreatedDate" label="CreatedDate">
             <Input/>
           </Form.Item> */}
-          
+
           <Form.Item>
             <Button type="primary" htmlType="submit">
               {editMode ? 'Update' : 'Add'}

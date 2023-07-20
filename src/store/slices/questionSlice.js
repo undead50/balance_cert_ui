@@ -1,6 +1,17 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '../../hooks/axiosInstance';
+import { notification } from 'antd';
 // import axiosInstance from 'axiosInstance';
+
+const callNotification = ((description, type) => {
+  notification.open({
+    message: 'info',
+    description: description,
+    duration: 3, // Duration in seconds, 0 means the notification won't close automatically,
+    type: type,
+  });
+})
+
 
 
 const initialState = {
@@ -103,12 +114,16 @@ const questionSlice = createSlice({
           (question) => question.id === updatedQuestion.id
         );
         if (index !== -1) {
+          const category_name = state.questions[index].category_name
+          updatedQuestion.category_name = category_name
           state.questions[index] = updatedQuestion;
         }
+        callNotification('Operation Sucessfull', 'success')
       })
       .addCase(updateQuestionAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        callNotification(state.error, 'error')
       })
       .addCase(deleteQuestionAsync.pending, (state) => {
         state.loading = true;
@@ -120,10 +135,12 @@ const questionSlice = createSlice({
         state.questions = state.questions.filter(
           (question) => question.id !== questionId
         );
+        callNotification('Operation Sucessfull', 'success')
       })
       .addCase(deleteQuestionAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        callNotification(state.error, 'error')
       });
   },
 });

@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Form, Input, Select, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategorysAsync } from '../../store/slices/categorySlice';
-import { createQuestionAsync } from '../../store/slices/questionSlice';
+import { createQuestionAsync, updateQuestionAsync } from '../../store/slices/questionSlice';
 import { useNotification } from '../../hooks/index';
 
 const { Option } = Select;
 
 const CreateQuestion = (props) => {
+
   const { callNotification } = useNotification();
 
   const dispatch = useDispatch();
@@ -15,16 +16,54 @@ const CreateQuestion = (props) => {
   const { categorys, loading, error } = useSelector((state) => state.category);
   const [options, setOptions] = useState([]);
   const [form] = Form.useForm();
+
+
+  useEffect(() => {
+    // alert(props.initialValue)
+    // form.resetFields()
+    if (props.editMode) {
+      const newValues = {
+        question: props.questionRecord.question,
+        ref: props.questionRecord.ref,
+        weight: props.questionRecord.weightOfelement,
+        // category: props.questionRecord.categoryId,
+        id: props.questionRecord.id,
+      };
+      form.setFieldsValue(newValues);
+
+      // console.log(props.questionRecord);
+    }
+    else {
+      form.resetFields()
+    }
+
+  }, [props])
+
+  const initialValues = {
+    category: props.selectedOption, // Set the initial value for the select field
+    // ... other initial values for other form fields if needed
+  };
+
+  console.log(initialValues)
+
   const onFinish = (values) => {
     console.log('Form values:', values);
-    dispatch(createQuestionAsync(values));
-    if (error) {
-      callNotification('Something went Worng', 'error');
-    } else {
-      form.resetFields();
+    if (props.editMode) {
+      console.log(values)
+      dispatch(updateQuestionAsync(values))
       props.visible();
-      callNotification('Question Added Successfully', 'success');
+    } else {
+      dispatch(createQuestionAsync(values));
+
+      if (error) {
+        callNotification('Something went Worng', 'error');
+      } else {
+        form.resetFields();
+        props.visible();
+        callNotification('Question Added Successfully', 'success');
+      }
     }
+
   };
 
   useEffect(() => {
@@ -39,7 +78,11 @@ const CreateQuestion = (props) => {
   }, []);
 
   return (
-    <Form form={form} onFinish={onFinish}>
+    <Form form={form} initialValues={initialValues} onFinish={onFinish}>
+      {props.editMode && (<Form.Item name="id" hidden={true}>
+        <Input />
+      </Form.Item>)}
+
       <Form.Item
         label="Question"
         name="question"
@@ -80,7 +123,7 @@ const CreateQuestion = (props) => {
 
       <Form.Item>
         <Button type="primary" htmlType="submit">
-          Add
+          {props.editMode ? 'Edit' : 'Add'}
         </Button>
       </Form.Item>
     </Form>

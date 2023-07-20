@@ -1,6 +1,17 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '../../hooks/axiosInstance';
 import { useSelector } from 'react-redux';
+import { notification } from 'antd';
+// import axiosInstance from 'axiosInstance';
+
+const callNotification = ((description, type) => {
+  notification.open({
+    message: 'info',
+    description: description,
+    duration: 3, // Duration in seconds, 0 means the notification won't close automatically,
+    type: type,
+  });
+})
 
 const initialState = {
   categorys: [],
@@ -106,6 +117,8 @@ const categorySlice = createSlice({
         if (index !== -1) {
           state.categorys[index] = updatedCategory;
         }
+
+        callNotification('Operation Sucessfull', 'success')
       })
       .addCase(updateCategoryAsync.rejected, (state, action) => {
         state.loading = false;
