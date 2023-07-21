@@ -87,7 +87,9 @@ export const deleteRiskAsync = createAsyncThunk(
 const riskSlice = createSlice({
   name: 'risk',
   initialState,
-  reducers: {},
+  reducers: {
+    resetStateRisk: (state) => initialState
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchRisksAsync.pending, (state) => {
@@ -165,5 +167,5 @@ const riskSlice = createSlice({
       })
   },
 });
-
+export const { resetStateRisk } = riskSlice.actions;
 export const riskReducer = riskSlice.reducer;

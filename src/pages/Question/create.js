@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Select, Button } from 'antd';
+import { Form, Input, Select, Button, InputNumber } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategorysAsync } from '../../store/slices/categorySlice';
 import { createQuestionAsync, updateQuestionAsync } from '../../store/slices/questionSlice';
@@ -116,9 +116,9 @@ const CreateQuestion = (props) => {
       <Form.Item
         label="Weight of Element"
         name="weight"
-        rules={[{ required: true, message: 'Please enter the weight' }]}
+        rules={[{ type: 'float,integer', required: true, message: 'Please enter the weight' }]}
       >
-        <Input placeholder="Enter the weight" />
+        <InputNumber />
       </Form.Item>
 
       <Form.Item>

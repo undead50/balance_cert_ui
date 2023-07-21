@@ -60,7 +60,9 @@ export const deleteMarkAsync = createAsyncThunk(
 const markSlice = createSlice({
   name: 'mark',
   initialState,
-  reducers: {},
+  reducers: {
+    resetStateMark: (state) => initialState
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchMarksAsync.pending, (state) => {
@@ -120,5 +122,5 @@ const markSlice = createSlice({
       });
   },
 });
-
+export const { resetStateMark } = markSlice.actions;
 export const markReducer = markSlice.reducer;

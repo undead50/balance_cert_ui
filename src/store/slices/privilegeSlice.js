@@ -61,7 +61,9 @@ export const deletePrivilegeAsync = createAsyncThunk(
 const privilegeSlice = createSlice({
   name: 'privilege',
   initialState,
-  reducers: {},
+  reducers: {
+    resetStatePrivilege: (state) => initialState
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchPrivilegesAsync.pending, (state) => {
@@ -122,4 +124,5 @@ const privilegeSlice = createSlice({
   },
 });
 
+export const { resetStatePrivilege } = privilegeSlice.actions;
 export const privilegeReducer = privilegeSlice.reducer;

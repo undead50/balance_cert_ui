@@ -8,6 +8,12 @@ import { setUser } from '../../store';
 import { useSelector, useDispatch } from 'react-redux';
 import { postLoginData } from '../../store/slices/authSlice';
 import { useNotification } from '../../hooks/index';
+import { resetStateUser } from '../../store/slices/userSlice';
+import { resetStateRisk } from '../../store/slices/riskSlice';
+import { resetStateQuestion } from '../../store/slices/questionSlice';
+import { resetStatePrivilege } from '../../store/slices/privilegeSlice';
+import { resetStateCategory } from '../../store/slices/categorySlice';
+import { resetStateMark } from '../../store/slices/markSlice';
 
 const LoginPage = () => {
   // alert('login')
@@ -18,6 +24,15 @@ const LoginPage = () => {
 
   const { data, loading, error } = useSelector((state) => state.auth);
   // useNotification('Login Denied','error')
+
+  useEffect(() => {
+    dispatch(resetStateUser())
+    dispatch(resetStateRisk())
+    dispatch(resetStateQuestion())
+    dispatch(resetStatePrivilege())
+    dispatch(resetStateCategory())
+    dispatch(resetStateMark())
+  }, [])
 
   useEffect(() => {
     if (data) {

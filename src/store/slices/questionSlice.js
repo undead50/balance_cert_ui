@@ -76,7 +76,9 @@ export const deleteQuestionAsync = createAsyncThunk(
 const questionSlice = createSlice({
   name: 'question',
   initialState,
-  reducers: {},
+  reducers: {
+    resetStateQuestion: (state) => initialState
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchQuestionsAsync.pending, (state) => {
@@ -145,4 +147,5 @@ const questionSlice = createSlice({
   },
 });
 
+export const { resetStateQuestion } = questionSlice.actions;
 export const questionReducer = questionSlice.reducer;

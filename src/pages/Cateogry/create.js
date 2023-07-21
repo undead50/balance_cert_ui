@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, InputNumber } from 'antd';
 import { useDispatch } from 'react-redux';
 import { createCategoryAsync, updateCategoryAsync } from '../../store/slices/categorySlice';
 import { useNotification } from '../../hooks/index';
@@ -52,9 +52,9 @@ const CategoryForm = (props) => {
       <Form.Item
         name="weightOfelement"
         label="weightOfelement"
-        rules={[{ required: true, message: 'Please enter the Weight of Category' }]}
+        rules={[{ type: 'float', required: true, message: 'Please Provide Valid Weight of Category' }]}
       >
-        <Input placeholder="Enter weightOfelement" />
+        <InputNumber />
       </Form.Item>
 
       <Form.Item>
