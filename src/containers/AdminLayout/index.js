@@ -1,6 +1,19 @@
 import React, { useState } from "react";
-import { Layout, Breadcrumb, Button } from "antd";
-import { LogoutOutlined } from "@ant-design/icons";
+import {
+  Layout,
+  Breadcrumb,
+  Button,
+  Menu,
+  Avatar,
+  Row,
+  Popover,
+  Typography,
+} from "antd";
+import {
+  UserOutlined,
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
+} from "@ant-design/icons";
 import { Outlet, useNavigate, Navigate } from "react-router-dom";
 import SideBar from "../../components/Sidebar";
 import LoginPage from "../../pages/Auth/Login";
@@ -9,15 +22,67 @@ import { logout } from "../../store";
 import { setUser,FlushUserData } from '../../store';
 
 const { Header, Content, Footer, Sider } = Layout;
+const { Text } = Typography;
+
 
 const AdminLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.user);
 
   const handleCollapse = (collapsed) => {
     setCollapsed(collapsed);
   };
+
+  const content = (
+    <div style={{ width: "auto", paddingLeft: "2px", paddingRight: "2px" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: "12px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "start",
+            gap: "0px",
+          }}
+        >
+          <Text style={{ marginTop: "0px", fontSize: 18, fontWeight: "500" }}>
+            {userInfo?.userName}
+          </Text>
+          <Text style={{ marginTop: "1px", fontSize: 13, color: "#606060" }}>
+            {userInfo?.solDesc}
+          </Text>
+          {/* <Text   style={{marginTop:'-1px', fontSize:12, color:"#6D6D6D"}}>Employee Id: 1923</Text> */}
+          <Text style={{ fontSize: 13, color: "#606060" }}>
+            {userInfo?.email}
+          </Text>
+        </div>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignContent: "right",
+        }}
+      >
+        <Button
+          onClick={() => handleLogout()}
+          type="primary"
+          style={{ marginTop: "12px", width: "auto" }}
+        >
+          Log out
+        </Button>
+      </div>
+    </div>
+  );
+
 
   const handleLogout = () => {
     // Handle logout logic here
@@ -45,6 +110,8 @@ const AdminLayout = () => {
         onCollapse={handleCollapse}
         style={{
           overflow: "auto",
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#f1f1f1',
           height: "100vh",
           position: "sticky",
           backgroundColor:'white',
@@ -52,12 +119,22 @@ const AdminLayout = () => {
           left: 0
         }}
       >
-        <div className="logo">
+        <div
+          className="logo"
+          style={{
+            display: "flex",
+            width: "100%",
+            marginLeft: "0px",
+            marginRight: "0px",
+            justifyContent: "center",
+          }}
+        >
           <img
             src={process.env.PUBLIC_URL + '/images/citizens-logo.png'}
             style={{
               height: "40px",
-              width: "160px",
+
+              width: collapsed ? "80%" : "90%",
               marginTop: "-8px",
             }}
           />
@@ -79,26 +156,37 @@ const AdminLayout = () => {
               alignItems: "center",
             }}
           >
-            <Button
-              type="primary"
-              icon={<LogoutOutlined />}
-              onClick={handleLogout}
-              style={{ marginTop: "0px", marginRight: "20px" }}
+            <div
+              style={{ flex: "50%", textAlign: "right", marginRight: "18px" }}
             >
-              Logout
-            </Button>
+              <Popover
+                overlayStyle={{ position: "fixed" }}
+                content={content}
+                title=""
+                trigger="click"
+                placement="topRight"
+              >
+                <Avatar
+                  size={40}
+                  icon={<UserOutlined />}
+                  style={{ cursor: "pointer", marginTop: -3 }}
+                />
+              </Popover>
+            </div>
           </Header>
           <Content
             className="site-layout-background"
-            style={{ margin: "12px", padding: "10px", height: "100%" }}
+            style={{
+              margin: "12px",
+              padding: "10px",
+              height: "100%",
+              boxShadow: "0 4px 4px 0 rgba(0, 0, 0, 0.05)",
+            }}
           >
             <div>
               <Outlet />
             </div>
           </Content>
-          {/* <Footer style={{ textAlign: 'center', height:'50px', display:'flex', justifyContent:'center', alignContent:'center' }}>
-          <h3>Citizens Bank International ©2023</h3> 
-        </Footer> */}
         </Layout>
       </Content>
     </Layout>

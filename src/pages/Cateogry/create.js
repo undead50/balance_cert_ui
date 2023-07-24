@@ -52,7 +52,7 @@ const CategoryForm = (props) => {
       <Form.Item
         name="weightOfelement"
         label="weightOfelement"
-        rules={[{ type: 'float', required: true, message: 'Please Provide Valid Weight of Category' }]}
+        rules={[{ type: 'integer,float', required: true, message: 'Please Provide Valid Weight of Category' }]}
       >
         <InputNumber />
       </Form.Item>

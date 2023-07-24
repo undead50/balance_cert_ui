@@ -183,26 +183,13 @@ const AccountOpeningForm = () => {
     form.setFieldsValue({
       [fieldName]: selectedValue,
     });
-    // form.setFieldsValue({ input: value === 3 ? false : true });
     console.log('formvalues')
 
-    // console.log(form.getFieldsValue()[fieldName])
-    // alert(value)
 
     setRequiredExplation(prevData => ({
       ...prevData,
       [fieldName]: selectedValue === 3 ? false : true
     }));
-
-    // alert(form.getFieldValue(`requireExplanation_${fieldName}`))
-    // console.log(form.getFieldValue())
-    // if(selectedValue === 3){
-    //   setRequiredExplation(false)
-    // }
-    // else {
-    //   setRequiredExplation(true)
-    // }
-    // setValue(e.target.value);
   };
 
   return (
@@ -219,7 +206,7 @@ const AccountOpeningForm = () => {
         <Col span={1}></Col>
         <Col span={12}>
           {currentStep === 0 && (
-
+            <div className="custom-scrollbar" style={{width:'150%',height:'50%'}}>
             <Card style={{ width: '140%' }}>
               <>
                 <p style={{ marginTop: '0px', marginBottom: '10px' }}>
@@ -325,11 +312,13 @@ const AccountOpeningForm = () => {
                 <p style={{ marginTop: '0px', marginBottom: '10px' }}>
                   &#xa0;
                 </p>
-              </>
-            </Card>
+                </>
+                
+              </Card>
+              </div>
           )}
           {currentStep == 0 && (
-            <div style={{ marginTop: '8px' }}>
+            <div style={{ marginTop: '30px' }}>
               <Button type="primary" onClick={handleNext}>
                 Next
               </Button>
