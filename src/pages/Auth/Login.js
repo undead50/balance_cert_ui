@@ -44,7 +44,9 @@ const LoginPage = () => {
             email: data.Data.email,
             departmentName: data.Data.departmentName,
             token: data.Data.token,
-            isBranchManager: data.Data.isBranchManager
+            isBranchManager: data.Data.isBranchManager,
+            employeeName: data.Data.employeeName,
+            isSuperAdmin: data.Data.isSuperAdmin
           })
         );
         navigate('/');

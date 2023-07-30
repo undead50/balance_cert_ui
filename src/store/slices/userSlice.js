@@ -7,7 +7,9 @@ const initialState = {
         email: '',
         departmentName: '',
         token: '',
-        isBranchManager: ''
+        isBranchManager: '',
+        employeeName:'',
+        isSuperAdmin:false
     }
 }
 

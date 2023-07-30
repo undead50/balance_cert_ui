@@ -22,10 +22,14 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 
 
-export const fetchRisksAsync = createAsyncThunk('risk/fetchRisks', async () => {
+export const fetchRisksAsync = createAsyncThunk('risk/fetchRisks', async (branch_code) => {
+  console.log(branch_code)
   try {
     const url = BACKEND_URL + '/risk/fetchRisks';
-    const response = await axiosInstance.get(url);
+    const response = await axiosInstance.get(url, {params: {
+        branch_code : branch_code,
+      }
+    });
     return response.data;
   } catch (error) {
     throw new Error(error.response.data.error);

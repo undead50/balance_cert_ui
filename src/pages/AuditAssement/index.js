@@ -44,7 +44,7 @@ const AccountOpeningForm = () => {
 
   const { userInfo } = useSelector((state) => state.user);
 
-  console.log(userInfo);
+  // alert(userInfo.solId)
   const handleNext = () => {
     form
       .validateFields()
@@ -79,6 +79,7 @@ const AccountOpeningForm = () => {
           ...values,
         }));
         console.log(form.getFieldsValue());
+        console.log("formValues")
         console.log(formValues);
         navigate('/assessmentindex');
       })
@@ -92,6 +93,7 @@ const AccountOpeningForm = () => {
     const postData = {
       assessment_data: formValues,
       status: saveAsDraft ? 'DRAFT' : 'CREATED',
+      branch_code: formValues.branch_code,
       created_by: userInfo.userName,
     };
 
@@ -100,6 +102,7 @@ const AccountOpeningForm = () => {
       assessment_data: formValues,
       status: saveAsDraft ? 'DRAFT' : 'CREATED',
       created_by: userInfo.userName,
+      branch_code: formValues.branch_code,
     };
 
     if (saveAsDraft) {
@@ -192,10 +195,17 @@ const AccountOpeningForm = () => {
     }));
   };
 
+  const initialValues = {
+    branch_code: userInfo.solId,
+  };
+
   return (
-    <Form form={form} onFinish={handleSubmit}>
+    <Form form={form} onFinish={handleSubmit} initialValues={initialValues}>
       <Row>
         <Col span={5}>
+        <Form.Item name="branch_code" style={{ display: 'none' }}>
+        <Input type="hidden" value={userInfo.solId}/>
+      </Form.Item>
           <Steps current={currentStep} direction="vertical" size="small">
             <Step title="Start"></Step>
             {categorys.map((category) => (

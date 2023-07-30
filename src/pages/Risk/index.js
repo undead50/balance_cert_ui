@@ -16,6 +16,7 @@ import './index.css';
 import AssessmentSummary from './AssessmentSummary';
 import CommentModal from './CommentModal ';
 
+
 const RiskTable = () => {
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -32,6 +33,8 @@ const RiskTable = () => {
   // const { callNotification } = useNotification();
 
   const dispatch = useDispatch();
+
+  const { userInfo } = useSelector((state) => state.user);
 
   const { risks, loading, error } = useSelector((state) => state.risk);
 
@@ -170,7 +173,7 @@ const RiskTable = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchRisksAsync());
+    userInfo.isSuperAdmin === true ? dispatch(fetchRisksAsync()) : dispatch((fetchRisksAsync(userInfo.solId)));
     console.log(risks);
   }, []);
 
@@ -201,6 +204,11 @@ const RiskTable = () => {
       title: 'created_at',
       dataIndex: 'created_at',
       key: 'created_at',
+    },
+    {
+      title: 'branch_code',
+      dataIndex: 'branch_code',
+      key:'branch_code'
     },
 
     {
