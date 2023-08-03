@@ -194,10 +194,16 @@ const RiskTable = () => {
   };
 
   const columns = [
+    // {
+    //   title: 'id',
+    //   dataIndex: 'id',
+    //   key: 'id',
+    // },
+
     {
-      title: 'id',
-      dataIndex: 'id',
-      key: 'id',
+      title: 'branch_code',
+      dataIndex: 'branch_code',
+      key:'branch_code'
     },
 
     {
@@ -205,11 +211,7 @@ const RiskTable = () => {
       dataIndex: 'created_at',
       key: 'created_at',
     },
-    {
-      title: 'branch_code',
-      dataIndex: 'branch_code',
-      key:'branch_code'
-    },
+    
 
     {
       title: 'created_by',
@@ -282,15 +284,17 @@ const RiskTable = () => {
           <Button onClick={() => handleView(record)}>
             <EyeOutlined />
           </Button>
-          {['CREATED', 'REVIEWED'].includes(record.status) ? (
-            <Button onClick={() => handleAction(record)}>
-              {record.status === 'CREATED'
-                ? 'Review'
-                : record.status === 'REVIEWED'
-                ? 'Approve'
-                : null}
-            </Button>
-          ) : null}
+          {userInfo.isBranchManager === 'Y' || userInfo.isSuperAdmin === true &&
+            (['CREATED', 'REVIEWED'].includes(record.status) ? (
+              <Button onClick={() => handleAction(record)}>
+                {record.status === 'CREATED'
+                  ? 'Review'
+                  : record.status === 'REVIEWED'
+                    ? 'Approve'
+                    : null}
+              </Button>
+            ) : null)}
+        
           {record.status === 'APPROVED' ? (
             <Button onClick={() => handleViewAssessment(record)}>
               <EyeOutlined /> Summary

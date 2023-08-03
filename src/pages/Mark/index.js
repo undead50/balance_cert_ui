@@ -145,8 +145,8 @@ const MarkTable = () => {
         <Form form={form} onFinish={onFinish}>
           {/* Add form fields here based on your column fields */}
 
-          {editMode && (<Form.Item name="id">
-            <Input type='hidden' />
+          {editMode && (<Form.Item name="id" hidden={true}>
+            <Input/>
           </Form.Item>)}
 
 

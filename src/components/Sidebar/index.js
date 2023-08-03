@@ -6,8 +6,9 @@ import {
   PieChartOutlined,
   UserOutlined,
   SettingTwoTone,
+  SnippetsTwoTone
 } from '@ant-design/icons';
-import { useEffect } from 'react';
+
 
 const { SubMenu } = Menu;
 
@@ -40,6 +41,10 @@ function SideBard() {
         <Menu.Item key="8">Team 2</Menu.Item>
       </SubMenu> */}
       {/* <Menu.Item key="9" icon={<FileOutlined />} /> */}
+      { userInfo.isSuperAdmin === true && ( <SubMenu key="sub3" icon={<SnippetsTwoTone/>} title="Report">
+        <Menu.Item key="12"><Link to={'/report'}>Risk Report</Link></Menu.Item>
+      </SubMenu>)}
+     
       { userInfo.isSuperAdmin === true && ( <SubMenu key="sub2" icon={<SettingTwoTone />} title="Settings">
         {/* <Menu.Item key="4"><Link to = {'/createAudit'}>Create Audit</Link></Menu.Item>
         <Menu.Item key="5"><Link to = {'/indexAudit'}>List Audit</Link></Menu.Item> */}
@@ -48,6 +53,7 @@ function SideBard() {
         <Menu.Item key="10"><Link to={'/previlageIndex'}>Previlage</Link></Menu.Item>
         <Menu.Item key="11"><Link to={'/markingIndex'}>Marks</Link></Menu.Item>
       </SubMenu>)}
+
      
     </Menu>
   );

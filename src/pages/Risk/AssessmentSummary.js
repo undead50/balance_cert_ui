@@ -42,6 +42,8 @@ const AssessmentSummary = (props) => {
 
   // },[])
 
+  console.log(assSummary)
+
   useEffect(() => {
     if (sumOfWeightageAverageScore < 20) {
       setRiskState('Low')
@@ -66,13 +68,16 @@ const AssessmentSummary = (props) => {
     // alert(a.weightageAverageScore)
   })
 
+  const sortByTotalSum = mutableData.sort((a, b) => {
+    return a.totalSum - b.totalSum
+  })
+
+
+  // console.log(sortByTotalSum)
+
   const sumOfWeightageAverageScore = mutableData.reduce((accumulator, currentObj) => {
     return accumulator + currentObj.weightageAverageScore;
   }, 0);
-
-
-
-
 
 
   const sumOfTotalSum = mutableData.reduce((accumulator, currentObj) => {
@@ -86,7 +91,7 @@ const AssessmentSummary = (props) => {
 
   const averageOfTotalSum = sumOfTotalSum / mutableData.length;
 
-  const modifiedSummary = sortByAverageWeight.map((key) => {
+  const modifiedSummary = sortByTotalSum.map((key) => {
     const data = {
       categoryName: key.categoryName,
       totalSum: `${key.totalSum}%`,

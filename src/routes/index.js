@@ -13,6 +13,7 @@ import UserPrivilegesTable from '../pages/Previlage';
 import RiskTable from '../pages/Risk';
 import ProtectedRoute from '../components/ProtectedRoute';
 import MarkTable from '../pages/Mark';
+import ReportTable from '../pages/Report';
 
 function MyRoutes() {
   return (
@@ -26,7 +27,8 @@ function MyRoutes() {
           <Route path="indexAudit" element={<Index/>}/>
           <Route path="riskassessment" element={<AccountOpeningForm/>}/>
           <Route path="riskassessment/:riskassessmentID" element={<AccountOpeningForm/>}/>
-          <Route path="assessmentindex" element={<RiskTable/>}/>
+          <Route path="assessmentindex" element={<RiskTable />} />
+          <Route path="/report" element={<ReportTable/>}/>
           <Route path="categoryIndex" element={<CategoryIndex/>}/>
           <Route path="questionIndex" element={<QuestionIndex/>}/>
           <Route path="previlageIndex" element={<UserPrivilegesTable/>} />

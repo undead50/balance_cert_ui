@@ -145,6 +145,7 @@ const AccountOpeningForm = () => {
               assessment_data: finalFormValues,
               status: saveAsDraft ? 'DRAFT' : 'CREATED',
               created_by: userInfo.userName,
+              branch_code: userInfo.solId,
             };
             dispatch(updateRiskAsync(postDataEdit));
           } else {
@@ -152,6 +153,7 @@ const AccountOpeningForm = () => {
               assessment_data: finalFormValues,
               status: saveAsDraft ? 'DRAFT' : 'CREATED',
               created_by: userInfo.userName,
+              branch_code: userInfo.solId,
             };
             dispatch(createRiskAsync(postData));
           }
