@@ -8,6 +8,7 @@ import {
     updateReportAsync,
 } from '../../store/slices/reportSlice';
 import { EyeOutlined } from '@ant-design/icons';
+// import Spinner  from '../../components/Spinner';
 // import { useNotification } from '../../hooks/index';
 import moment from 'moment'; // Import moment here
 
@@ -98,7 +99,11 @@ const ReportTable = () => {
             dataIndex: 'branch_code',
             key: 'branch_code',
         },
-
+        {
+          title: 'Branch Description',
+          dataIndex: 'branchDesc',
+          key: 'branchDesc',
+      },
 
 
         {
@@ -209,7 +214,7 @@ const ReportTable = () => {
     </Button> */}
             <h2 style={{justifyContent:'center',display:'flex'}}>Branch Wise Summary Report</h2>
             <br/>
-            <Table dataSource={dataSource} columns={columns} />
+            <Table dataSource={dataSource} columns={columns} loading={loading} />
 
             {/* Modal for adding/editing a record */}
             <Modal
@@ -251,7 +256,9 @@ const ReportTable = () => {
                     </Form.Item> */}
                 </Form>
             </Modal>
-        </div>
+            {/* {loading && <Spinner />} */}
+      </div>
+      
     );
 };
 

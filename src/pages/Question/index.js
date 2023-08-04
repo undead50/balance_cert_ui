@@ -119,7 +119,7 @@ const QuestionIndex = () => {
       >
         Add
       </Button>
-      <Table dataSource={dataSource} columns={columns} />
+      <Table dataSource={dataSource} columns={columns} loading={loading }  />
       <Modal
         title={editMode ? "Question Edit Form" : "Questions Add Form"}
         open={visible}

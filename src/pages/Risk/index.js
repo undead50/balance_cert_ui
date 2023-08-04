@@ -3,6 +3,7 @@ import { Table, Button, Modal, Form, Tag, Space, Card, List } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 
+
 import {
   calculateRiskAsync,
   createRiskAsync,
@@ -205,6 +206,11 @@ const RiskTable = () => {
       dataIndex: 'branch_code',
       key:'branch_code'
     },
+    // {
+    //   title: 'branchDesc',
+    //   dataIndex: 'branchDesc',
+    //   key:'branchDesc'
+    // },
 
     {
       title: 'created_at',
@@ -314,7 +320,7 @@ const RiskTable = () => {
       >
         Add
       </Button> */}
-      <Table dataSource={dataSource} columns={columns} />
+      <Table dataSource={dataSource} columns={columns} loading={loading } />
 
       {/* Modal for adding/editing a record */}
       <Modal

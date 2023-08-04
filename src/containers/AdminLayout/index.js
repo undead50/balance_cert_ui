@@ -156,6 +156,38 @@ const AdminLayout = () => {
               alignItems: "center",
             }}
           >
+             <div
+              style={{
+                marginLeft: "0px",
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              <Button
+                type="text"
+                icon={
+                  collapsed ? (
+                    <MenuUnfoldOutlined style={{ fontSize: "20px" }} />
+                  ) : (
+                    <MenuFoldOutlined style={{ fontSize: "20px" }} />
+                  )
+                }
+                onClick={() => setCollapsed(!collapsed)}
+                style={{
+                  width: 56,
+                  height: 56,
+                  color: "white",
+                  marginTop: "5px",
+                  alignSelf: "center",
+                }}
+              />
+
+              <h1
+                style={{ color: "#fff", fontSize: "19px", fontWeight: "600" }}
+              >
+                Self Risk Assessment System.
+              </h1>
+            </div>
             <div
               style={{ flex: "50%", textAlign: "right", marginRight: "18px" }}
             >
