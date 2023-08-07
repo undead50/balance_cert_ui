@@ -18,10 +18,14 @@ const initialState = {
 };
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-export const fetchReportsAsync = createAsyncThunk('report/fetchReports', async () => {
+export const fetchReportsAsync = createAsyncThunk('report/fetchReports', async (data) => {
   try {
+    const params = {
+      startDate : data.startDate,
+      endDate : data.endDate,
+    };
     const url = BACKEND_URL + '/report/fetchReports';
-    const response = await axiosInstance.get(url);
+    const response = await axiosInstance.get(url,{params});
     return response.data;
   } catch (error) {
     throw new Error(error.response.data.error);

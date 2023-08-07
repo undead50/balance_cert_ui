@@ -20,6 +20,7 @@ import { privilegeReducer } from "./slices/privilegeSlice";
 import { riskReducer } from "./slices/riskSlice";
 import { markReducer } from "./slices/markSlice";
 import { reportReducer } from "./slices/reportSlice";
+import { branchReducer } from "./slices/branchSlice";
 import { enc, AES } from 'crypto-js';
 
 const secretKey = '081fbadce74f99af29c8280fce633fb9';
@@ -51,6 +52,7 @@ const rootReducer = combineReducers({
   risk: riskReducer,
   mark: markReducer,
   report: reportReducer,
+  branch: branchReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

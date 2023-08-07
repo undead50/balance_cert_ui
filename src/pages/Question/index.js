@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import CreateQuestion from './create';
 import { deleteQuestionAsync, fetchQuestionsAsync } from '../../store/slices/questionSlice';
+import {fetchCategorysAsync } from '../../store/slices/categorySlice'
 import { Space } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 
@@ -19,10 +20,12 @@ const handleView = (record) => {
 const QuestionIndex = () => {
   const dispatch = useDispatch();
   const { questions, loading, error } = useSelector((state) => state.question);
+  const { categorys } = useSelector((state) => state.category); 
   const [visible, setVisible] = useState(false);
   const [questionRecord, setQuestionRecord] = useState({});
   const [editMode, setEditMode] = useState(false);
   const [selectedOption, setSelectedOption] = useState('')
+  const [categoryList, setCategoryList] = useState([])
 
 
   const columns = [
@@ -49,6 +52,9 @@ const QuestionIndex = () => {
       title: 'Category Name',
       dataIndex: 'category_name',
       key: 'category_name',
+      filters: categoryList,
+      filterSearch: false,
+      onFilter: (value, record) => record.category_name === value,
     },
     // {
     //   title: 'Created At',
@@ -106,9 +112,21 @@ const QuestionIndex = () => {
 
   useEffect(() => {
     dispatch(fetchQuestionsAsync());
+    dispatch(fetchCategorysAsync());
+
+    const filterCategory = categorys.map((category) => {
+     return {
+        text: category.categoryName,
+        value: category.categoryName
+    }
+    })
+    // console.log(filterCategory)
+    setCategoryList(filterCategory)
+
   }, []);
 
   const dataSource = questions;
+
 
   return (
     <div>

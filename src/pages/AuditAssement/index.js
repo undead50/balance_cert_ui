@@ -4,7 +4,7 @@ import { Col, Row, Card, Checkbox } from 'antd';
 import { fetchCategorysAsync } from '../../store/slices/categorySlice';
 import { fetchQuestionsAsync } from '../../store/slices/questionSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { SaveOutlined } from '@ant-design/icons';
+import { SaveOutlined ,PlayCircleFilled} from '@ant-design/icons';
 import { createRiskAsync, updateRiskAsync } from '../../store/slices/riskSlice';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -22,9 +22,9 @@ const AccountOpeningForm = () => {
     if (riskassessmentID) {
       const editRisk = risks.filter((risk) => risk.id == riskassessmentID);
       console.log('editRisk');
-      console.log(editRisk[0]['assessment_data']);
-      setFormValues(editRisk[0]['assessment_data']);
-      form.setFieldsValue(editRisk[0]['assessment_data']);
+      console.log(JSON.parse(editRisk[0]['assessment_data']));
+      setFormValues(JSON.parse(editRisk[0]['assessment_data']));
+      form.setFieldsValue(JSON.parse(editRisk[0]['assessment_data']));
       setIsDraft(true);
     }
   }, [riskassessmentID]);
@@ -337,8 +337,8 @@ const AccountOpeningForm = () => {
             <div style={{ marginTop: '20px' }}>
               
               <br />
-              { checked && (<Button type="primary" onClick={handleNext}>
-                Start Assessment
+              { checked && (<Button type="primary" shape = "round" onClick={handleNext}>
+                Start Assessment <PlayCircleFilled />
               </Button>)}
               
             </div>
@@ -429,13 +429,14 @@ const AccountOpeningForm = () => {
               <div style={{ display: 'flex', marginTop: '50px', justifyContent: 'space-between' }}>
                 {currentStep > 0 && (
                   <>
-                    <Button type="primary" onClick={handlePrevious}>
+                    <Button type="primary" shape = "round" onClick={handlePrevious}>
                       Previous
                     </Button>
                     <Button
                       type="primary"
                       icon={<SaveOutlined />}
                       onClick={handleDraft}
+                      shape = "round"
                     >
 
                       Save as Draft
@@ -443,7 +444,7 @@ const AccountOpeningForm = () => {
                   </>
                 )}
                 {currentStep < categorys.length && (
-                  <Button type="primary" onClick={handleNext}>
+                  <Button type="primary" onClick={handleNext} shape = "round">
                     Next
                   </Button>
                 )}

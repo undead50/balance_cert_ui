@@ -11,8 +11,9 @@ import {
   fetchRisksAsync,
   updateRiskAsync,
 } from '../../store/slices/riskSlice';
+import { fetchBranchsAsync } from '../../store/slices/branchSlice';
 import { useNotification } from '../../hooks/index';
-import { useNavigate } from 'react-router-dom';
+import { json, useNavigate } from 'react-router-dom';
 import './index.css';
 import AssessmentSummary from './AssessmentSummary';
 import CommentModal from './CommentModal ';
@@ -38,6 +39,7 @@ const RiskTable = () => {
   const { userInfo } = useSelector((state) => state.user);
 
   const { risks, loading, error } = useSelector((state) => state.risk);
+  const {branchs} = useSelector((state)=> state.branch)
 
   const { questions } = useSelector((state) => state.question);
   const [auditHistoty, setAuditHistory] = useState([]);
@@ -148,7 +150,9 @@ const RiskTable = () => {
     setIsModalVisible(true);
     // console.log(risk[0]['assessment_data'])
     const selectedRecord = risk[0]['assessment_data'];
-    Object.entries(risk[0]['assessment_data']).forEach(([key, value]) => {
+    const selectedObject = JSON.parse(selectedRecord);
+
+    Object.entries(selectedObject).forEach(([key, value]) => {
       questions.map((qkey) => {
         if (qkey.ref === key) {
           const selectedValue =
@@ -164,18 +168,40 @@ const RiskTable = () => {
             Category: qkey.category_name,
             question: qkey.question,
             Selected: selectedValue,
-            es: selectedRecord[`ES${qkey.ref}`],
+            es: selectedObject[`ES${qkey.ref}`],
           });
           // console.log(`${qkey.question}:${value}`)
         }
       });
     });
+    console.log(tableData)
     setTableData(listData);
   };
 
+  // const getBranchDesc = (branchCode) => {
+  //   let descripTion
+  //   const branchDesc = branchs.map((branch) => {
+  //     if (branchCode == branch.branchCode) {
+  //       return branch.branchDesc
+  //     }
+  //   }
+  //   )
+  //   return branchDesc
+  // }
+
   useEffect(() => {
     userInfo.isSuperAdmin === true ? dispatch(fetchRisksAsync()) : dispatch((fetchRisksAsync(userInfo.solId)));
-    console.log(risks);
+    // console.log(risks);
+    dispatch(fetchBranchsAsync())
+
+    // const updatedBranch = risks.map((risk) => {
+    //   return {
+    //     risk,
+    //     branchDesc: getBranchDesc(risk.branch_code)
+    //   }
+    // })
+    
+    // console.log(updatedBranch)
   }, []);
 
   const dataSource = risks;
@@ -206,11 +232,20 @@ const RiskTable = () => {
       dataIndex: 'branch_code',
       key:'branch_code'
     },
-    // {
-    //   title: 'branchDesc',
-    //   dataIndex: 'branchDesc',
-    //   key:'branchDesc'
-    // },
+    {
+      title: 'branchDesc',
+      dataIndex: 'branchDesc',
+      key: 'branchDesc',
+      filters:  
+        branchs.map((branch) => {
+          return {
+            text: branch.branchDesc,
+            value : branch.branchDesc
+        }
+        }),
+      filterSearch: true,
+      onFilter: (value, record) => record.branchDesc === value,
+    },
 
     {
       title: 'created_at',
