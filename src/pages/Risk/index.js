@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Modal, Form, Tag, Space, Card, List } from 'antd';
+import { Table, Button, Modal, Form, Tag, Space, Card, List,DatePicker } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EyeOutlined,CheckOutlined,SearchOutlined,FilePdfOutlined } from '@ant-design/icons';
 
 
 import {
@@ -17,7 +17,12 @@ import { json, useNavigate } from 'react-router-dom';
 import './index.css';
 import AssessmentSummary from './AssessmentSummary';
 import CommentModal from './CommentModal ';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
 
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+const { RangePicker } = DatePicker;
 
 const RiskTable = () => {
   const [form] = Form.useForm();
@@ -30,6 +35,7 @@ const RiskTable = () => {
   const [commentVisible, setCommentVisible] = useState(false);
   const [commentRecord, setCommentRecord] = useState({});
   const [auditAssessmentRecord, setAuditAssessmentRecord] = useState([]);
+  const [modalRecord,setModalRecord] = useState({})
 
   const navigate = useNavigate();
   // const { callNotification } = useNotification();
@@ -44,6 +50,28 @@ const RiskTable = () => {
   const { questions } = useSelector((state) => state.question);
   const [auditHistoty, setAuditHistory] = useState([]);
 
+
+  const onSearch = (values) => {
+    let startDate;
+    let endDate;
+    values.dateRange.map(( data,index) => {
+      if (index === 0) {
+        startDate = data.format('YYYY-MM-DD')  
+      } else if (index === 1 ) {
+        endDate =  data.format('YYYY-MM-DD')  
+      }   
+    })
+
+    // alert(`${startDate},${endDate}`)
+    // const data = {
+    //   startDate,
+    //   endDate
+    // }
+    let data
+    userInfo.isSuperAdmin ?  data = {startDate,endDate} : data = {startDate,endDate,branch_code: userInfo.solId}
+    dispatch(fetchRisksAsync(data))
+  }
+
   const viewColumns = [
     { title: 'Ref', dataIndex: 'Ref', key: 'Ref' },
     { title: 'Category', dataIndex: 'Category', key: 'Ref' },
@@ -56,6 +84,42 @@ const RiskTable = () => {
     { title: 'Explanation of score', dataIndex: 'es', key: 'es' },
   ];
 
+  const downloadPDF = () => {
+    const pdfDefinition = {
+      content: [
+        {
+          text: "Branch Wise Risk Assessment Status",  // Add the heading here
+          style: 'heading',
+        },
+        {
+          table: {
+            headerRows: 1,
+            widths: columns.map(() => 'auto'),
+            body: [
+              columns.map(column => ({ text: column.title, style: 'tableHeader' })),
+              ...dataSource.map(row => columns.map(column => row[column.dataIndex] || '')),
+            ],
+          },
+          layout: 'lightHorizontalLines',
+        },
+      ],
+      styles: {
+        heading: {
+          fontSize: 18,
+          bold: true,
+          alignment: 'center',
+          margin: [0, 0, 0, 10], // Optional margin
+        },
+        tableHeader: {
+          bold: true,
+        },
+      },
+    };
+
+    const pdfDocGenerator = pdfMake.createPdf(pdfDefinition);
+    pdfDocGenerator.download('Branch_Wise_Risk_Assessment_Status.pdf');
+  };
+
   // Function to handle opening the modal for adding/editing a record
   const handleAction = (record) => {
     setCommentVisible(true);
@@ -64,6 +128,7 @@ const RiskTable = () => {
 
   const closeComment = () => {
     setCommentVisible(false);
+    closeModal()
   };
 
   const data = auditHistoty;
@@ -91,6 +156,8 @@ const RiskTable = () => {
         )
       : console.log('');
     setAuditAssessmentRecord(auditAssessmentList);
+    
+    
   };
 
   const handleCompleteDraft = () => {
@@ -108,6 +175,7 @@ const RiskTable = () => {
     setIsModalVisible(false);
     setTableData([]);
     setAssessmentStatus({});
+    setModalRecord({})
     console.log(assesmentStatus);
     setAuditHistory([]);
   };
@@ -150,7 +218,13 @@ const RiskTable = () => {
     setIsModalVisible(true);
     // console.log(risk[0]['assessment_data'])
     const selectedRecord = risk[0]['assessment_data'];
-    const selectedObject = JSON.parse(selectedRecord);
+    if (typeof selectedRecord === 'string') {
+      var selectedObject = JSON.parse(selectedRecord);  
+    }
+    else {
+      var selectedObject = selectedRecord
+    }
+    
 
     Object.entries(selectedObject).forEach(([key, value]) => {
       questions.map((qkey) => {
@@ -176,6 +250,7 @@ const RiskTable = () => {
     });
     console.log(tableData)
     setTableData(listData);
+    setModalRecord(record)
   };
 
   // const getBranchDesc = (branchCode) => {
@@ -190,7 +265,10 @@ const RiskTable = () => {
   // }
 
   useEffect(() => {
-    userInfo.isSuperAdmin === true ? dispatch(fetchRisksAsync()) : dispatch((fetchRisksAsync(userInfo.solId)));
+    let data
+    userInfo.isSuperAdmin ?  data = {} : data = {branch_code: userInfo.solId}
+    // userInfo.isSuperAdmin === true ? dispatch(fetchRisksAsync()) : dispatch((fetchRisksAsync({branch_code: userInfo.solId})));
+    dispatch(fetchRisksAsync(data))
     // console.log(risks);
     dispatch(fetchBranchsAsync())
 
@@ -228,12 +306,12 @@ const RiskTable = () => {
     // },
 
     {
-      title: 'branch_code',
+      title: 'Brach Code',
       dataIndex: 'branch_code',
       key:'branch_code'
     },
     {
-      title: 'branchDesc',
+      title: 'Branch Description',
       dataIndex: 'branchDesc',
       key: 'branchDesc',
       filters:  
@@ -248,14 +326,14 @@ const RiskTable = () => {
     },
 
     {
-      title: 'created_at',
+      title: 'Created At',
       dataIndex: 'created_at',
       key: 'created_at',
     },
     
 
     {
-      title: 'created_by',
+      title: 'Created By',
       dataIndex: 'created_by',
       key: 'created_by',
     },
@@ -297,9 +375,33 @@ const RiskTable = () => {
     // },
 
     {
-      title: 'status',
+      title: 'Status',
       dataIndex: 'status',
       key: 'status',
+      filters:  
+        [{
+          text: 'APPROVED',
+          value : 'APPROVED'
+        },
+        {
+          text: 'CREATED',
+          value : 'CREATED'
+          },
+          {
+            text: 'REVIEWED',
+            value : 'REVIEWED'
+          },
+          {
+            text: 'REJECTED',
+            value : 'REJECTED'
+          },
+          {
+            text: 'DRAFT',
+            value : 'DRAFT'
+          }
+        ],
+      filterSearch: true,
+      onFilter: (value, record) => record.status === value,
       render: (status) => {
         let color =
           status === 'APPROVED'
@@ -325,7 +427,7 @@ const RiskTable = () => {
           <Button onClick={() => handleView(record)}>
             <EyeOutlined />
           </Button>
-          {userInfo.isBranchManager === 'Y' || userInfo.isSuperAdmin === true &&
+          {/* {userInfo.isBranchManager === 'Y' || userInfo.isSuperAdmin === true &&
             (['CREATED', 'REVIEWED'].includes(record.status) ? (
               <Button onClick={() => handleAction(record)}>
                 {record.status === 'CREATED'
@@ -334,7 +436,7 @@ const RiskTable = () => {
                     ? 'Approve'
                     : null}
               </Button>
-            ) : null)}
+            ) : null)} */}
         
           {record.status === 'APPROVED' ? (
             <Button onClick={() => handleViewAssessment(record)}>
@@ -355,6 +457,29 @@ const RiskTable = () => {
       >
         Add
       </Button> */}
+      {userInfo.isSuperAdmin ? <h2 style={{ justifyContent: 'center', display: 'flex', textDecoration: 'underline' }}>(Branch Wise Risk Assessment Status)</h2>:null}
+      <Button onClick={downloadPDF} type="primary" shape='round'>
+        Export Pdf<FilePdfOutlined />
+      </Button>
+      <br />
+      <br />
+      <Form form={form} onFinish={onSearch} layout="inline">
+        <Form.Item
+          name="dateRange"
+          label="Select Date Range"
+          rules={[
+            { type: 'array', required: true, message: 'Please select a date range' },
+          ]}
+        >
+          <RangePicker format="YYYY-MM-DD" style={{ width: 300 }} />
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary"  shape="circle"  htmlType="submit"><SearchOutlined /></Button>
+        </Form.Item>
+      </Form>
+      <br />
+      <br />
       <Table dataSource={dataSource} columns={columns} loading={loading } />
 
       {/* Modal for adding/editing a record */}
@@ -369,10 +494,11 @@ const RiskTable = () => {
           <Button
             type="primary"
             size="small"
+            shape='round'
             style={{ marginBottom: '10px' }}
             onClick={() => handleCompleteDraft()}
           >
-            Complete Draft
+            Continue Draft
           </Button>
         ) : (
           ''
@@ -391,6 +517,23 @@ const RiskTable = () => {
               }}
               renderItem={(item) => <List.Item>{item}</List.Item>}
             />
+            {userInfo.isBranchManager === 'Y' || userInfo.isSuperAdmin === true &&
+            (['CREATED', 'REVIEWED'].includes(modalRecord.status) ? (
+              <>
+              <Button type="primary" shape='round' onClick={() => handleAction(modalRecord)}>
+                <CheckOutlined />
+                {modalRecord.status === 'CREATED'
+                  ? 'Review'
+                  : modalRecord.status === 'REVIEWED'
+                    ? 'Approve'
+                    : null}
+                
+              </Button>
+              <br />
+              <br />
+              </>
+              ) : null)}
+            
             <Table
               dataSource={tableData}
               columns={viewColumns}

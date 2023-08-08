@@ -22,6 +22,9 @@ const CommentModal = (props) => {
             toSubmitValue.reviewed_comment = values.comment
             toSubmitValue.reviewed_by = userInfo.userName
             toSubmitValue.reviewed_at = currentDate
+            if (typeof toSubmitValue.assessment_data === 'string') {
+                toSubmitValue.assessment_data = JSON.parse(toSubmitValue.assessment_data);  
+              }
             console.log(toSubmitValue)
             dispatch(updateRiskAsync(toSubmitValue))
             props.closeComment()
@@ -34,6 +37,9 @@ const CommentModal = (props) => {
             toSubmitValue.approved_comment = values.comment
             toSubmitValue.approved_by = userInfo.userName
             toSubmitValue.approved_at = currentDate
+            if (typeof toSubmitValue.assessment_data === 'string') {
+                toSubmitValue.assessment_data = JSON.parse(toSubmitValue.assessment_data);  
+              }
             console.log(toSubmitValue)
             dispatch(updateRiskAsync(toSubmitValue))
             props.closeComment()

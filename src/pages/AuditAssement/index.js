@@ -329,16 +329,16 @@ const AccountOpeningForm = () => {
                     &#xa0;
                   </p>
                 </>
-                <Checkbox checked={checked} onChange={handleCheckboxChange}>
+                {!isDraft && <Checkbox checked={checked} onChange={handleCheckboxChange}>
                 I accept the terms and conditions
-                </Checkbox>
+                </Checkbox>}
                 
                 {currentStep == 0 && (
             <div style={{ marginTop: '20px' }}>
               
               <br />
-              { checked && (<Button type="primary" shape = "round" onClick={handleNext}>
-                Start Assessment <PlayCircleFilled />
+              { (checked || isDraft) && (<Button type="primary" shape = "round" onClick={handleNext}>
+                {isDraft ? 'Continue Draft' : 'Start Assessment'} <PlayCircleFilled />
               </Button>)}
               
             </div>

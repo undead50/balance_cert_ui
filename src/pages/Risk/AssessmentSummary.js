@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useState } from 'react';
-import { Modal, Table, List, Button, Tag } from 'antd';
+import { Modal, Table, List, Button, Tag,Image } from 'antd';
 import { useSelector } from 'react-redux';
 import './index.css';
 import ChartComponent from './AssessmentChart.js';
@@ -18,8 +18,8 @@ const AssessmentSummary = (props) => {
   };
 
   const handleConvertToPDF = () => {
-    const pdfWidth = 480; // Width of A4 in mm
-    const pdfHeight = 297; // Height of A4 in mm
+    const pdfWidth = 500; // Width of A4 in mm
+    const pdfHeight = 500; // Height of A4 in mm
     html2canvas(modalContentRef.current).then((canvas) => {
       const dataURL = canvas.toDataURL();
       // Convert the dataURL to PDF using jspdf
@@ -28,7 +28,7 @@ const AssessmentSummary = (props) => {
         unit: 'mm',
         format: [pdfWidth, pdfHeight],
       });
-      pdf.addImage(dataURL, 'PNG', 20, 1); // You can adjust the position and size of the image in the PDF
+      pdf.addImage(dataURL, 'PNG', 100, 1); // You can adjust the position and size of the image in the PDF
       pdf.save('assessment_summary.pdf');
     });
   };
@@ -138,9 +138,11 @@ const AssessmentSummary = (props) => {
         width="1000px"
         height="200px"
       >
-        <Button type='text' onClick={handleConvertToPDF} icon={<FilePdfOutlined style={{ fontSize: '35px' }} />} size={'large'} ></Button>
+        <Button type='text' onClick={handleConvertToPDF} icon={<FilePdfOutlined style={{
+          fontSize: '35px',
+        }} />} size={'large'} ></Button>
         <br />
-        <br />
+        <br/>
         <div ref={modalContentRef}>
           {/* <div className="custom-scrollbar"> */}
 
@@ -155,6 +157,15 @@ const AssessmentSummary = (props) => {
             }}
             renderItem={(item) => <List.Item>{item}</List.Item>}
           />
+
+<div style={{display: 'flex', justifyContent:'center'}}>
+        <img
+          width={200}
+          src={process.env.PUBLIC_URL + '/images/citizens-logo.png'}
+          
+          />
+          </div>
+          <br />
 
           <Table dataSource={dataSource} columns={columns} pagination={false}
             summary={() => {

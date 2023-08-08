@@ -7,16 +7,21 @@ import {
   fetchReportsAsync,
   updateReportAsync,
 } from '../../store/slices/reportSlice';
-import { EyeOutlined,SearchOutlined } from '@ant-design/icons';
+import { EyeOutlined,SearchOutlined,FilePdfOutlined } from '@ant-design/icons';
 // import Spinner  from '../../components/Spinner';
 // import { useNotification } from '../../hooks/index';
 import moment from 'moment'; // Import moment here
 import { fetchBranchsAsync } from '../../store/slices/branchSlice';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 
 const { RangePicker } = DatePicker;
 
 const ReportTable = () => {
+
   const filterCreatedAt = (value, createdDate) => {
     if (value === 'today') {
       const today = moment().startOf('day');
@@ -42,6 +47,9 @@ const ReportTable = () => {
     return false;
   };
 
+
+
+  
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [formValues, setFormValues] = useState({});
@@ -84,6 +92,46 @@ const ReportTable = () => {
     console.log(branchs);
   }, []);
 
+  const downloadPDF = () => {
+    const pdfDefinition = {
+      content: [
+        {
+          text: "Branch Wise Summary Report",  // Add the heading here
+          style: 'heading',
+        },
+        {
+          table: {
+            headerRows: 1,
+            widths: columns.map(() => 'auto'),
+            body: [
+              columns.map(column => ({ text: column.title, style: 'tableHeader' })),
+              ...dataSource.map(row => columns.map(column => row[column.dataIndex] || '')),
+            ],
+          },
+          layout: 'lightHorizontalLines',
+        },
+      ],
+      styles: {
+        heading: {
+          fontSize: 18,
+          bold: true,
+          alignment: 'center',
+          margin: [0, 0, 0, 10], // Optional margin
+        },
+        tableHeader: {
+          bold: true,
+        },
+      },
+    };
+
+    const pdfDocGenerator = pdfMake.createPdf(pdfDefinition);
+    pdfDocGenerator.download('Branch_Wise_Summary_Report.pdf');
+  };
+
+
+
+
+
   const dataSource = reports;
 
   const onFinish = (values) => {
@@ -123,7 +171,7 @@ const ReportTable = () => {
   const columns = [
 
     {
-      title: 'branch_code',
+      title: 'Branch Code',
       dataIndex: 'branch_code',
       key: 'branch_code',
     },
@@ -250,7 +298,10 @@ const ReportTable = () => {
     >
       Add
     </Button> */}
-      <h2 style={{ justifyContent: 'center', display: 'flex' }}>Branch Wise Summary Report</h2>
+      <h2 style={{ justifyContent: 'center', display: 'flex',textDecoration:'underline' }}>(Branch Wise Summary Report)</h2>
+      <Button onClick={downloadPDF} type="primary" shape='round'>
+        Export Pdf<FilePdfOutlined />
+      </Button>
       <br />
       <br />
       <Form form={form} onFinish={onSearch} layout="inline">
