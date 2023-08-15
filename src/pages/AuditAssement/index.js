@@ -1,6 +1,6 @@
 import { Form, Radio, Button, Steps, Input, Popconfirm } from 'antd';
 import { useEffect, useState } from 'react';
-import { Col, Row, Card, Checkbox } from 'antd';
+import { Col, Row, Card, Checkbox,Tooltip } from 'antd';
 import { fetchCategorysAsync } from '../../store/slices/categorySlice';
 import { fetchQuestionsAsync } from '../../store/slices/questionSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -337,9 +337,12 @@ const AccountOpeningForm = () => {
             <div style={{ marginTop: '20px' }}>
               
               <br />
-              { (checked || isDraft) && (<Button type="primary" shape = "round" onClick={handleNext}>
+                    {(checked || isDraft) && (
+                      <Tooltip placement="topLeft" title={ isDraft ? 'Please click to continue your Draft':'Please click to start the assessment'}>
+                      <Button type="primary" shape="round" onClick={handleNext}>
                 {isDraft ? 'Continue Draft' : 'Start Assessment'} <PlayCircleFilled />
-              </Button>)}
+                        </Button>
+                        </Tooltip>)}
               
             </div>
           )}

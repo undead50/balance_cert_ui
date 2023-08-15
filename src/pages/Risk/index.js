@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Modal, Form, Tag, Space, Card, List,DatePicker } from 'antd';
+import { Table, Button, Modal, Form, Tag, Space, Card, List, DatePicker, Tooltip } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { DeleteOutlined, EyeOutlined,CheckOutlined,SearchOutlined,FilePdfOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EyeOutlined, CheckOutlined, SearchOutlined, FilePdfOutlined } from '@ant-design/icons';
 
 
 import {
@@ -35,7 +35,7 @@ const RiskTable = () => {
   const [commentVisible, setCommentVisible] = useState(false);
   const [commentRecord, setCommentRecord] = useState({});
   const [auditAssessmentRecord, setAuditAssessmentRecord] = useState([]);
-  const [modalRecord,setModalRecord] = useState({})
+  const [modalRecord, setModalRecord] = useState({})
 
   const navigate = useNavigate();
   // const { callNotification } = useNotification();
@@ -45,7 +45,7 @@ const RiskTable = () => {
   const { userInfo } = useSelector((state) => state.user);
 
   const { risks, loading, error } = useSelector((state) => state.risk);
-  const {branchs} = useSelector((state)=> state.branch)
+  const { branchs } = useSelector((state) => state.branch)
 
   const { questions } = useSelector((state) => state.question);
   const [auditHistoty, setAuditHistory] = useState([]);
@@ -54,12 +54,12 @@ const RiskTable = () => {
   const onSearch = (values) => {
     let startDate;
     let endDate;
-    values.dateRange.map(( data,index) => {
+    values.dateRange.map((data, index) => {
       if (index === 0) {
-        startDate = data.format('YYYY-MM-DD')  
-      } else if (index === 1 ) {
-        endDate =  data.format('YYYY-MM-DD')  
-      }   
+        startDate = data.format('YYYY-MM-DD')
+      } else if (index === 1) {
+        endDate = data.format('YYYY-MM-DD')
+      }
     })
 
     // alert(`${startDate},${endDate}`)
@@ -68,7 +68,7 @@ const RiskTable = () => {
     //   endDate
     // }
     let data
-    userInfo.isSuperAdmin ?  data = {startDate,endDate} : data = {startDate,endDate,branch_code: userInfo.solId}
+    userInfo.isSuperAdmin ? data = { startDate, endDate } : data = { startDate, endDate, branch_code: userInfo.solId }
     dispatch(fetchRisksAsync(data))
   }
 
@@ -142,22 +142,22 @@ const RiskTable = () => {
       : console.log('');
     record.reviewed_by !== null
       ? auditAssessmentList.push(
-          `reviewed_by : ${record.reviewed_by} ,reviewed_comment: ${record.reviewed_comment}`
-        )
+        `reviewed_by : ${record.reviewed_by} ,reviewed_comment: ${record.reviewed_comment}`
+      )
       : console.log('');
     record.approved_by !== null
       ? auditAssessmentList.push(
-          `approved_by : ${record.approved_by} ,approved_comment: ${record.approved_comment}`
-        )
+        `approved_by : ${record.approved_by} ,approved_comment: ${record.approved_comment}`
+      )
       : console.log('');
     record.rejected_by !== null
       ? auditAssessmentList.push(
-          `rejected_by : ${record.rejected_by} ,rejected_comment: ${record.rejected_comment}`
-        )
+        `rejected_by : ${record.rejected_by} ,rejected_comment: ${record.rejected_comment}`
+      )
       : console.log('');
     setAuditAssessmentRecord(auditAssessmentList);
-    
-    
+
+
   };
 
   const handleCompleteDraft = () => {
@@ -197,18 +197,18 @@ const RiskTable = () => {
       : console.log('');
     record.reviewed_by !== null
       ? auditList.push(
-          `reviewed_by : ${record.reviewed_by} ,reviewed_comment: ${record.reviewed_comment}`
-        )
+        `reviewed_by : ${record.reviewed_by} ,reviewed_comment: ${record.reviewed_comment}`
+      )
       : console.log('');
     record.approved_by !== null
       ? auditList.push(
-          `approved_by : ${record.approved_by} ,approved_comment: ${record.approved_comment}`
-        )
+        `approved_by : ${record.approved_by} ,approved_comment: ${record.approved_comment}`
+      )
       : console.log('');
     record.rejected_by !== null
       ? auditList.push(
-          `rejected_by : ${record.rejected_by} ,rejected_comment: ${record.rejected_comment}`
-        )
+        `rejected_by : ${record.rejected_by} ,rejected_comment: ${record.rejected_comment}`
+      )
       : console.log('');
     setAuditHistory(auditList);
     setAssessmentStatus({ record: record.status, id: record.id });
@@ -219,12 +219,12 @@ const RiskTable = () => {
     // console.log(risk[0]['assessment_data'])
     const selectedRecord = risk[0]['assessment_data'];
     if (typeof selectedRecord === 'string') {
-      var selectedObject = JSON.parse(selectedRecord);  
+      var selectedObject = JSON.parse(selectedRecord);
     }
     else {
       var selectedObject = selectedRecord
     }
-    
+
 
     Object.entries(selectedObject).forEach(([key, value]) => {
       questions.map((qkey) => {
@@ -233,10 +233,10 @@ const RiskTable = () => {
             value == 1
               ? 'Not comply'
               : value == 2
-              ? 'Partly Comply'
-              : value == 3
-              ? 'Fully comply'
-              : "Don't know";
+                ? 'Partly Comply'
+                : value == 3
+                  ? 'Fully comply'
+                  : "Don't know";
           listData.push({
             Ref: qkey.ref,
             Category: qkey.category_name,
@@ -266,7 +266,7 @@ const RiskTable = () => {
 
   useEffect(() => {
     let data
-    userInfo.isSuperAdmin ?  data = {} : data = {branch_code: userInfo.solId}
+    userInfo.isSuperAdmin ? data = {} : data = { branch_code: userInfo.solId }
     // userInfo.isSuperAdmin === true ? dispatch(fetchRisksAsync()) : dispatch((fetchRisksAsync({branch_code: userInfo.solId})));
     dispatch(fetchRisksAsync(data))
     // console.log(risks);
@@ -278,7 +278,7 @@ const RiskTable = () => {
     //     branchDesc: getBranchDesc(risk.branch_code)
     //   }
     // })
-    
+
     // console.log(updatedBranch)
   }, []);
 
@@ -308,18 +308,18 @@ const RiskTable = () => {
     {
       title: 'Brach Code',
       dataIndex: 'branch_code',
-      key:'branch_code'
+      key: 'branch_code'
     },
     {
       title: 'Branch Description',
       dataIndex: 'branchDesc',
       key: 'branchDesc',
-      filters:  
+      filters:
         branchs.map((branch) => {
           return {
             text: branch.branchDesc,
-            value : branch.branchDesc
-        }
+            value: branch.branchDesc
+          }
         }),
       filterSearch: true,
       onFilter: (value, record) => record.branchDesc === value,
@@ -330,7 +330,7 @@ const RiskTable = () => {
       dataIndex: 'created_at',
       key: 'created_at',
     },
-    
+
 
     {
       title: 'Created By',
@@ -378,27 +378,27 @@ const RiskTable = () => {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      filters:  
+      filters:
         [{
           text: 'APPROVED',
-          value : 'APPROVED'
+          value: 'APPROVED'
         },
         {
           text: 'CREATED',
-          value : 'CREATED'
-          },
-          {
-            text: 'REVIEWED',
-            value : 'REVIEWED'
-          },
-          {
-            text: 'REJECTED',
-            value : 'REJECTED'
-          },
-          {
-            text: 'DRAFT',
-            value : 'DRAFT'
-          }
+          value: 'CREATED'
+        },
+        {
+          text: 'REVIEWED',
+          value: 'REVIEWED'
+        },
+        {
+          text: 'REJECTED',
+          value: 'REJECTED'
+        },
+        {
+          text: 'DRAFT',
+          value: 'DRAFT'
+        }
         ],
       filterSearch: true,
       onFilter: (value, record) => record.status === value,
@@ -407,10 +407,10 @@ const RiskTable = () => {
           status === 'APPROVED'
             ? 'green'
             : status === 'REVIEWED'
-            ? 'yellow'
-            : status === 'CREATED'
-            ? 'blue'
-            : 'red';
+              ? 'yellow'
+              : status === 'CREATED'
+                ? 'blue'
+                : 'red';
         return <Tag color={color}>{status}</Tag>;
       },
     },
@@ -424,9 +424,13 @@ const RiskTable = () => {
           <Button onClick={() => handleDelete(record)}>
             <DeleteOutlined />
           </Button>
-          <Button onClick={() => handleView(record)}>
-            <EyeOutlined />
-          </Button>
+          <Tooltip placement="topLeft" title='Click to view Assessment Detail.'>
+            <Button onClick={() => handleView(record)}>
+
+              <EyeOutlined />
+
+            </Button>
+          </Tooltip>
           {/* {userInfo.isBranchManager === 'Y' || userInfo.isSuperAdmin === true &&
             (['CREATED', 'REVIEWED'].includes(record.status) ? (
               <Button onClick={() => handleAction(record)}>
@@ -437,7 +441,7 @@ const RiskTable = () => {
                     : null}
               </Button>
             ) : null)} */}
-        
+
           {record.status === 'APPROVED' ? (
             <Button onClick={() => handleViewAssessment(record)}>
               <EyeOutlined /> Summary
@@ -457,7 +461,7 @@ const RiskTable = () => {
       >
         Add
       </Button> */}
-      {userInfo.isSuperAdmin ? <h2 style={{ justifyContent: 'center', display: 'flex', textDecoration: 'underline' }}>(Branch Wise Risk Assessment Status)</h2>:null}
+      {userInfo.isSuperAdmin ? <h2 style={{ justifyContent: 'center', display: 'flex', textDecoration: 'underline' }}>(Branch Wise Risk Assessment Status)</h2> : null}
       <Button onClick={downloadPDF} type="primary" shape='round'>
         Export Pdf<FilePdfOutlined />
       </Button>
@@ -475,12 +479,12 @@ const RiskTable = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary"  shape="circle"  htmlType="submit"><SearchOutlined /></Button>
+          <Button type="primary" shape="circle" htmlType="submit"><SearchOutlined /></Button>
         </Form.Item>
       </Form>
       <br />
       <br />
-      <Table dataSource={dataSource} columns={columns} loading={loading } />
+      <Table dataSource={dataSource} columns={columns} loading={loading} />
 
       {/* Modal for adding/editing a record */}
       <Modal
@@ -518,22 +522,22 @@ const RiskTable = () => {
               renderItem={(item) => <List.Item>{item}</List.Item>}
             />
             {userInfo.isBranchManager === 'Y' || userInfo.isSuperAdmin === true &&
-            (['CREATED', 'REVIEWED'].includes(modalRecord.status) ? (
-              <>
-              <Button type="primary" shape='round' onClick={() => handleAction(modalRecord)}>
-                <CheckOutlined />
-                {modalRecord.status === 'CREATED'
-                  ? 'Review'
-                  : modalRecord.status === 'REVIEWED'
-                    ? 'Approve'
-                    : null}
-                
-              </Button>
-              <br />
-              <br />
-              </>
+              (['CREATED', 'REVIEWED'].includes(modalRecord.status) ? (
+                <>
+                  <Button type="primary" shape='round' onClick={() => handleAction(modalRecord)}>
+                    <CheckOutlined />
+                    {modalRecord.status === 'CREATED'
+                      ? 'Review'
+                      : modalRecord.status === 'REVIEWED'
+                        ? 'Approve'
+                        : null}
+
+                  </Button>
+                  <br />
+                  <br />
+                </>
               ) : null)}
-            
+
             <Table
               dataSource={tableData}
               columns={viewColumns}
