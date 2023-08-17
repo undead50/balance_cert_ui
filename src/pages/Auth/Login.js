@@ -15,7 +15,6 @@ import { resetStatePrivilege } from '../../store/slices/privilegeSlice';
 import { resetStateCategory } from '../../store/slices/categorySlice';
 import { resetStateMark } from '../../store/slices/markSlice';
 
-
 const LoginPage = () => {
   // alert('login')
   const navigate = useNavigate();
@@ -27,13 +26,13 @@ const LoginPage = () => {
   // useNotification('Login Denied','error')
 
   useEffect(() => {
-    dispatch(resetStateUser())
-    dispatch(resetStateRisk())
-    dispatch(resetStateQuestion())
-    dispatch(resetStatePrivilege())
-    dispatch(resetStateCategory())
-    dispatch(resetStateMark())
-  }, [])
+    dispatch(resetStateUser());
+    dispatch(resetStateRisk());
+    dispatch(resetStateQuestion());
+    dispatch(resetStatePrivilege());
+    dispatch(resetStateCategory());
+    dispatch(resetStateMark());
+  }, []);
 
   useEffect(() => {
     if (data) {
@@ -47,10 +46,10 @@ const LoginPage = () => {
             token: data.Data.token,
             isBranchManager: data.Data.isBranchManager,
             employeeName: data.Data.employeeName,
-            isSuperAdmin: data.Data.isSuperAdmin
+            isSuperAdmin: data.Data.isSuperAdmin,
           })
         );
-        navigate('/');
+        navigate('/dashboard');
         callNotification('Login Success', 'success');
       } else {
         callNotification('Login Denied', 'error');

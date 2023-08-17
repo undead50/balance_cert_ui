@@ -1,9 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Dashboard from '../pages/Dashboard/Dashboard';
 import LoginPage from '../pages/Auth/Login';
 import Create from '../pages/Audit/create';
 import Index from '../pages/Audit/index';
-import Information from '../pages/Dashboard/Information';
+import Dashboard from '../pages/Dashboard';
 import React from 'react';
 import AdminLayout from '../containers/AdminLayout';
 import AccountOpeningForm from '../pages/AuditAssement';
@@ -20,21 +19,29 @@ function MyRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path = "/login" element={<LoginPage/>}></Route>
-        <Route  element={<ProtectedRoute><AdminLayout/></ProtectedRoute>}>
-          <Route path="" element={<Dashboard/>}/>
-          <Route path="createAudit" element={<Create/>}/>
-          <Route path="info" element={<Information />}/>
-          <Route path="indexAudit" element={<Index/>}/>
-          <Route path="riskassessment" element={<AccountOpeningForm/>}/>
-          <Route path="riskassessment/:riskassessmentID" element={<AccountOpeningForm/>}/>
+        <Route path="/login" element={<LoginPage />}></Route>
+        <Route
+          element={
+            <ProtectedRoute>
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="createAudit" element={<Create />} />
+          <Route path="indexAudit" element={<Index />} />
+          <Route path="riskassessment" element={<AccountOpeningForm />} />
+          <Route
+            path="riskassessment/:riskassessmentID"
+            element={<AccountOpeningForm />}
+          />
           <Route path="assessmentindex" element={<RiskTable />} />
-          <Route path="/report" element={<ReportTable/>}/>
-          <Route path="categoryIndex" element={<CategoryIndex/>}/>
-          <Route path="questionIndex" element={<QuestionIndex/>}/>
-          <Route path="previlageIndex" element={<UserPrivilegesTable/>} />
+          <Route path="/report" element={<ReportTable />} />
+          <Route path="categoryIndex" element={<CategoryIndex />} />
+          <Route path="questionIndex" element={<QuestionIndex />} />
+          <Route path="previlageIndex" element={<UserPrivilegesTable />} />
           <Route path="markingIndex" element={<MarkTable />} />
-          <Route path="initiateAssessment" element={<InitiateAssessment/>}/>
+          <Route path="initiateAssessment" element={<InitiateAssessment />} />
         </Route>
       </Routes>
     </BrowserRouter>
