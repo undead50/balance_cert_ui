@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Modal, Form, Tag, Space, Card, List, DatePicker, Tooltip } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { DeleteOutlined, EyeOutlined, CheckOutlined, SearchOutlined, FilePdfOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EyeOutlined, CheckOutlined, SearchOutlined, FilePdfOutlined,PlayCircleOutlined } from '@ant-design/icons';
 
 
 import {
@@ -368,11 +368,11 @@ const RiskTable = () => {
     //   key: 'reviewed_by',
     // },
 
-    // {
-    //   title: 'reviewed_at',
-    //   dataIndex: 'reviewed_at',
-    //   key: 'reviewed_at',
-    // },
+    {
+      title: 'initiated_by',
+      dataIndex: 'initiated_by',
+      key: 'initiated_by',
+    },
 
     {
       title: 'Status',
@@ -424,10 +424,10 @@ const RiskTable = () => {
           <Button onClick={() => handleDelete(record)}>
             <DeleteOutlined />
           </Button>
-          <Tooltip placement="topLeft" title='Click to view Assessment Detail.'>
+          <Tooltip placement="topLeft" title={record.status == 'INITIATED'?'Click to Start Assessment':'Click to View Assessment'}>
             <Button onClick={() => handleView(record)}>
 
-              <EyeOutlined />
+              {record.status == "INITIATED" ? <PlayCircleOutlined />:<EyeOutlined /> }
 
             </Button>
           </Tooltip>
@@ -494,7 +494,7 @@ const RiskTable = () => {
         footer={null}
         width="1000px"
       >
-        {assesmentStatus.record == 'DRAFT' ? (
+        {assesmentStatus.record == 'DRAFT' || assesmentStatus.record == "INITIATED" ? (
           <Button
             type="primary"
             size="small"
@@ -502,7 +502,7 @@ const RiskTable = () => {
             style={{ marginBottom: '10px' }}
             onClick={() => handleCompleteDraft()}
           >
-            Continue Draft
+            { assesmentStatus.record == 'DRAFT' ? 'Continue Draft': 'Start Assessment'}
           </Button>
         ) : (
           ''

@@ -21,6 +21,7 @@ import { riskReducer } from "./slices/riskSlice";
 import { markReducer } from "./slices/markSlice";
 import { reportReducer } from "./slices/reportSlice";
 import { branchReducer } from "./slices/branchSlice";
+import { mydashboardReducer } from "./slices/mydashboardSlice";
 import { enc, AES } from 'crypto-js';
 
 const secretKey = '081fbadce74f99af29c8280fce633fb9';
@@ -35,15 +36,8 @@ const encryptor = createTransform(
   (outboundState, key) => decrypt(outboundState) // Decrypt the outbound state
 );
 
-const persistConfig = {
-  key: 'root',
-  storage,
-  transforms: [encryptor], // Use the encryptTransform directly
-  whitelist: ['auth', 'user', 'category', 'question', 'privilege', 'risk', 'mark','report'],
-};
-
-
 const rootReducer = combineReducers({
+  mydashboard: mydashboardReducer,
   auth: authReducer,
   user: userReducer,
   category: categoryReducer,
@@ -53,7 +47,19 @@ const rootReducer = combineReducers({
   mark: markReducer,
   report: reportReducer,
   branch: branchReducer,
+ 
 });
+
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  transforms: [encryptor], // Use the encryptTransform directly
+  whitelist: ['auth', 'user', 'category', 'question', 'privilege', 'risk', 'mark','report','mydashboard'],
+};
+
+
+
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

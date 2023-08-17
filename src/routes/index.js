@@ -22,7 +22,7 @@ function MyRoutes() {
       <Routes>
         <Route path = "/login" element={<LoginPage/>}></Route>
         <Route  element={<ProtectedRoute><AdminLayout/></ProtectedRoute>}>
-          <Route path="/" element={<Dashboard/>}/>
+          <Route path="" element={<Dashboard/>}/>
           <Route path="createAudit" element={<Create/>}/>
           <Route path="info" element={<Information />}/>
           <Route path="indexAudit" element={<Index/>}/>

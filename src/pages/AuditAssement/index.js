@@ -25,7 +25,13 @@ const AccountOpeningForm = () => {
       console.log(JSON.parse(editRisk[0]['assessment_data']));
       setFormValues(JSON.parse(editRisk[0]['assessment_data']));
       form.setFieldsValue(JSON.parse(editRisk[0]['assessment_data']));
-      setIsDraft(true);
+      if (editRisk[0]['status'] === 'DRAFT') {
+        setIsDraft(true);
+      }
+      else {
+        setIsDraft(false);
+      }
+      
     }
   }, [riskassessmentID]);
 
@@ -95,9 +101,10 @@ const AccountOpeningForm = () => {
 
   useEffect(() => {
     const postData = {
+      id: riskassessmentID ? parseInt(riskassessmentID) : null,
       assessment_data: formValues,
       status: saveAsDraft ? 'DRAFT' : 'CREATED',
-      branch_code: formValues.branch_code,
+      // branch_code: formValues.branch_code,
       created_by: userInfo.userName,
     };
 
@@ -106,7 +113,7 @@ const AccountOpeningForm = () => {
       assessment_data: formValues,
       status: saveAsDraft ? 'DRAFT' : 'CREATED',
       created_by: userInfo.userName,
-      branch_code: formValues.branch_code,
+      // branch_code: formValues.branch_code,
     };
 
     if (saveAsDraft) {
@@ -121,7 +128,7 @@ const AccountOpeningForm = () => {
       } else {
         try {
           // alert('postData');
-          dispatch(createRiskAsync(postData));
+          dispatch(updateRiskAsync(postData));
           // callNotification('Saved as Draft', 'success');
         } catch (error) {
           // callNotification(`${error}`, 'error');
@@ -149,17 +156,18 @@ const AccountOpeningForm = () => {
               assessment_data: finalFormValues,
               status: saveAsDraft ? 'DRAFT' : 'CREATED',
               created_by: userInfo.userName,
-              branch_code: userInfo.solId,
+              // branch_code: userInfo.solId,
             };
             dispatch(updateRiskAsync(postDataEdit));
           } else {
             const postData = {
+              id: riskassessmentID ? parseInt(riskassessmentID) : null,
               assessment_data: finalFormValues,
               status: saveAsDraft ? 'DRAFT' : 'CREATED',
               created_by: userInfo.userName,
-              branch_code: userInfo.solId,
+              // branch_code: userInfo.solId,
             };
-            dispatch(createRiskAsync(postData));
+            dispatch(updateRiskAsync(postData));
           }
 
           // callNotification('Form Submitted SuccessFully', 'success');

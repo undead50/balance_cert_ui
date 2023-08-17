@@ -52,6 +52,20 @@ export const createRiskAsync = createAsyncThunk(
   }
 );
 
+
+export const initiateAssessmentAsync = createAsyncThunk(
+  'risk/initiateAssessment',
+  async (riskData) => {
+    try {
+      const url = BACKEND_URL + '/risk/initiateAssessment';
+      const response = await axiosInstance.post(url, riskData);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.error);
+    }
+  }
+);
+
 export const updateRiskAsync = createAsyncThunk(
   'risk/updateRisk',
   async (riskData) => {
@@ -121,6 +135,20 @@ const riskSlice = createSlice({
         callNotification('Operation Successfull', 'success');
       })
       .addCase(createRiskAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+        callNotification(state.error, 'error');
+      })
+      .addCase(initiateAssessmentAsync.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(initiateAssessmentAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        state.risks.push(action.payload);
+        callNotification('Operation Successfull', 'success');
+      })
+      .addCase(initiateAssessmentAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
         callNotification(state.error, 'error');
