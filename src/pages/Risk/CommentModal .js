@@ -61,6 +61,10 @@ const CommentModal = (props) => {
             toSubmitValue.rejected_comment = value.comment
             toSubmitValue.rejected_by = userInfo.userName
             toSubmitValue.rejected_at = currentDate
+            if (typeof toSubmitValue.assessment_data === 'string') {
+                toSubmitValue.assessment_data = JSON.parse(toSubmitValue.assessment_data);  
+              }
+            console.log(toSubmitValue)
             props.closeComment()
             form.resetFields()
             dispatch(updateRiskAsync(toSubmitValue))

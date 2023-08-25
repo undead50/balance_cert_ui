@@ -49,7 +49,7 @@ const LoginPage = () => {
             isSuperAdmin: data.Data.isSuperAdmin,
           })
         );
-        navigate('/dashboard');
+        navigate('/');
         callNotification('Login Success', 'success');
       } else {
         callNotification('Login Denied', 'error');

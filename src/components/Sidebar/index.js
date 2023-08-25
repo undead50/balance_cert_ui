@@ -17,7 +17,7 @@ function SideBard() {
   return (
     <Menu theme="light" defaultSelectedKeys={['1']} mode="inline">
       <Menu.Item key="1" icon={<PieChartOutlined />}>
-        <Link to={'/dashboard'}>Dashboard</Link>
+        <Link to={'/'}>Dashboard</Link>
       </Menu.Item>
       {/* <Menu.Item key="2" icon={<DesktopOutlined />}>
         <Link to={'/createAudit'}>Create Audit Request</Link>

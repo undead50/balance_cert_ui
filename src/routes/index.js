@@ -27,7 +27,7 @@ function MyRoutes() {
             </ProtectedRoute>
           }
         >
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/" element={<Dashboard />} />
           <Route path="createAudit" element={<Create />} />
           <Route path="indexAudit" element={<Index />} />
           <Route path="riskassessment" element={<AccountOpeningForm />} />

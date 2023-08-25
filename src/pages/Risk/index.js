@@ -12,6 +12,8 @@ import {
   updateRiskAsync,
 } from '../../store/slices/riskSlice';
 import { fetchBranchsAsync } from '../../store/slices/branchSlice';
+import { fetchCategorysAsync } from '../../store/slices/categorySlice';
+import { fetchQuestionsAsync } from '../../store/slices/questionSlice';
 import { useNotification } from '../../hooks/index';
 import { json, useNavigate } from 'react-router-dom';
 import './index.css';
@@ -271,6 +273,8 @@ const RiskTable = () => {
     dispatch(fetchRisksAsync(data))
     // console.log(risks);
     dispatch(fetchBranchsAsync())
+    dispatch(fetchCategorysAsync())
+    dispatch(fetchQuestionsAsync())
 
     // const updatedBranch = risks.map((risk) => {
     //   return {

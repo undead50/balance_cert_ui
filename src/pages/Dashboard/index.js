@@ -9,6 +9,7 @@ import { Card, Col, Row, Statistic, Avatar } from 'antd';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { fetchDashboardsAsync } from '../../store/slices/dashboardSlice';
+import CountUp from 'react-countup';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ const Dashboard = () => {
   const { dashboards } = useSelector((state) => state.dashboard);
 
   const { userInfo } = useSelector((state) => state.user);
+  const formatter = (num) => <CountUp end={num.toString().replace(/,/g, '')} />;
 
   useEffect(() => {
     dispatch(fetchDashboardsAsync());
@@ -31,75 +33,45 @@ const Dashboard = () => {
           {userInfo.employeeName}
         </Tag>
       </p>
-      <Row gutter={16}>
+      <Row gutter={12}>
         <Col span={6}>
-          <Card bordered={false} style={{ backgroundColor: '#F5F5F5' }}>
-            <Statistic
-              title="APPROVED"
-              value={dashboards.map((dashboard) => {
-                if (dashboard.STATUS === 'APPROVED') {
-                  return dashboard.count;
-                }
-              })}
-              precision={0}
-              valueStyle={{
-                color: '#3f8600',
-              }}
-              suffix=""
-            />
-          </Card>
-          <Card
-            bordered={false}
-            style={{ marginTop: '10px', backgroundColor: '#F5F5F5' }}
-          >
-            <Statistic
-              title="REJECTED"
-              value={dashboards.map((dashboard) => {
-                if (dashboard.STATUS === 'REJECTED') {
-                  return dashboard.count;
-                }
-              })}
-              precision={0}
-              valueStyle={{
-                color: '#3f8600',
-              }}
-              suffix=""
-            />
-          </Card>
+          <Card style={{backgroundColor:'#84D2B5'}}>
+          <Statistic title="APPROVED" value={dashboards.map((dashboard) => {
+            if (dashboard.STATUS === 'APPROVED') {
+              return dashboard.count;
+            }
+
+          })} formatter={formatter} />
+            </Card>
         </Col>
         <Col span={6}>
-          <Card bordered={false} style={{ backgroundColor: '#F5F5F5' }}>
-            <Statistic
-              title="INITIATED"
-              value={dashboards.map((dashboard) => {
-                if (dashboard.STATUS === 'INITIATED') {
-                  return dashboard.count;
-                }
-              })}
-              precision={0}
-              valueStyle={{
-                color: '#cf1322',
-              }}
-            />
-          </Card>
-          <Card
-            bordered={false}
-            style={{ marginTop: '10px', backgroundColor: '#F5F5F5' }}
-          >
-            <Statistic
-              title="DRAFT"
-              value={dashboards.map((dashboard) => {
-                if (dashboard.STATUS === 'DRAFT') {
-                  return dashboard.count;
-                }
-              })}
-              precision={0}
-              valueStyle={{
-                color: '#3f8600',
-              }}
-              suffix=""
-            />
-          </Card>
+          <Card style={{backgroundColor:"#4285B4"}}>
+          <Statistic title="INITIATED" value={dashboards.map((dashboard) => {
+            if (dashboard.STATUS === 'INITIATED') {
+              return dashboard.count;
+            }
+          })} precision={2} formatter={formatter} />
+            </Card>
+        </Col>
+      </Row>
+      <Row gutter={12}>
+      <Col span={6}>
+          <Card style={{marginTop:'10px',backgroundColor:'#FFC107'}}>
+          <Statistic title="DRAFT" value={dashboards.map((dashboard) => {
+            if (dashboard.STATUS === 'DRAFT') {
+              return dashboard.count;
+            }
+          })} formatter={formatter} />
+            </Card>
+        </Col>
+        <Col span={6}>
+        <Card style={{marginTop:'10px',backgroundColor:'red'}}>
+          <Statistic title="REJECTED" value={dashboards.map((dashboard) => {
+            if (dashboard.STATUS === 'REJECTED') {
+              return dashboard.count;
+            }
+          })} precision={2} formatter={formatter} />
+            </Card>
         </Col>
       </Row>
     </>
