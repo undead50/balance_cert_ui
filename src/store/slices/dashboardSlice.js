@@ -18,10 +18,15 @@ const initialState = {
 };
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-export const fetchDashboardsAsync = createAsyncThunk('dashboard/fetchDashboards', async () => {
+export const fetchDashboardsAsync = createAsyncThunk('dashboard/fetchDashboards', async (branchCode) => {
   try {
+    const queryParams = {
+      branchCode: branchCode,
+    };
     const url = BACKEND_URL + '/dashboard/fetchDashboards';
-    const response = await axiosInstance.get(url);
+    const response = await axiosInstance.get(url,{
+      params: queryParams
+    });
     return response.data;
   } catch (error) {
     throw new Error(error.response.data.error);

@@ -1,0 +1,9 @@
+.hoverable-card {
+    transition: transform 0.3s; /* Add a smooth transition effect */
+    cursor: pointer; /* Change cursor to hand on hover */
+  }
+  
+  .hoverable-card:hover {
+    transform: scale(1.05); /* Apply a scaling effect on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a shadow for a pop effect */
+  }

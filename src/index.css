@@ -22,3 +22,17 @@
   background: linear-gradient(to left, #468CC1, #3EAB94) !important
   /* Additional styles if needed */
 }
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('../fonts/Poppins-Regular.ttf') format('woff2'),
+       url('../fonts/Poppins-Bold.ttf') format('woff');
+  /* Include other font weights and styles if needed */
+}
+
+.ant {
+  p {
+    font-family: 'Poppins';
+    font-size: 'small';
+  }
+}

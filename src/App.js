@@ -1,9 +1,18 @@
 import MyRoutes from "./routes";
-
+import { ConfigProvider } from "antd";
 const App = () => {
   return (
     <>
-    <MyRoutes/>
+    <ConfigProvider
+      theme={{
+          token: {
+          fontFamily: 'Poppins', // replace with your desired font,
+          fontSize: 13
+        }
+      }}
+    >
+        <MyRoutes />
+        </ConfigProvider>  
     </>
   );
 };

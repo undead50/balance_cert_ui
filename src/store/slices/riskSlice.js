@@ -27,7 +27,8 @@ export const fetchRisksAsync = createAsyncThunk('risk/fetchRisks', async (data) 
   const params = {
     startDate : data.startDate,
     endDate: data.endDate,
-    branch_code: data.branch_code
+    branch_code: data.branch_code,
+    dashboardStatus: data.dashboardStatus
   };
   try {
     const url = BACKEND_URL + '/risk/fetchRisks';

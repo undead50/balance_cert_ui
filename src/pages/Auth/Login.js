@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Form, Input, Button, Card } from 'antd';
+import { Form, Input, Button, Card,Tooltip } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import './index.css';
@@ -14,6 +14,7 @@ import { resetStateQuestion } from '../../store/slices/questionSlice';
 import { resetStatePrivilege } from '../../store/slices/privilegeSlice';
 import { resetStateCategory } from '../../store/slices/categorySlice';
 import { resetStateMark } from '../../store/slices/markSlice';
+import { resetStateDashboard } from '../../store/slices/dashboardSlice';
 
 const LoginPage = () => {
   // alert('login')
@@ -32,6 +33,7 @@ const LoginPage = () => {
     dispatch(resetStatePrivilege());
     dispatch(resetStateCategory());
     dispatch(resetStateMark());
+    dispatch(resetStateDashboard());
   }, []);
 
   useEffect(() => {
@@ -91,10 +93,10 @@ const LoginPage = () => {
             }}
           />
         </div>
-        <u>
-          <h3 style={{ fontFamily: 'cursive' }}>Risk Assessment tool </h3>
-        </u>
-
+        
+        <h3><strong>Risk Assessment System </strong></h3>
+        
+            
         <Form name="login-form" onFinish={onFinish}>
           <Form.Item
             name="username"
@@ -106,6 +108,7 @@ const LoginPage = () => {
             ]}
           >
             <Input prefix={<UserOutlined />} placeholder="Username" />
+            {/* <Tooltip placement="topLeft" title="Click to Start Assessment':'Click to View Assessment"></Tooltip> */}
           </Form.Item>
           <Form.Item
             name="password"

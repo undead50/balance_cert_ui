@@ -51,7 +51,7 @@ const rootReducer = combineReducers({
 });
 
 const persistConfig = {
-  key: 'root',
+  key: 'root_riskassessment',
   storage,
   transforms: [encryptor], // Use the encryptTransform directly
   whitelist: [

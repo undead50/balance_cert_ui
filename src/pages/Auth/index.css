@@ -6,3 +6,12 @@
   background: rgba(0, 0, 0, 0.05);
   border-radius: 4px;
 }
+
+.login_heading {
+  font-size: 5em;
+  font-family: 'Arial', sans-serif;
+  color: #fff;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 #ff4500, 4px 4px 0 #ff8100, 6px 6px 0 #ffbe00;
+  transform: perspective(200px) rotateX(20deg);
+}

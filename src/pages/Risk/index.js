@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Modal, Form, Tag, Space, Card, List, DatePicker, Tooltip } from 'antd';
+import { Table, Button, Modal, Form, Tag, Space, Card, List, DatePicker, Tooltip, Popconfirm } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { DeleteOutlined, EyeOutlined, CheckOutlined, SearchOutlined, FilePdfOutlined,PlayCircleOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EyeOutlined, CheckOutlined, SearchOutlined, FilePdfOutlined,PlayCircleOutlined,ReloadOutlined } from '@ant-design/icons';
 
 
 import {
@@ -21,6 +21,8 @@ import AssessmentSummary from './AssessmentSummary';
 import CommentModal from './CommentModal ';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
+import { useParams } from 'react-router-dom';
+
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -43,6 +45,8 @@ const RiskTable = () => {
   // const { callNotification } = useNotification();
 
   const dispatch = useDispatch();
+  const { dashboardStatus } = useParams();
+  
 
   const { userInfo } = useSelector((state) => state.user);
 
@@ -127,6 +131,19 @@ const RiskTable = () => {
     setCommentVisible(true);
     setCommentRecord(record);
   };
+
+  const handleReprocess = (record) => {
+    const postData = {
+      id: record.id,
+      status: "DRAFT",
+      branch_code: record.branch_code,
+      branchDesc: record.branchDesc
+    }
+    dispatch(updateRiskAsync(postData))
+    // console.log(record)
+    // alert(record.branchDesc)
+    // alert('here')
+  }
 
   const closeComment = () => {
     setCommentVisible(false);
@@ -268,7 +285,8 @@ const RiskTable = () => {
 
   useEffect(() => {
     let data
-    userInfo.isSuperAdmin ? data = {} : data = { branch_code: userInfo.solId }
+
+    userInfo.isSuperAdmin ? data = {dashboardStatus:dashboardStatus} : data = { branch_code: userInfo.solId,dashboardStatus:dashboardStatus }
     // userInfo.isSuperAdmin === true ? dispatch(fetchRisksAsync()) : dispatch((fetchRisksAsync({branch_code: userInfo.solId})));
     dispatch(fetchRisksAsync(data))
     // console.log(risks);
@@ -451,6 +469,19 @@ const RiskTable = () => {
               <EyeOutlined /> Summary
             </Button>
           ) : null}
+          {
+            record.status === 'REJECTED' ? (
+              <Popconfirm
+                title="Reprocess Assessment"
+                description="Are you sure to Reprocess the Assessment?"
+                onConfirm={()=>handleReprocess(record)}
+                okText="Yes"
+                cancelText="No"
+              >
+            <Button>
+              <ReloadOutlined />  Reprocess
+            </Button>        
+            </Popconfirm>) : null}
         </Space>
       ),
     },

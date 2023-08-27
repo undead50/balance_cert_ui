@@ -35,6 +35,7 @@ function MyRoutes() {
             path="riskassessment/:riskassessmentID"
             element={<AccountOpeningForm />}
           />
+          <Route path="assessmentindex/:dashboardStatus" element={<RiskTable />} />
           <Route path="assessmentindex" element={<RiskTable />} />
           <Route path="/report" element={<ReportTable />} />
           <Route path="categoryIndex" element={<CategoryIndex />} />
