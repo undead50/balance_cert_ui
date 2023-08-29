@@ -2,14 +2,18 @@ import React from 'react';
 import { Modal, Form, Input, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+    calculateRiskAsync,
     updateRiskAsync,
 } from '../../store/slices/riskSlice';
+import { createRiskdetailAsync } from '../../store/slices/RiskDetailSlice';
 
 const currentDate = new Date();
 const CommentModal = (props) => {
     const dispatch = useDispatch();
     const [form] = Form.useForm();
 
+
+    const { assSummary } = useSelector((state) => state.risk);
 
     const { userInfo } = useSelector((state) => state.user);
 
@@ -32,7 +36,9 @@ const CommentModal = (props) => {
 
         }
         if (props.commentRecord.status === 'REVIEWED') {
+            
             const toSubmitValue = { ...props.commentRecord }
+            dispatch(calculateRiskAsync(toSubmitValue))
             toSubmitValue.status = 'APPROVED'
             toSubmitValue.approved_comment = values.comment
             toSubmitValue.approved_by = userInfo.userName
@@ -42,6 +48,13 @@ const CommentModal = (props) => {
               }
             console.log(toSubmitValue)
             dispatch(updateRiskAsync(toSubmitValue))
+            
+            const detailData = {
+                riskId : toSubmitValue.id,
+                assessment_data : assSummary,
+            }
+            dispatch(createRiskdetailAsync(detailData))
+            // console.log(assSummary)
             props.closeComment()
             form.resetFields()
 

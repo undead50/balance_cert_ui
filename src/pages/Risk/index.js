@@ -464,7 +464,7 @@ const RiskTable = () => {
               </Button>
             ) : null)} */}
 
-          {record.status === 'APPROVED' ? (
+          {record.status === 'APPROVED'? (
             <Button onClick={() => handleViewAssessment(record)}>
               <EyeOutlined /> Summary
             </Button>
@@ -556,14 +556,27 @@ const RiskTable = () => {
               }}
               renderItem={(item) => <List.Item>{item}</List.Item>}
             />
-            {userInfo.isBranchManager === 'Y' || userInfo.isSuperAdmin === true &&
-              (['CREATED', 'REVIEWED'].includes(modalRecord.status) ? (
+            {(userInfo.isBranchManager === 'Y' || userInfo.isSuperAdmin === true) &&
+              (['CREATED'].includes(modalRecord.status) ? (
                 <>
                   <Button type="primary" shape='round' onClick={() => handleAction(modalRecord)}>
                     <CheckOutlined />
                     {modalRecord.status === 'CREATED'
                       ? 'Review'
-                      : modalRecord.status === 'REVIEWED'
+                        : null}
+
+                  </Button>
+                  <br />
+                  <br />
+                </>
+              ) : null)}
+            
+            {(userInfo.isSuperAdmin === true) &&
+              (['REVIEWED'].includes(modalRecord.status) ? (
+                <>
+                  <Button type="primary" shape='round' onClick={() => handleAction(modalRecord)}>
+                    <CheckOutlined />
+                    {modalRecord.status === 'REVIEWED'
                         ? 'Approve'
                         : null}
 
@@ -572,6 +585,7 @@ const RiskTable = () => {
                   <br />
                 </>
               ) : null)}
+            
 
             <Table
               dataSource={tableData}

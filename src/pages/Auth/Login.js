@@ -46,7 +46,7 @@ const LoginPage = () => {
             email: data.Data.email,
             departmentName: data.Data.departmentName,
             token: data.Data.token,
-            isBranchManager: data.Data.isBranchManager,
+            isBranchManager: (data.Data.functionalTitle === "Branch Manager" || data.Data.functionalTitle === "Assistant Branch Manager") ? "Y" : "N",
             employeeName: data.Data.employeeName,
             isSuperAdmin: data.Data.isSuperAdmin,
           })

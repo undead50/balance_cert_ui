@@ -22,9 +22,17 @@ const AccountOpeningForm = () => {
     if (riskassessmentID) {
       const editRisk = risks.filter((risk) => risk.id == riskassessmentID);
       console.log('editRisk');
-      console.log(JSON.parse(editRisk[0]['assessment_data']));
-      setFormValues(JSON.parse(editRisk[0]['assessment_data']));
-      form.setFieldsValue(JSON.parse(editRisk[0]['assessment_data']));
+      // console.log(JSON.parse(editRisk[0]['assessment_data']));
+      const selectedRecord = editRisk[0]['assessment_data'];
+      if (typeof selectedRecord === 'string') {
+        var selectedObject = JSON.parse(selectedRecord);
+      }
+      else {
+        var selectedObject = selectedRecord
+      }
+
+      setFormValues(selectedObject);
+      form.setFieldsValue(selectedObject);
       if (editRisk[0]['status'] === 'DRAFT') {
         setIsDraft(true);
       }

@@ -14,12 +14,14 @@ import ProtectedRoute from '../components/ProtectedRoute';
 import MarkTable from '../pages/Mark';
 import ReportTable from '../pages/Report';
 import InitiateAssessment from '../pages/Risk/InitiateAssessment';
+import Notfound from '../pages/System/404';
 
 function MyRoutes() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<LoginPage />}></Route>
+        <Route path="*" element={<Notfound/>}></Route>
         <Route
           element={
             <ProtectedRoute>

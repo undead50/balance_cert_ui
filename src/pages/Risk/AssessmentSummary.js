@@ -94,10 +94,10 @@ const AssessmentSummary = (props) => {
   const modifiedSummary = sortByTotalSum.map((key) => {
     const data = {
       categoryName: key.categoryName,
-      totalSum: `${key.totalSum}%`,
-      categoryId: `${key.categoryId}%`,
-      weightage: `${key.weightage}%`,
-      weightageAverageScore: `${key.weightageAverageScore}%`,
+      totalSum: `${key.totalSum.toFixed(2)}%`,
+      categoryId: `${key.categoryId.toFixed(2)}%`,
+      weightage: `${key.weightage.toFixed(2)}%`,
+      weightageAverageScore: `${key.weightageAverageScore.toFixed(2)}%`,
     };
 
     return data;
@@ -173,12 +173,12 @@ const AssessmentSummary = (props) => {
                 <>
                   <Table.Summary.Row>
                     <Table.Summary.Cell index={0}><strong>Final Scoring</strong></Table.Summary.Cell>
-                    <Table.Summary.Cell index={1}><strong>{averageOfTotalSum}% </strong></Table.Summary.Cell>
+                    <Table.Summary.Cell index={1}><strong>{averageOfTotalSum.toFixed(2)}% </strong></Table.Summary.Cell>
                     <Table.Summary.Cell index={2}>
-                      <strong>{sumOfWeightage}%</strong>
+                      <strong>{sumOfWeightage.toFixed(2)}%</strong>
                     </Table.Summary.Cell>
                     <Table.Summary.Cell index={3}>
-                      <strong>{sumOfWeightageAverageScore}% Risk: <Tag bordered={false} color={riskState === "High" ? "error" : riskState === "Low" ? "success" : riskState === "Medium" ? "warning" : null}>
+                      <strong>{sumOfWeightageAverageScore.toFixed(2)}% Risk: <Tag bordered={false} color={riskState === "High" ? "error" : riskState === "Low" ? "success" : riskState === "Medium" ? "warning" : null}>
                         {riskState}
                       </Tag></strong>
                     </Table.Summary.Cell>

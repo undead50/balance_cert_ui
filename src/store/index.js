@@ -22,6 +22,7 @@ import { markReducer } from './slices/markSlice';
 import { reportReducer } from './slices/reportSlice';
 import { branchReducer } from './slices/branchSlice';
 import { dashboardReducer } from './slices/dashboardSlice';
+import { RiskDetailReducer } from './slices/RiskDetailSlice';
 import { enc, AES } from 'crypto-js';
 
 const secretKey = '081fbadce74f99af29c8280fce633fb9';
@@ -48,6 +49,7 @@ const rootReducer = combineReducers({
   mark: markReducer,
   report: reportReducer,
   branch: branchReducer,
+  riskdetail: RiskDetailReducer,
 });
 
 const persistConfig = {
@@ -65,6 +67,7 @@ const persistConfig = {
     'report',
     'mydashboard',
     'dashboard',
+    'riskdetail'
   ],
 };
 

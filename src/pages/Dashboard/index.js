@@ -97,6 +97,16 @@ const Dashboard = () => {
           })} formatter={formatter} />
             </Card>
         </Col>
+        <Col span={6}>
+          <Card style={{marginTop:'10px',backgroundColor:'#D2D6DE'}} onClick={() => handleClick('REVIEWED')} className="hoverable-card">
+          <Statistic title="REVIEWED" style={{fontWeight:'bold'}} value={dashboards.map((dashboard) => {
+            if (dashboard.STATUS === 'REVIEWED') {
+              return dashboard.count;
+            }
+          })} formatter={formatter} />
+            </Card>
+        </Col>    
+
       </Row>
     </>
   );
