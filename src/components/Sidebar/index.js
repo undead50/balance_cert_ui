@@ -40,8 +40,14 @@ function SideBard() {
       {/* <Menu.Item key="9" icon={<FileOutlined />} /> */}
       {userInfo.isSuperAdmin === true && (
         <SubMenu key="sub3" icon={<SnippetsTwoTone />} title="Report">
-          <Menu.Item key="12">
+          <Menu.Item key="13">
             <Link to={'/report'}>Risk Report</Link>
+          </Menu.Item>
+          <Menu.Item key="14">
+            <Link to={'/riskRankingReport'}>Risk Ranking</Link>
+          </Menu.Item>
+          <Menu.Item key="15">
+            <Link to={'/'}>Risk Status</Link>
           </Menu.Item>
         </SubMenu>
       )}

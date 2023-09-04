@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Modal, Form, Input, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -16,6 +16,10 @@ const CommentModal = (props) => {
     const { assSummary } = useSelector((state) => state.risk);
 
     const { userInfo } = useSelector((state) => state.user);
+
+    useEffect(() => {
+        
+    },[assSummary])
 
     const onFinish = (values) => {
         // Handle form submission here (e.g., sending the comment data to the server)
@@ -38,7 +42,7 @@ const CommentModal = (props) => {
         if (props.commentRecord.status === 'REVIEWED') {
             
             const toSubmitValue = { ...props.commentRecord }
-            dispatch(calculateRiskAsync(toSubmitValue))
+            // dispatch(calculateRiskAsync(toSubmitValue))
             toSubmitValue.status = 'APPROVED'
             toSubmitValue.approved_comment = values.comment
             toSubmitValue.approved_by = userInfo.userName
@@ -48,10 +52,23 @@ const CommentModal = (props) => {
               }
             console.log(toSubmitValue)
             dispatch(updateRiskAsync(toSubmitValue))
+
+            let weightageAverageScoreList = []
+            assSummary.map((data) => {
+                weightageAverageScoreList.push(data.weightageAverageScore)
+            })
+            
+            const sumOfWeightageAverageScore = weightageAverageScoreList.reduce((accumulator, currentObj) => {
+                return accumulator + currentObj;
+             }, 0);
             
             const detailData = {
                 riskId : toSubmitValue.id,
-                assessment_data : assSummary,
+                assessment_data: assSummary,
+                created_by: userInfo.employeeName,
+                approved_by: userInfo.employeeName,
+                sumOfWeightageAverageScore:sumOfWeightageAverageScore
+                
             }
             dispatch(createRiskdetailAsync(detailData))
             // console.log(assSummary)

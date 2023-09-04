@@ -1,4 +1,4 @@
-import { Tag } from 'antd';
+import { Tag,Image } from 'antd';
 import { useSelector } from 'react-redux';
 import {
   ArrowDownOutlined,
@@ -36,9 +36,12 @@ const Dashboard = () => {
     
   }, []);
 
+  const base64Image = `data:image/png;base64,${userInfo.image}`;
+
   return (
     <>
       <h1>Dasboard</h1>
+      <Image src={base64Image} alt="Base64 Image" /> 
       <p>
         <Avatar size="small" icon={<UserOutlined />} />{' '}
         <Tag color="green" size="large">

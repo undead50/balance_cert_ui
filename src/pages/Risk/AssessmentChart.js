@@ -5,13 +5,20 @@ import { useSelector } from 'react-redux';
 const ChartComponent = () => {
   // Sample data and options for the bar chart
 
+  const { RiskDetail } = useSelector((state) => state.riskdetail);
+  let assmentData = []
+  if (RiskDetail.length !== 0) {
+    assmentData = RiskDetail[0].assessment_data
+  }
+
+
   const { assSummary } = useSelector((state) => state.risk);
 
-  const assessmentLables = assSummary.map((assessment) => {
+  const assessmentLables = assmentData.map((assessment) => {
     return assessment.categoryName;
   });
 
-  const assessmentData = assSummary.map((assessment) => {
+  const assessmentData = assmentData.map((assessment) => {
     return parseInt(assessment.weightageAverageScore);
   });
 

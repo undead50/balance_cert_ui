@@ -22,6 +22,7 @@ import CommentModal from './CommentModal ';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { useParams } from 'react-router-dom';
+import { fetchRiskdetailsAsyncById } from '../../store/slices/RiskDetailSlice';
 
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -40,13 +41,14 @@ const RiskTable = () => {
   const [commentRecord, setCommentRecord] = useState({});
   const [auditAssessmentRecord, setAuditAssessmentRecord] = useState([]);
   const [modalRecord, setModalRecord] = useState({})
+  const [categoryList, setCategoryList] = useState([])
 
   const navigate = useNavigate();
   // const { callNotification } = useNotification();
 
   const dispatch = useDispatch();
   const { dashboardStatus } = useParams();
-  
+  const { categorys } = useSelector((state) => state.category); 
 
   const { userInfo } = useSelector((state) => state.user);
 
@@ -58,6 +60,8 @@ const RiskTable = () => {
 
 
   const onSearch = (values) => {
+
+    
     let startDate;
     let endDate;
     values.dateRange.map((data, index) => {
@@ -80,7 +84,9 @@ const RiskTable = () => {
 
   const viewColumns = [
     { title: 'Ref', dataIndex: 'Ref', key: 'Ref' },
-    { title: 'Category', dataIndex: 'Category', key: 'Ref' },
+    { title: 'Category', dataIndex: 'Category', key: 'Ref',filters: categoryList,
+    filterSearch: false,
+    onFilter: (value, record) => record.Category === value },
     {
       title: 'Observation as per manual/circulars/NRB Directives',
       dataIndex: 'question',
@@ -153,7 +159,10 @@ const RiskTable = () => {
   const data = auditHistoty;
 
   const handleViewAssessment = (record) => {
-    dispatch(calculateRiskAsync(record));
+
+
+    
+    dispatch(fetchRiskdetailsAsyncById(record));
     setVisible(true);
     let auditAssessmentList = [];
     record.created_by !== null
@@ -204,11 +213,26 @@ const RiskTable = () => {
     setAuditAssessmentRecord([]);
   };
 
+  useEffect(() => {
+    dispatch(fetchCategorysAsync());
+
+    const filterCategory = categorys.map((category) => {
+     return {
+        text: category.categoryName,
+        value: category.categoryName
+    }
+    })
+    // console.log(filterCategory)
+    setCategoryList(filterCategory)
+
+  }, []);
+
   // useEffect(()=>{
   //   alert(assesmentStatus)
   // },[assesmentStatus])
 
   const handleView = (record) => {
+    dispatch(calculateRiskAsync(record));
     console.log([record.created_by, record.reviewed_by, record.approved_by]);
     let auditList = [];
     record.created_by !== null
@@ -528,6 +552,7 @@ const RiskTable = () => {
         onCancel={closeModal}
         footer={null}
         width="1000px"
+        destroyOnClose={true}
       >
         {assesmentStatus.record == 'DRAFT' || assesmentStatus.record == "INITIATED" ? (
           <Button

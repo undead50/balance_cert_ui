@@ -10,6 +10,7 @@ import { FilePdfOutlined } from '@ant-design/icons';
 
 const AssessmentSummary = (props) => {
   const { assSummary } = useSelector((state) => state.risk);
+  const { RiskDetail } = useSelector((state) => state.riskdetail);
   const modalContentRef = useRef(null);
   const [riskState, setRiskState] = useState('')
 
@@ -42,7 +43,14 @@ const AssessmentSummary = (props) => {
 
   // },[])
 
-  console.log(assSummary)
+  // console.log(RiskDetail[0].assessment_data)
+
+  let assmentData = []
+  if (RiskDetail.length !== 0) {
+    assmentData = RiskDetail[0].assessment_data
+  }
+
+
 
   useEffect(() => {
     if (sumOfWeightageAverageScore < 20) {
@@ -55,10 +63,10 @@ const AssessmentSummary = (props) => {
       setRiskState('Medium')
     }
 
-  }, [assSummary])
+  }, [assmentData])
 
 
-  const mutableData = [...assSummary];
+  const mutableData = [...assmentData];
 
   // Use the map() function to create a new array with sorted elements
   // Print the sorted array

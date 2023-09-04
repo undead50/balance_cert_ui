@@ -13,6 +13,8 @@ const callNotification = ((description, type) => {
 
 const initialState = {
   reports: [],
+  riskRankingReports: [],
+  riskStatusReport: [],
   report_loading: false,
   report_error: null,
 };
@@ -26,6 +28,30 @@ export const fetchReportsAsync = createAsyncThunk('report/fetchReports', async (
     };
     const url = BACKEND_URL + '/report/fetchReports';
     const response = await axiosInstance.get(url,{params});
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.error);
+  }
+});
+
+export const fetchRiskStatusReportsAsync = createAsyncThunk('report/riskStatus', async () => {
+  try {
+    const url = BACKEND_URL + '/report/riskStatus';
+    const response = await axiosInstance.get(url);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.error);
+  }
+});
+
+export const fetchRiskRankingReportsAsync = createAsyncThunk('report/riskRankingReport', async (data) => {
+  try {
+    const payload = {
+      start_date : data.start_date,
+      end_date : data.end_date,
+    };
+    const url = BACKEND_URL + '/report/riskRankingReport';
+    const response = await axiosInstance.post(url,payload);
     return response.data;
   } catch (error) {
     throw new Error(error.response.data.error);
@@ -89,6 +115,30 @@ const reportSlice = createSlice({
         state.reports = action.payload;
       })
       .addCase(fetchReportsAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(fetchRiskStatusReportsAsync.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchRiskStatusReportsAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        state.riskStatusReport = action.payload;
+      })
+      .addCase(fetchRiskStatusReportsAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(fetchRiskRankingReportsAsync.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchRiskRankingReportsAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        state.riskRankingReports = action.payload;
+      })
+      .addCase(fetchRiskRankingReportsAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })

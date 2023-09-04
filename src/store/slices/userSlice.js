@@ -8,7 +8,9 @@ const initialState = {
         departmentName: '',
         token: '',
         isBranchManager: '',
-        employeeName:'',
+        employeeName: '',
+        photoId: '',
+        image: '',
         isSuperAdmin:false
     }
 }

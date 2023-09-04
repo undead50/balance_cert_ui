@@ -26,6 +26,7 @@ const InitiateAssessment = () => {
   const navigate = useNavigate();
 
   const { userInfo } = useSelector((state) => state.user);
+  const { loading } = useSelector((state) => state.risk);
   const [branchData, setBranchData] = useState([])
   const [targetKeys, setTargetKeys] = useState([]);
   const [selectedKeys, setSelectedKeys] = useState([]);
@@ -97,8 +98,8 @@ const InitiateAssessment = () => {
     dispatch(initiateAssessmentAsync(values))
     form.resetFields();
     setTargetKeys([])
-    navigate('/assessmentindex')
-    console.log(targetKeys)
+    // navigate('/assessmentindex')
+    // console.log(targetKeys)
   };
 
   return (
@@ -163,7 +164,7 @@ const InitiateAssessment = () => {
           <Input.TextArea rows={4}  style={{ width: '400px' }} />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" shape='round' htmlType="submit">
+          <Button type="primary" loading={loading} shape='round' htmlType="submit">
             Initiate Assessment
           </Button>
         </Form.Item>

@@ -8,6 +8,7 @@ import {
   Row,
   Popover,
   Typography,
+  Image
 } from 'antd';
 import {
   UserOutlined,
@@ -33,6 +34,8 @@ const AdminLayout = () => {
     setCollapsed(collapsed);
   };
 
+  const base64Image = `data:image/png;base64,${userInfo.image}`;
+
   const content = (
     <div style={{ width: 'auto', paddingLeft: '2px', paddingRight: '2px' }}>
       <div
@@ -51,6 +54,7 @@ const AdminLayout = () => {
             gap: '0px',
           }}
         >
+          <Image src={base64Image} alt="Base64 Image" /> 
           <Text style={{ marginTop: '0px', fontSize: 18, fontWeight: '500' }}>
             {userInfo?.userName}
           </Text>

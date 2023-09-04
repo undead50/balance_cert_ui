@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Form, Input, Button, Card,Tooltip } from 'antd';
+import { Form, Input, Button, Card,Typography } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import './index.css';
@@ -20,6 +20,8 @@ const LoginPage = () => {
   // alert('login')
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { Title } = Typography;
 
   const { callNotification } = useNotification();
 
@@ -49,6 +51,7 @@ const LoginPage = () => {
             isBranchManager: (data.Data.functionalTitle === "Branch Manager" || data.Data.functionalTitle === "Assistant Branch Manager") ? "Y" : "N",
             employeeName: data.Data.employeeName,
             isSuperAdmin: data.Data.isSuperAdmin,
+            image: data.Data.image,
           })
         );
         navigate('/');
@@ -80,21 +83,17 @@ const LoginPage = () => {
         justifyContent: 'center',
       }}
     >
-      <Card style={{ maxWidth: '25%', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 24 }}>
+      <Card className='custom-card' >
+        <div className="logo">
           <img
             src={process.env.PUBLIC_URL + '/images/citizens-logo.png'}
             alt="Logo"
-            style={{
-              height: 80,
-              width: '90%',
-              marginLeft: '20px',
-              maxHeight: '10vh',
-            }}
           />
         </div>
         
-        <h3><strong>Risk Assessment System </strong></h3>
+        <Title level={4} code style={{ textAlign: 'center',marginBottom:'15px',textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)' }}>
+          Risk Assessment System
+        </Title>
         
             
         <Form name="login-form" onFinish={onFinish}>
@@ -122,11 +121,13 @@ const LoginPage = () => {
             <Input.Password prefix={<LockOutlined />} placeholder="Password" />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
+            <div style={{display:'flex',justifyContent:'flex-end'}}>
+            <Button type="primary" loading={loading}  shape="round" htmlType="submit" style={{ width:'30%',boxShadow: '6px 2px 9px rgba(0, 0, 0, 0.2)' }}>
               Log In
-            </Button>
+              </Button>
+              </div>
           </Form.Item>
-          {loading && <Spinner />}
+          {/* {loading && <Spinner />} */}
           {/* <Outlet/> */}
         </Form>
       </Card>

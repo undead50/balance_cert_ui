@@ -13,6 +13,7 @@ const callNotification = ((description, type) => {
 
 const initialState = {
   RiskDetails: [],
+  RiskDetail:[],
   RiskDetail_loading: false,
   RiskDetail_error: null,
 };
@@ -22,6 +23,16 @@ export const fetchRiskdetailsAsync = createAsyncThunk('RiskDetail/fetchRiskdetai
   try {
     const url = BACKEND_URL + '/RiskDetail/fetchRiskdetails';
     const response = await axiosInstance.get(url);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.error);
+  }
+});
+
+export const fetchRiskdetailsAsyncById = createAsyncThunk('RiskDetail/fetchRiskdetailsbyId', async (RiskDetailData) => {
+  try {
+    const url = BACKEND_URL + '/RiskDetail/fetchRiskdetailsbyId';
+    const response = await axiosInstance.post(url,RiskDetailData);
     return response.data;
   } catch (error) {
     throw new Error(error.response.data.error);
@@ -85,6 +96,18 @@ const RiskDetailSlice = createSlice({
         state.RiskDetails = action.payload;
       })
       .addCase(fetchRiskdetailsAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(fetchRiskdetailsAsyncById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchRiskdetailsAsyncById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.RiskDetail = action.payload;
+      })
+      .addCase(fetchRiskdetailsAsyncById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })
