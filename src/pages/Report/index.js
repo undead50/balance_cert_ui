@@ -7,13 +7,14 @@ import {
   fetchReportsAsync,
   updateReportAsync,
 } from '../../store/slices/reportSlice';
-import { EyeOutlined,SearchOutlined,FilePdfOutlined } from '@ant-design/icons';
+import { EyeOutlined,SearchOutlined,FilePdfOutlined,FileExcelOutlined } from '@ant-design/icons';
 // import Spinner  from '../../components/Spinner';
 // import { useNotification } from '../../hooks/index';
 import moment from 'moment'; // Import moment here
 import { fetchBranchsAsync } from '../../store/slices/branchSlice';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
+import * as XLSX from 'xlsx';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -21,6 +22,36 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 const { RangePicker } = DatePicker;
 
 const ReportTable = () => {
+
+  const exportToExcel = () => {
+  
+    // Create a new worksheet
+    const ws = XLSX.utils.json_to_sheet(dataSource.map(item => {
+      // Customize the data format if needed
+      return {
+        branch_code: item.branch_code,
+        branchDesc: item.branchDesc,
+        Status: item.status,
+        riskRating: item.riskRating,
+        sumOfWeightageAverageScore: item.sumOfWeightageAverageScore,
+        created_at: item.created_at
+
+        // Add more columns as needed
+      };
+    }));
+
+    // const title = 'Risk Ranking Report'
+    // // Add a title row
+    // const titleRow = ['Title: ', title]; // Customize as needed
+    // XLSX.utils.sheet_add_aoa(ws, [titleRow], { origin: 0 });
+
+    // Create a new workbook
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    // Save the workbook to a file
+    XLSX.writeFile(wb, `BranchWiseSummaryReport.xlsx`);
+  };
 
   const filterCreatedAt = (value, createdDate) => {
     if (value === 'today') {
@@ -301,6 +332,10 @@ const ReportTable = () => {
       <h2 style={{ justifyContent: 'center', display: 'flex',textDecoration:'underline' }}>(Branch Wise Summary Report)</h2>
       <Button onClick={downloadPDF} type="primary" shape='round'>
         Export Pdf<FilePdfOutlined />
+      </Button>
+      &nbsp; &nbsp;
+      <Button onClick={exportToExcel} type="primary" shape='round'>
+        Export excel<FileExcelOutlined />
       </Button>
       <br />
       <br />

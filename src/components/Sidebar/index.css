@@ -1,0 +1,37 @@
+.custom-scrollbar-sidebar {
+    height: 600px; /* Adjust the height as needed */
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: #f1f1f1 #f1f1f1;
+  }
+  
+  .custom-scrollbar-sidebar::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+  }
+  
+  .custom-scrollbar-sidebar::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* Color of the scrollbar track */
+  }
+  
+  .custom-scrollbar-sidebar::-webkit-scrollbar-thumb {
+    background-color: #ccc8c8; /* Color of the scrollbar thumb */
+    border-radius: 4px; /* Rounded corners of the thumb */
+  }
+  
+
+
+/* Customizing the horizontal scrollbar track */
+::-webkit-scrollbar:horizontal {
+  height: 8px; /* Height of the scrollbar track */
+}
+
+/* Customizing the horizontal scrollbar thumb */
+::-webkit-scrollbar-thumb:horizontal {
+  background-color: #f7ebeb; /* Color of the scrollbar thumb */
+  border-radius: 5px; /* Radius of the scrollbar thumb */
+}
+
+/* Optional: You can also customize the horizontal scrollbar on the hover state */
+::-webkit-scrollbar-thumb:horizontal:hover {
+  background-color: #c2c2c2; /* Color of the scrollbar thumb on hover */
+}  

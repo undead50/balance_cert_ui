@@ -113,6 +113,7 @@ const CommentModal = (props) => {
             footer={null}
             onFinish={onFinish}
             onCancel={handleCancel}
+            destroyOnClose={true}
         >
             <Form form={form} onFinish={onFinish} layout="vertical">
                 <Form.Item

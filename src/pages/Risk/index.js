@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Modal, Form, Tag, Space, Card, List, DatePicker, Tooltip, Popconfirm } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { DeleteOutlined, EyeOutlined, CheckOutlined, SearchOutlined, FilePdfOutlined,PlayCircleOutlined,ReloadOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EyeOutlined, CheckOutlined, SearchOutlined, FilePdfOutlined,PlayCircleOutlined,ReloadOutlined,FileExcelOutlined } from '@ant-design/icons';
 
 
 import {
@@ -23,6 +23,8 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { useParams } from 'react-router-dom';
 import { fetchRiskdetailsAsyncById } from '../../store/slices/RiskDetailSlice';
+import * as XLSX from 'xlsx';
+import PreviewAssessmentSummary from './PreviewAssessmentSummary';
 
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -30,6 +32,35 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 const { RangePicker } = DatePicker;
 
 const RiskTable = () => {
+
+  const exportToExcel = () => {
+  
+    // Create a new worksheet
+    const ws = XLSX.utils.json_to_sheet(dataSource.map(item => {
+      // Customize the data format if needed
+      return {
+        branch_code: item.branch_code,
+        branchDesc: item.branchDesc,
+        Status: item.status,
+        initiated_by:item.initiated_by,
+        created_at: item.created_at
+        // Add more columns as needed
+      };
+    }));
+
+    // const title = 'Risk Ranking Report'
+    // // Add a title row
+    // const titleRow = ['Title: ', title]; // Customize as needed
+    // XLSX.utils.sheet_add_aoa(ws, [titleRow], { origin: 0 });
+
+    // Create a new workbook
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    // Save the workbook to a file
+    XLSX.writeFile(wb, `myfile.xlsx`);
+  };
+
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [formValues, setFormValues] = useState({});
@@ -42,6 +73,7 @@ const RiskTable = () => {
   const [auditAssessmentRecord, setAuditAssessmentRecord] = useState([]);
   const [modalRecord, setModalRecord] = useState({})
   const [categoryList, setCategoryList] = useState([])
+  const [previewVisible,setPreviewVisible] = useState(false)
 
   const navigate = useNavigate();
   // const { callNotification } = useNotification();
@@ -52,7 +84,7 @@ const RiskTable = () => {
 
   const { userInfo } = useSelector((state) => state.user);
 
-  const { risks, loading, error } = useSelector((state) => state.risk);
+  const { assSummary,risks, loading, error } = useSelector((state) => state.risk);
   const { branchs } = useSelector((state) => state.branch)
 
   const { questions } = useSelector((state) => state.question);
@@ -158,10 +190,34 @@ const RiskTable = () => {
 
   const data = auditHistoty;
 
+  const handlePreviewAssessment = (record) => {
+    dispatch(calculateRiskAsync(record));
+    setPreviewVisible(true);
+    let auditAssessmentList = [];
+    record.created_by !== null
+      ? auditAssessmentList.push(`created_by : ${record.created_by}`)
+      : console.log('');
+    record.reviewed_by !== null
+      ? auditAssessmentList.push(
+        `reviewed_by : ${record.reviewed_by} ,reviewed_comment: ${record.reviewed_comment}`
+      )
+      : console.log('');
+    record.approved_by !== null
+      ? auditAssessmentList.push(
+        `approved_by : ${record.approved_by} ,approved_comment: ${record.approved_comment}`
+      )
+      : console.log('');
+    record.rejected_by !== null
+      ? auditAssessmentList.push(
+        `rejected_by : ${record.rejected_by} ,rejected_comment: ${record.rejected_comment}`
+      )
+      : console.log('');
+    setAuditAssessmentRecord(auditAssessmentList);
+
+
+  };
+
   const handleViewAssessment = (record) => {
-
-
-    
     dispatch(fetchRiskdetailsAsyncById(record));
     setVisible(true);
     let auditAssessmentList = [];
@@ -213,17 +269,15 @@ const RiskTable = () => {
     setAuditAssessmentRecord([]);
   };
 
-  useEffect(() => {
-    dispatch(fetchCategorysAsync());
+  const onPreviewCancel = () => {
+    setPreviewVisible(false);
+    setAuditAssessmentRecord([])
+  }
 
-    const filterCategory = categorys.map((category) => {
-     return {
-        text: category.categoryName,
-        value: category.categoryName
-    }
-    })
-    // console.log(filterCategory)
-    setCategoryList(filterCategory)
+  useEffect(() => {
+    // dispatch(fetchCategorysAsync());
+
+    
 
   }, []);
 
@@ -232,6 +286,14 @@ const RiskTable = () => {
   // },[assesmentStatus])
 
   const handleView = (record) => {
+    const filterCategory = categorys.map((category) => {
+      return {
+         text: category.categoryName,
+         value: category.categoryName
+     }
+     })
+     // console.log(filterCategory)
+     setCategoryList(filterCategory)
     dispatch(calculateRiskAsync(record));
     console.log([record.created_by, record.reviewed_by, record.approved_by]);
     let auditList = [];
@@ -493,6 +555,12 @@ const RiskTable = () => {
               <EyeOutlined /> Summary
             </Button>
           ) : null}
+          {record.status === 'REVIEWED' 
+          && userInfo.isSuperAdmin === true ? (
+            <Button onClick={() => handlePreviewAssessment(record)}>
+              <EyeOutlined /> Preview Summary
+            </Button>
+          ) : null}
           {
             record.status === 'REJECTED' ? (
               <Popconfirm
@@ -523,6 +591,10 @@ const RiskTable = () => {
       {userInfo.isSuperAdmin ? <h2 style={{ justifyContent: 'center', display: 'flex', textDecoration: 'underline' }}>(Branch Wise Risk Assessment Status)</h2> : null}
       <Button onClick={downloadPDF} type="primary" shape='round'>
         Export Pdf<FilePdfOutlined />
+      </Button>
+      &nbsp; &nbsp;
+      <Button onClick={exportToExcel} type="primary" shape='round'>
+        Export excel<FileExcelOutlined />
       </Button>
       <br />
       <br />
@@ -623,6 +695,11 @@ const RiskTable = () => {
       <AssessmentSummary
         visible={visible}
         onCancel={onCancel}
+        auditAssessmentRecord={auditAssessmentRecord}
+      />
+      <PreviewAssessmentSummary
+        visible={previewVisible}
+        onCancel={onPreviewCancel}
         auditAssessmentRecord={auditAssessmentRecord}
       />
       <CommentModal

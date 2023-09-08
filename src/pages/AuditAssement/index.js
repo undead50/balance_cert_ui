@@ -80,6 +80,7 @@ const AccountOpeningForm = () => {
         // Handle form validation errors
         console.log('Form validation failed:', errors);
       });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handlePrevious = () => {

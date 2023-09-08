@@ -28,6 +28,17 @@ export const fetchBranchsAsync = createAsyncThunk('branch/fetchBranchs', async (
   }
 });
 
+export const syncBranchAsync = createAsyncThunk('branch/syncBranch', async () => {
+  try {
+    const url = BACKEND_URL + '/branch/syncBranch';
+    const response = await axiosInstance.post(url);
+    return response.data;
+    
+  } catch (error) {
+    throw new Error(error.response.data.error);
+  }
+})
+
 export const createBranchAsync = createAsyncThunk(
   'branch/createBranch',
   async (branchData) => {
@@ -76,6 +87,18 @@ const branchSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+        .addCase(syncBranchAsync.pending, (state) => {
+          state.loading = true;
+          state.error = null;
+        })
+        .addCase(syncBranchAsync.fulfilled, (state, action) => {
+          state.loading = false;
+          callNotification('Operation Successfull', 'success');
+        })
+        .addCase(syncBranchAsync.rejected, (state, action) => {
+          state.loading = false;
+          state.error = action.error.message;
+        })
       .addCase(fetchBranchsAsync.pending, (state) => {
         state.loading = true;
         state.error = null;

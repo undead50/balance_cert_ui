@@ -16,6 +16,8 @@ import ReportTable from '../pages/Report';
 import InitiateAssessment from '../pages/Risk/InitiateAssessment';
 import Notfound from '../pages/System/404';
 import RiskRankingReport from '../pages/Report/RiskRankingReport';
+import RiskStatus from '../pages/Report/RiskStatus';
+import SyncBranch from '../pages/Branch';
 
 function MyRoutes() {
   return (
@@ -41,12 +43,14 @@ function MyRoutes() {
           <Route path="assessmentindex/:dashboardStatus" element={<RiskTable />} />
           <Route path="assessmentindex" element={<RiskTable />} />
           <Route path="/report" element={<ReportTable />} />
-          <Route path="/riskRankingReport" element={<RiskRankingReport/>}/>
+          <Route path="/riskRankingReport" element={<RiskRankingReport />} />
+          <Route path="/riskStatus" element={<RiskStatus/>}/>
           <Route path="categoryIndex" element={<CategoryIndex />} />
           <Route path="questionIndex" element={<QuestionIndex />} />
           <Route path="previlageIndex" element={<UserPrivilegesTable />} />
           <Route path="markingIndex" element={<MarkTable />} />
           <Route path="initiateAssessment" element={<InitiateAssessment />} />
+          <Route path="syncBranch" element={<SyncBranch/>} />
         </Route>
       </Routes>
     </BrowserRouter>

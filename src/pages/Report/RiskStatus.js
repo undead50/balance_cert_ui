@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Modal, Form, Input, DatePicker, Space, Tag,Card } from 'antd';
+import { Table, Button, Modal, Form, Input, DatePicker, Space, Tag } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   createReportAsync,
   deleteReportAsync,
-  fetchRiskRankingReportsAsync,
-  resetStateReport,
+    fetchRiskStatusReportsAsync,
   updateReportAsync,
 } from '../../store/slices/reportSlice';
 import { EyeOutlined,SearchOutlined,FilePdfOutlined,FileExcelOutlined } from '@ant-design/icons';
@@ -14,78 +13,45 @@ import { EyeOutlined,SearchOutlined,FilePdfOutlined,FileExcelOutlined } from '@a
 import moment from 'moment'; // Import moment here
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
-import { Pie } from 'react-chartjs-2';
 import * as XLSX from 'xlsx';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 
-
-
 const { RangePicker } = DatePicker;
 
-const RiskRankingReport = () => {
+const RiskStatus = () => {
 
 
-  const exportToExcel = () => {
+    const exportToExcel = () => {
   
-    // Create a new worksheet
-    const ws = XLSX.utils.json_to_sheet(dataSource.map(item => {
-      // Customize the data format if needed
-      return {
-        highRisk: item.highRisk,
-        mediumRisk: item.mediumRisk,
-        lowRisk: item.lowRisk,
-        noofBranch: item.noofBranch,
-        // Add more columns as needed
-      };
-    }));
-
-    // const title = 'Risk Ranking Report'
-    // // Add a title row
-    // const titleRow = ['Title: ', title]; // Customize as needed
-    // XLSX.utils.sheet_add_aoa(ws, [titleRow], { origin: 0 });
-
-    // Create a new workbook
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-    // Save the workbook to a file
-    XLSX.writeFile(wb, `Risk_Ranking_Report.xlsx`);
-  };
-
-  const [pieReportData, setPieReportData] = useState([])
-  const [rankingData, setRankingData] = useState([])
-
-  const data = {
-    labels: ['Total High Risk Branches', 'Total Medium Risk Branches', 'Total Low Risk Branches'],
-    datasets: [
-      {
-        data: pieReportData,
-        backgroundColor: [
-          'red',
-          '#FFC107',
-          '#508838'
-        ],
-      },
-    ],
-  };
-
-  // Chart.js options for the pie chart
-  const options = {
-    title: {
-      display: true,
-      text: 'Risk Ranking Report',
-    },
-  };
-
-  useEffect(() => {
-
-    return () => {
-      dispatch(resetStateReport())
-    };
+        // Create a new worksheet
+        const ws = XLSX.utils.json_to_sheet(dataSource.map(item => {
+          // Customize the data format if needed
+          return {
+            branchDesc: item.branchDesc,
+            status: item.status,
+            noOf: item.noOf,
+            // Add more columns as needed
+          };
+        }));
     
-  },[])
+        // const title = 'Risk Ranking Report'
+        // // Add a title row
+        // const titleRow = ['Title: ', title]; // Customize as needed
+        // XLSX.utils.sheet_add_aoa(ws, [titleRow], { origin: 0 });
+    
+        // Create a new workbook
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    
+        // Save the workbook to a file
+        XLSX.writeFile(wb, `Risk_Status_Report.xlsx`);
+      };
+
+    const { riskStatusReport, loading, error } = useSelector(
+        (state) => state.report
+      );
 
   const filterCreatedAt = (value, createdDate) => {
     if (value === 'today') {
@@ -124,9 +90,7 @@ const RiskRankingReport = () => {
   const {branchs} = useSelector((state)=> state.branch)
 
 
-  const { riskRankingReports, loading, error } = useSelector(
-    (state) => state.report
-  );
+  
 
   // Function to handle opening the modal for adding/editing a record
   const handleEdit = (record) => {
@@ -134,14 +98,6 @@ const RiskRankingReport = () => {
     setEditMode(true);
     setIsModalVisible(true);
   };
-
-  useEffect(() => {
-    if (riskRankingReports.length !== 0) {
-      console.log(riskRankingReports[0].highRisk)
-      setPieReportData([riskRankingReports[0].highRisk, riskRankingReports[0].mediumRisk, riskRankingReports[0].lowRisk])
-      setRankingData(riskRankingReports)
-    }
-  },[riskRankingReports])
 
   const handleAdd = () => {
     setEditMode(false);
@@ -155,15 +111,20 @@ const RiskRankingReport = () => {
     // callNotification('Report deleted Successfully', 'success');
   };
 
-
-
+  useEffect(() => {
+    const data = {
+      startDate: undefined,
+      endDate: undefined
+    }
+    dispatch(fetchRiskStatusReportsAsync())
+    console.log(branchs);
+  }, []);
 
   const downloadPDF = () => {
-
     const pdfDefinition = {
       content: [
         {
-          text: "Risk Ranking Report",  // Add the heading here
+          text: "Risk Status Report",  // Add the heading here
           style: 'heading',
         },
         {
@@ -192,14 +153,14 @@ const RiskRankingReport = () => {
     };
 
     const pdfDocGenerator = pdfMake.createPdf(pdfDefinition);
-    pdfDocGenerator.download('Risk_Ranking_Report.pdf');
+    pdfDocGenerator.download('Risk_Status.pdf');
   };
 
 
 
 
 
-  const dataSource = rankingData;
+  const dataSource = riskStatusReport;
 
   const onFinish = (values) => {
     console.log(values);
@@ -231,31 +192,37 @@ const RiskRankingReport = () => {
         start_date,
         end_date
     }
-    dispatch(fetchRiskRankingReportsAsync(data))
+    
   }
+
 
   const columns = [
 
     {
-      title: 'HIGH RISK',
-      dataIndex: 'highRisk',
-      key: 'highRisk',
+      title: 'Branch Description',
+      dataIndex: 'branchDesc',
+      key: 'branchDesc',
       },
       {
-        title: 'MEDIUM RISK',
-        dataIndex: 'mediumRisk',
-        key: 'mediumRisk',
+        title: 'Status',
+        dataIndex: 'status',
+        key: 'status',
+        filters: [
+          { text: 'APPROVED', value: 'APPROVED' },
+          { text: 'REVIEWED', value: 'REVIEWED' },
+          { text: 'CREATED', value: 'CREATED' },
+          { text: 'DRAFT', value: 'DRAFT' },
+          {text: 'INITIATED',value: 'INITIATED'}
+        ],
+        filterSearch: false,
+        onFilter: (value, record) => record.status === value,
       },
       {
-        title: 'LOW RISK',
-        dataIndex: 'lowRisk',
-        key: 'lowRisk',
+        title: 'Count',
+        dataIndex: 'noOf',
+        key: 'noOf',
       },
-      {
-        title: 'NO OF BRANCH',
-        dataIndex: 'noofBranch',
-        key: 'noofBranch',
-      }
+    
   ];
 
   return (
@@ -267,7 +234,7 @@ const RiskRankingReport = () => {
     >
       Add
     </Button> */}
-      <h2 style={{ justifyContent: 'center', display: 'flex',textDecoration:'underline' }}>(Risk Ranking Report)</h2>
+      <h2 style={{ justifyContent: 'center', display: 'flex',textDecoration:'underline' }}>(Risk Status Report)</h2>
       <Button onClick={downloadPDF} type="primary" shape='round'>
         Export Pdf<FilePdfOutlined />
       </Button>
@@ -292,16 +259,9 @@ const RiskRankingReport = () => {
           <Button type="primary"  shape="circle"  htmlType="submit"><SearchOutlined /></Button>
         </Form.Item>
       </Form>
-
-      
       <br />
-      <Card style={{ width: '300px', height: '300px' }}>
-      {/* Render the pie chart */}
-      <Pie data={data} options={options} />
-    </Card>
       <br />
-      <Table dataSource={rankingData} columns={columns} loading={loading} />
-      
+      <Table dataSource={dataSource} columns={columns} loading={loading} />
 
       {/* Modal for adding/editing a record */}
       <Modal
@@ -346,9 +306,7 @@ const RiskRankingReport = () => {
       {/* {loading && <Spinner />} */}
     </div>
 
-    
-
   );
 };
 
-export default RiskRankingReport;
+export default RiskStatus;

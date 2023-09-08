@@ -8,9 +8,9 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { FilePdfOutlined } from '@ant-design/icons';
 
-const AssessmentSummary = (props) => {
+const PreviewAssessmentSummary = (props) => {
   const { assSummary } = useSelector((state) => state.risk);
-  const { RiskDetail } = useSelector((state) => state.riskdetail);
+//   const { RiskDetail } = useSelector((state) => state.riskdetail);
   const modalContentRef = useRef(null);
   const [riskState, setRiskState] = useState('')
 
@@ -45,10 +45,10 @@ const AssessmentSummary = (props) => {
 
   // console.log(RiskDetail[0].assessment_data)
 
-  let assmentData = []
-  if (RiskDetail.length !== 0) {
-    assmentData = RiskDetail[0].assessment_data
-  }
+  let assmentData = assSummary
+//   if (RiskDetail.length !== 0) {
+//     assmentData = RiskDetail[0].assessment_data
+//   }
 
 
 
@@ -205,4 +205,4 @@ const AssessmentSummary = (props) => {
   );
 };
 
-export default AssessmentSummary;
+export default PreviewAssessmentSummary;

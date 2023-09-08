@@ -129,15 +129,21 @@ const AdminLayout = () => {
             justifyContent: 'center',
           }}
         >
-          <img
+          { collapsed ? (
+            <img
+              src={process.env.PUBLIC_URL + '/images/colo.png'}
+              style={{
+                marginTop: '0px',
+                width: '50px'
+              }}
+            />): <img
             src={process.env.PUBLIC_URL + '/images/citizens-logo.png'}
             style={{
-              height: '40px',
-
-              width: collapsed ? '80%' : '90%',
-              marginTop: '-8px',
+              height: '45px',
+              width: '90%',
             }}
-          />
+          /> }
+          {/*  */}
         </div>
         <SideBar />
       </Sider>

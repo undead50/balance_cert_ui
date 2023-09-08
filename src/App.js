@@ -10,8 +10,8 @@ const App = () => {
           fontSize: 13
         }
       }}
-    >
-        <MyRoutes />
+      >
+          <MyRoutes />
         </ConfigProvider>  
     </>
   );

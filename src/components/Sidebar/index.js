@@ -8,6 +8,7 @@ import {
   SettingTwoTone,
   SnippetsTwoTone,
 } from '@ant-design/icons';
+import './index.css'
 
 const { SubMenu } = Menu;
 
@@ -15,6 +16,7 @@ function SideBard() {
   const { userInfo } = useSelector((state) => state.user);
 
   return (
+    // <div className='custom-scrollbar-sidebar'>
     <Menu theme="light" defaultSelectedKeys={['1']} mode="inline">
       <Menu.Item key="1" icon={<PieChartOutlined />}>
         <Link to={'/'}>Dashboard</Link>
@@ -47,7 +49,7 @@ function SideBard() {
             <Link to={'/riskRankingReport'}>Risk Ranking</Link>
           </Menu.Item>
           <Menu.Item key="15">
-            <Link to={'/'}>Risk Status</Link>
+            <Link to={'/riskStatus'}>Risk Status</Link>
           </Menu.Item>
         </SubMenu>
       )}
@@ -71,9 +73,13 @@ function SideBard() {
           <Menu.Item key="12">
             <Link to={'/initiateAssessment'}>Initiate Assessment</Link>
           </Menu.Item>
+          <Menu.Item key="16">
+            <Link to={'/syncBranch'}>Sync Branch</Link>
+          </Menu.Item>
         </SubMenu>
       )}
-    </Menu>
+      </Menu>
+      // </div>
   );
 }
 
