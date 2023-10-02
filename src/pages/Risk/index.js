@@ -562,7 +562,7 @@ const RiskTable = () => {
             </Button>
           ) : null}
           {
-            record.status === 'REJECTED' ? (
+            (record.status === 'REJECTED' && userInfo.isBranchManager === 'N') ? (
               <Popconfirm
                 title="Reprocess Assessment"
                 description="Are you sure to Reprocess the Assessment?"
@@ -626,7 +626,7 @@ const RiskTable = () => {
         width="1000px"
         destroyOnClose={true}
       >
-        {assesmentStatus.record == 'DRAFT' || assesmentStatus.record == "INITIATED" ? (
+        {((assesmentStatus.record == 'DRAFT' || assesmentStatus.record == "INITIATED")  && userInfo.isBranchManager === 'N') ? (
           <Button
             type="primary"
             size="small"

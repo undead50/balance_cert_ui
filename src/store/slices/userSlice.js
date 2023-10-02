@@ -11,7 +11,8 @@ const initialState = {
         employeeName: '',
         photoId: '',
         image: '',
-        isSuperAdmin:false
+        isSuperAdmin: false,
+        solDesc: ''
     }
 }
 

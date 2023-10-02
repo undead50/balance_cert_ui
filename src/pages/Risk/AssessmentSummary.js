@@ -154,6 +154,14 @@ const AssessmentSummary = (props) => {
         <div ref={modalContentRef}>
           {/* <div className="custom-scrollbar"> */}
 
+          <div style={{display: 'flex', justifyContent:'center',marginBottom: '50px'}}>
+        <img
+          width={200}
+          src={process.env.PUBLIC_URL + '/images/citizens-logo.png'}
+          
+          />
+          </div>
+
           <List
             size="small"
             bordered={true}
@@ -166,13 +174,7 @@ const AssessmentSummary = (props) => {
             renderItem={(item) => <List.Item>{item}</List.Item>}
           />
 
-<div style={{display: 'flex', justifyContent:'center'}}>
-        <img
-          width={200}
-          src={process.env.PUBLIC_URL + '/images/citizens-logo.png'}
-          
-          />
-          </div>
+
           <br />
 
           <Table dataSource={dataSource} columns={columns} pagination={false}

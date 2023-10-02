@@ -191,7 +191,7 @@ const AdminLayout = () => {
               <h1
                 style={{ color: '#fff', fontSize: '19px', fontWeight: '600' }}
               >
-                Self Risk Assessment System.
+                 Balance Certificate Issuance
               </h1>
             </div>
             <div

@@ -18,6 +18,7 @@ import Notfound from '../pages/System/404';
 import RiskRankingReport from '../pages/Report/RiskRankingReport';
 import RiskStatus from '../pages/Report/RiskStatus';
 import SyncBranch from '../pages/Branch';
+import MultiStepForm from '../pages/BalanceCertificate';
 
 function MyRoutes() {
   return (
@@ -36,6 +37,7 @@ function MyRoutes() {
           <Route path="createAudit" element={<Create />} />
           <Route path="indexAudit" element={<Index />} />
           <Route path="riskassessment" element={<AccountOpeningForm />} />
+          <Route path="balcert-search" element={<MultiStepForm/>}/>
           <Route
             path="riskassessment/:riskassessmentID"
             element={<AccountOpeningForm />}

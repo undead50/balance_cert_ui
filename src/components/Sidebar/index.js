@@ -6,6 +6,7 @@ import {
   PieChartOutlined,
   UserOutlined,
   SettingTwoTone,
+  TeamOutlined,
   SnippetsTwoTone,
 } from '@ant-design/icons';
 import './index.css'
@@ -21,26 +22,23 @@ function SideBard() {
       <Menu.Item key="1" icon={<PieChartOutlined />}>
         <Link to={'/'}>Dashboard</Link>
       </Menu.Item>
-      {/* <Menu.Item key="2" icon={<DesktopOutlined />}>
-        <Link to={'/createAudit'}>Create Audit Request</Link>
-      </Menu.Item> */}
-      {/* <Menu.Item key="3" icon={<DesktopOutlined />}>
-        <Link to={'/info'}>Option 2</Link>
-      </Menu.Item> */}
-      <SubMenu key="sub1" icon={<UserOutlined />} title="Risk Assesment">
+      <SubMenu key="sub1" icon={<UserOutlined />} title="Balace Certificate">
         {/* <Menu.Item key="4"><Link to = {'/createAudit'}>Create Audit</Link></Menu.Item>
         <Menu.Item key="5"><Link to = {'/indexAudit'}>List Audit</Link></Menu.Item> */}
         {/* <Menu.Item key="6"><Link to={'/riskassessment'}>Risk Assessment</Link></Menu.Item> */}
-        <Menu.Item key="9">
-          <Link to={'/assessmentindex'}>Assessment Status</Link>
+        <Menu.Item key="2">
+          <Link to={'/balcert-search'}>Issue Certificate</Link>
+        </Menu.Item>
+        <Menu.Item key="3">
+          <Link to={'/assessmentindex'}>Certificate Status</Link>
         </Menu.Item>
       </SubMenu>
-      {/* <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
-        <Menu.Item key="7">Team 1</Menu.Item>
-        <Menu.Item key="8">Team 2</Menu.Item>
-      </SubMenu> */}
+      <SubMenu key="sub2" icon={<TeamOutlined />} title="Report">
+        <Menu.Item key="4">Team 1</Menu.Item>
+        <Menu.Item key="5">Team 2</Menu.Item>
+      </SubMenu>
       {/* <Menu.Item key="9" icon={<FileOutlined />} /> */}
-      {userInfo.isSuperAdmin === true && (
+      {/* {userInfo.isSuperAdmin === true && (
         <SubMenu key="sub3" icon={<SnippetsTwoTone />} title="Report">
           <Menu.Item key="13">
             <Link to={'/report'}>Risk Report</Link>
@@ -52,32 +50,9 @@ function SideBard() {
             <Link to={'/riskStatus'}>Risk Status</Link>
           </Menu.Item>
         </SubMenu>
-      )}
+      )} */}
 
-      {userInfo.isSuperAdmin === true && (
-        <SubMenu key="sub2" icon={<SettingTwoTone />} title="Settings">
-          {/* <Menu.Item key="4"><Link to = {'/createAudit'}>Create Audit</Link></Menu.Item>
-        <Menu.Item key="5"><Link to = {'/indexAudit'}>List Audit</Link></Menu.Item> */}
-          <Menu.Item key="7">
-            <Link to={'/categoryIndex'}>Category</Link>
-          </Menu.Item>
-          <Menu.Item key="8">
-            <Link to={'/questionIndex'}>Qutestions</Link>
-          </Menu.Item>
-          <Menu.Item key="10">
-            <Link to={'/previlageIndex'}>Previlage</Link>
-          </Menu.Item>
-          <Menu.Item key="11">
-            <Link to={'/markingIndex'}>Marks</Link>
-          </Menu.Item>
-          <Menu.Item key="12">
-            <Link to={'/initiateAssessment'}>Initiate Assessment</Link>
-          </Menu.Item>
-          <Menu.Item key="16">
-            <Link to={'/syncBranch'}>Sync Branch</Link>
-          </Menu.Item>
-        </SubMenu>
-      )}
+      
       </Menu>
       // </div>
   );

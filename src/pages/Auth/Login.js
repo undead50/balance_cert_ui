@@ -52,6 +52,7 @@ const LoginPage = () => {
             employeeName: data.Data.employeeName,
             isSuperAdmin: data.Data.isSuperAdmin,
             image: data.Data.image,
+            solDesc: data.Data.solDesc,
           })
         );
         navigate('/');
@@ -92,7 +93,7 @@ const LoginPage = () => {
         </div>
         
         <Title level={4} code style={{ textAlign: 'center',marginBottom:'15px',textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)' }}>
-          Risk Assessment System
+        Balance Certificate Issuance
         </Title>
         
             

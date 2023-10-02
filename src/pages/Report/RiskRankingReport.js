@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import { Table, Button, Modal, Form, Input, DatePicker, Space, Tag,Card } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
+import jsPDF from 'jspdf';
 import {
   createReportAsync,
   deleteReportAsync,
@@ -16,6 +17,9 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Pie } from 'react-chartjs-2';
 import * as XLSX from 'xlsx';
+import html2canvas from 'html2canvas';
+
+
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -25,6 +29,42 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 const { RangePicker } = DatePicker;
 
 const RiskRankingReport = () => {
+
+  const componentRef = useRef(null);
+  const handleConvertToPDF = () => {
+    // Get the DOM element to capture
+     // Get the DOM element to capture
+     const element = componentRef.current;
+
+
+    const pdfWidth = 500; // Width of A4 in mm
+    const pdfHeight = 500; // Height of A4 in mm
+    html2canvas(element).then((canvas) => {
+      const dataURL = canvas.toDataURL();
+      // Convert the dataURL to PDF using jspdf
+      const pdf = new jsPDF({
+        orientation: 'portrait', // You can also use 'landscape' if needed
+        unit: 'mm',
+        format: 'a4',
+      });
+      // Add a heading
+      const headingText = 'Risk Ranking Report';
+      const headingFontSize = 16; // Adjust the font size as needed
+      const headingX = 10; // X-coordinate of the heading
+      const headingY = 10; // Y-coordinate of the heading
+
+       // Add margin below the heading
+      const marginBelowHeading = 10; // Adjust the margin as needed
+      const contentX = headingX;
+      const contentY = headingY + marginBelowHeading; // Adjusted to include margin
+
+      pdf.setFontSize(headingFontSize);
+      pdf.text(headingX, headingY, headingText);
+      pdf.addImage(dataURL, 'PNG', 10, contentY); // You can adjust the position and size of the image in the PDF
+      pdf.save('risk_ranking_report.pdf');
+    });
+  };
+
 
 
   const exportToExcel = () => {
@@ -259,7 +299,7 @@ const RiskRankingReport = () => {
   ];
 
   return (
-    <div>
+    <div >
       {/* <Button
       type="primary"
       onClick={() => handleAdd()}
@@ -268,7 +308,7 @@ const RiskRankingReport = () => {
       Add
     </Button> */}
       <h2 style={{ justifyContent: 'center', display: 'flex',textDecoration:'underline' }}>(Risk Ranking Report)</h2>
-      <Button onClick={downloadPDF} type="primary" shape='round'>
+      <Button onClick={handleConvertToPDF} type="primary" shape='round'>
         Export Pdf<FilePdfOutlined />
       </Button>
       &nbsp;&nbsp;
@@ -295,13 +335,14 @@ const RiskRankingReport = () => {
 
       
       <br />
+      <div ref={componentRef}>
       <Card style={{ width: '300px', height: '300px' }}>
       {/* Render the pie chart */}
       <Pie data={data} options={options} />
     </Card>
       <br />
       <Table dataSource={rankingData} columns={columns} loading={loading} />
-      
+      </div>
 
       {/* Modal for adding/editing a record */}
       <Modal
