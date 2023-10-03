@@ -63,7 +63,7 @@ const Step1Form = () => {
                 <Row gutter={12}>
                     <Col span={4}>
                         <Form.Item label="Account Number" name="accountNumber">
-                            <Input placeholder="Enter Account Number" />
+                            <Input placeholder="Enter Account Number"/>
                         </Form.Item>
                     </Col>
                     <Col span={4}>

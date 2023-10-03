@@ -40,7 +40,7 @@ const MultiStepForm = () => {
           </Button>
         )}
         {currentStep < 3 && (
-          <Button type="primary" shape='round' onClick={next}>
+          <Button type="primary" shape='round' onClick={next} htmlType="submit">
             Next
           </Button>
         )}

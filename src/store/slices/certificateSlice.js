@@ -14,6 +14,8 @@ const callNotification = ((description, type) => {
 const initialState = {
   certificates: [],
   certificate_loading: false,
+  report_type: "",
+  custom_description:"",
   certificate_error: null,
 };
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -72,6 +74,12 @@ const certificateSlice = createSlice({
   name: 'certificate',
   initialState,
   reducers: {
+    setReportType: (state, action) => {
+      state.report_type = action.payload
+    },
+    setCustomDescription: (state, action) => {
+      state.custom_description = action.payload
+    },
     resetStateCertificate: (state) => initialState
   },
   extraReducers: (builder) => {
@@ -139,5 +147,5 @@ const certificateSlice = createSlice({
       });
   },
 });
-export const { resetStateCertificate } = certificateSlice.actions;
+export const { resetStateCertificate,setCustomDescription,setReportType } = certificateSlice.actions;
 export const certificateReducer = certificateSlice.reducer;
