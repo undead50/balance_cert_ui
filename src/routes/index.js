@@ -19,6 +19,7 @@ import RiskRankingReport from '../pages/Report/RiskRankingReport';
 import RiskStatus from '../pages/Report/RiskStatus';
 import SyncBranch from '../pages/Branch';
 import MultiStepForm from '../pages/BalanceCertificate';
+import TemplateTable from '../pages/Template';
 
 function MyRoutes() {
   return (
@@ -52,7 +53,8 @@ function MyRoutes() {
           <Route path="previlageIndex" element={<UserPrivilegesTable />} />
           <Route path="markingIndex" element={<MarkTable />} />
           <Route path="initiateAssessment" element={<InitiateAssessment />} />
-          <Route path="syncBranch" element={<SyncBranch/>} />
+          <Route path="syncBranch" element={<SyncBranch />} />
+          <Route path="template" element={<TemplateTable/>}/>
         </Route>
       </Routes>
     </BrowserRouter>

@@ -25,6 +25,7 @@ import { dashboardReducer } from './slices/dashboardSlice';
 import { RiskDetailReducer } from './slices/RiskDetailSlice';
 import { enc, AES } from 'crypto-js';
 import { certificateReducer } from './slices/certificateSlice';
+import { templateReducer } from './slices/templateSlice';
 
 const secretKey = '081fbadce74f99af29c8280fce633fb9';
 
@@ -52,6 +53,7 @@ const rootReducer = combineReducers({
   report: reportReducer,
   branch: branchReducer,
   riskdetail: RiskDetailReducer,
+  template:templateReducer
 });
 
 const persistConfig = {
