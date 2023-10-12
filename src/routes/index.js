@@ -20,13 +20,15 @@ import RiskStatus from '../pages/Report/RiskStatus';
 import SyncBranch from '../pages/Branch';
 import MultiStepForm from '../pages/BalanceCertificate';
 import TemplateTable from '../pages/Template';
+import VerificationDetails from '../pages/BalanceCertificate/Verification';
 
 function MyRoutes() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<LoginPage />}></Route>
-        <Route path="*" element={<Notfound/>}></Route>
+        <Route path="*" element={<Notfound />}></Route>
+        <Route path="verification" element={<VerificationDetails/>}/>
         <Route
           element={
             <ProtectedRoute>
@@ -54,7 +56,8 @@ function MyRoutes() {
           <Route path="markingIndex" element={<MarkTable />} />
           <Route path="initiateAssessment" element={<InitiateAssessment />} />
           <Route path="syncBranch" element={<SyncBranch />} />
-          <Route path="template" element={<TemplateTable/>}/>
+          <Route path="template" element={<TemplateTable />} />
+         
         </Route>
       </Routes>
     </BrowserRouter>
