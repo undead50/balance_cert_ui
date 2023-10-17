@@ -20,11 +20,14 @@ import {
 import { EyeOutlined } from '@ant-design/icons';
 import './index.css';
 import { fetchTemplatesAsync } from '../../store/slices/templateSlice';
+import { useForm } from 'antd/lib/form/Form';
 
 const Step1Form = () => {
-  const { certificates } = useSelector((state) => state.certificate);
+  const { certificates, certificate_loading } = useSelector((state) => state.certificate);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const certificateData = certificates.length !== 0 ? certificates[0] : [];
+  
+  const [form] = useForm();
 
   useEffect(() => {
     dispatch(fetchTemplatesAsync());
@@ -53,6 +56,12 @@ const Step1Form = () => {
       key: 'CERT_ISSUING_BRANCH',
     },
     {
+      title: 'CERTIFICATE_TYPE',
+      dataIndex: 'CERTIFICATE_TYPE',
+      key: 'CERTIFICATE_TYPE',
+      render: (text) => (text === 'C' ? 'Combined' : 'Single'),
+    },
+    {
       title: 'ACCOUNTNUMBER',
       dataIndex: 'ACCOUNTNUMBER',
       key: 'ACCOUNTNUMBER',
@@ -78,7 +87,8 @@ const Step1Form = () => {
   const dispatch = useDispatch();
   const onFinish = (values) => {
     console.log('Received values of form: ', values);
-    dispatch(fetchCertificatesAsync());
+    // alert(values.referenceNumber)
+    dispatch(fetchCertificatesAsync(values.referenceNumber));
   };
 
   // useEffect(() => {
@@ -88,11 +98,13 @@ const Step1Form = () => {
 
   const handleReset = () => {
     dispatch(resetStateCertificate());
+    form.resetFields();
+    
   };
 
   return (
     <Card>
-      <Form layout="vertical" onFinish={onFinish}>
+      <Form form={form} layout="vertical" onFinish={onFinish}>
         <div
           style={{
             display: 'flex',
@@ -104,7 +116,7 @@ const Step1Form = () => {
         </div>
 
         <Row gutter={12}>
-          <Col span={4}>
+          {/* <Col span={4}>
             <Form.Item label="Account Number" name="accountNumber">
               <Input placeholder="Enter Account Number" />
             </Form.Item>
@@ -113,9 +125,14 @@ const Step1Form = () => {
             <Form.Item label="Issued Date" name="issuedDate">
               <DatePicker />
             </Form.Item>
-          </Col>
-          <Col span={6}>
-            <Form.Item label="Reference Number" name="referenceNumber">
+          </Col> */}
+          <Col span={7}>
+            <Form.Item label="Reference Number(Check Certificate Validity)" name="referenceNumber" rules={[
+              {
+                required: true,
+                message: 'Please enter the Reference Number',
+              },
+            ]}>
               <Input placeholder="Enter Reference Number" />
             </Form.Item>
           </Col>
@@ -141,7 +158,7 @@ const Step1Form = () => {
           </Col>
         </Row>
       </Form>
-      <Table dataSource={certificates} columns={columns} />
+      <Table dataSource={certificates} columns={columns} loading={certificate_loading} />
       <Modal
         title="Certificate Details"
         width={600}
@@ -169,6 +186,11 @@ const Step1Form = () => {
                   label={<span className="bold-label">CERTIFICATE_TYPE</span>}
                 >
                   {certificateData['CERTIFICATE_TYPE']}
+                </Descriptions.Item>
+                <Descriptions.Item
+                  label={<span className="bold-label">RATE</span>}
+                >
+                  {certificateData['RATE']}
                 </Descriptions.Item>
                 <Descriptions.Item
                   label={

@@ -30,18 +30,18 @@ function SideBard() {
           <Link to={'/balcert-search'}>Issue Certificate</Link>
         </Menu.Item>
         <Menu.Item key="3">
-          <Link to={'/assessmentindex'}>Certificate Status</Link>
+          <Link to={'/qrcertificate'}>Certificate Status</Link>
         </Menu.Item>
       </SubMenu>
-      <SubMenu key="sub2" icon={<TeamOutlined />} title="Report">
+      {/* <SubMenu key="sub2" icon={<TeamOutlined />} title="Report">
         <Menu.Item key="4">Team 1</Menu.Item>
         <Menu.Item key="5">Team 2</Menu.Item>
-      </SubMenu>
+      </SubMenu> */}
       <SubMenu key="sub3" icon={<TeamOutlined />} title="Settings">
         <Menu.Item key="6">
         <Link to={'/template'}>Template</Link>
         </Menu.Item>
-        <Menu.Item key="7">Team 2</Menu.Item>
+        {/* <Menu.Item key="7">Team 2</Menu.Item> */}
       </SubMenu>
       {/* <Menu.Item key="9" icon={<FileOutlined />} /> */}
       {/* {userInfo.isSuperAdmin === true && (

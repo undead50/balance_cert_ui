@@ -11,19 +11,25 @@ const callNotification = ((description, type) => {
   });
 })
 
+
 const initialState = {
   certificates: [],
-  certificate_loading: false,
+  certificate_certificate_loading: false,
   report_type: "",
-  custom_description:"",
+  custom_description: "",
+  certificate_detail: "",
+  qr_certificate_detail: "",
   certificate_error: null,
 };
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-export const fetchCertificatesAsync = createAsyncThunk('certificate/fetchCertificates', async () => {
+export const fetchCertificatesAsync = createAsyncThunk('certificate/fetchCertificates', async (referenceNumber) => {
   try {
-    const url = BACKEND_URL + '/certificate/fetchCertificates';
-    const response = await axiosInstance.get(url);
+    const url = BACKEND_URL + `/certificate/fetchCertificates`;
+    const payload = {
+      referenceNumber:referenceNumber
+    }
+    const response = await axiosInstance.post(url,payload);
     return response.data;
   } catch (error) {
     throw new Error(error.response.data.error);
@@ -80,42 +86,53 @@ const certificateSlice = createSlice({
     setCustomDescription: (state, action) => {
       state.custom_description = action.payload
     },
+    setCertificate: (state, action) => {
+      state.certificate_detail = action.payload
+    },
+    setQrCertificate: (state, action) => {
+      state.qr_certificate_detail = action.payload
+    },
     resetStateCertificate: (state) => initialState
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchCertificatesAsync.pending, (state) => {
-        state.loading = true;
+        state.certificate_loading = true;
         state.error = null;
       })
       .addCase(fetchCertificatesAsync.fulfilled, (state, action) => {
-        state.loading = false;
+        state.certificate_loading = false;
         state.certificates = action.payload;
+        if (action.payload.length === 0) {
+          callNotification('Certificate Not Found', 'error');
+        } else {
+          callNotification('Certificate Is Valid', 'success');
+        }
       })
       .addCase(fetchCertificatesAsync.rejected, (state, action) => {
-        state.loading = false;
+        state.certificate_loading = false;
         state.error = action.error.message;
       })
       .addCase(createCertificateAsync.pending, (state) => {
-        state.loading = true;
+        state.certificate_loading = true;
         state.error = null;
       })
       .addCase(createCertificateAsync.fulfilled, (state, action) => {
-        state.loading = false;
+        state.certificate_loading = false;
         state.certificates.push(action.payload);
         callNotification('Operation Successfull', 'success');
       })
       .addCase(createCertificateAsync.rejected, (state, action) => {
-        state.loading = false;
+        state.certificate_loading = false;
         state.error = action.error.message;
         callNotification(state.error, 'error');
       })
       .addCase(updateCertificateAsync.pending, (state) => {
-        state.loading = true;
+        state.certificate_loading = true;
         state.error = null;
       })
       .addCase(updateCertificateAsync.fulfilled, (state, action) => {
-        state.loading = false;
+        state.certificate_loading = false;
         const updatedCertificate = action.payload;
         const index = state.certificates.findIndex(
           (certificate) => certificate.id === updatedCertificate.id
@@ -126,26 +143,26 @@ const certificateSlice = createSlice({
         callNotification('Operation Successfull', 'success');
       })
       .addCase(updateCertificateAsync.rejected, (state, action) => {
-        state.loading = false;
+        state.certificate_loading = false;
         state.error = action.error.message;
         callNotification(state.error, 'error');
       })
       .addCase(deleteCertificateAsync.pending, (state) => {
-        state.loading = true;
+        state.certificate_loading = true;
         state.error = null;
       })
       .addCase(deleteCertificateAsync.fulfilled, (state, action) => {
-        state.loading = false;
+        state.certificate_loading = false;
         const certificateId = action.payload;
         state.certificates = state.certificates.filter((certificate) => certificate.id !== certificateId);
         callNotification('Operation Successfull', 'success');
       })
       .addCase(deleteCertificateAsync.rejected, (state, action) => {
-        state.loading = false;
+        state.certificate_loading = false;
         state.error = action.error.message;
         callNotification(state.error, 'error');
       });
   },
 });
-export const { resetStateCertificate,setCustomDescription,setReportType } = certificateSlice.actions;
+export const { resetStateCertificate,setCustomDescription,setReportType,setCertificate,setQrCertificate } = certificateSlice.actions;
 export const certificateReducer = certificateSlice.reducer;

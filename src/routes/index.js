@@ -21,6 +21,7 @@ import SyncBranch from '../pages/Branch';
 import MultiStepForm from '../pages/BalanceCertificate';
 import TemplateTable from '../pages/Template';
 import VerificationDetails from '../pages/BalanceCertificate/Verification';
+import QrcertificateTable from '../pages/QrCertificate';
 
 function MyRoutes() {
   return (
@@ -57,6 +58,7 @@ function MyRoutes() {
           <Route path="initiateAssessment" element={<InitiateAssessment />} />
           <Route path="syncBranch" element={<SyncBranch />} />
           <Route path="template" element={<TemplateTable />} />
+          <Route path="qrcertificate" element={<QrcertificateTable/>}/>
          
         </Route>
       </Routes>

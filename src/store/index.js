@@ -26,6 +26,8 @@ import { RiskDetailReducer } from './slices/RiskDetailSlice';
 import { enc, AES } from 'crypto-js';
 import { certificateReducer } from './slices/certificateSlice';
 import { templateReducer } from './slices/templateSlice';
+import { qrcertificateReducer } from './slices/qrcertificateSlice';
+
 
 const secretKey = '081fbadce74f99af29c8280fce633fb9';
 
@@ -41,6 +43,7 @@ const encryptor = createTransform(
 );
 
 const rootReducer = combineReducers({
+  qrcertificate: qrcertificateReducer,
   certificate: certificateReducer,
   dashboard: dashboardReducer,
   auth: authReducer,
