@@ -3,18 +3,52 @@ import { Form, Button, DatePicker,Card,message } from 'antd';
 import { Controller, useForm } from 'react-hook-form';
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css';
-import plugins from 'suneditor/src/plugins';
+import plugins, { table } from 'suneditor/src/plugins';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchTemplatesAsync } from '../../store/slices/templateSlice';
 import { setCertificate } from '../../store/slices/certificateSlice';
 import { ToWords } from 'to-words';
 
 
+const DataTable = (data) => {
+
+  const tableRows = data.map((item, index) => (
+    `<tr key=${index}>
+      <td>${item["ACCT_NO"]}</td>
+      <td>${item["ACCT_CRNCY_CODE"]}</td>
+      <td>${item["BALANCE_EOD"]}</td>
+      <td>${item["BALANCE_CONVERTED"]}</td>
+      <td>${item["EQU_FCRNCY"]}</td>
+      <td>${item["RATE"]}</td>
+    </tr>`
+  ));
+  return `
+    <div style="margin-left:25px">
+      <table>
+        <thead>
+          <tr>
+            <th>Account Number</th>
+            <th>Account Currency</th>
+            <th>Account Balance</th>
+            <th>Equivalent(FCY)</th>
+            <th>FCY Currency</th>
+            <th>Exchange Rate</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${tableRows.join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+};
+
+
 // Define a handler function to convert amounts to words for different currencies
 const  convertAmountToWords = (amount, currencyCode) =>{
   // Create a configuration object for each supported currency
-  alert(amount)
-  alert(currencyCode)
+  // alert(amount)
+  // alert(currencyCode)
   const currencyConfig = {
     'JPY': {
       localeCode: 'en-BD',
@@ -44,7 +78,7 @@ const  convertAmountToWords = (amount, currencyCode) =>{
       },
     },
     'AUD': {
-      localeCode: 'en-AU',
+      localeCode: 'en-US',
       currency: true,
       currencyOptions: {
         name: 'Australian Dollar',
@@ -140,6 +174,21 @@ const Step4Form = () => {
     // alert(certificateData['BALANCE_NPR'])
     // alert(certificateData['ACCT_CRNCY_CODE'])
     let ACCOUNT_CRNCY_WORD = convertAmountToWords(parseFloat(certificateData['BALANCE_NPR']), certificateData['ACCT_CRNCY_CODE']);
+    var BALANCE_CONVERTED = 0
+    if (certificateData.CERTIFICATE_TYPE === 'S') {
+      var BALANCE_FCY_WORD = convertAmountToWords(parseFloat(certificateData['BALANCE_FCY']), certificateData['EQU_FCRNCY']);
+    } else {
+
+      const sumOfBalanceConverted = certificateData.COMBINED_DATA.reduce((acc, item) => {
+        // Convert the string values to numbers before adding
+        const balanceConverted = parseFloat(item.BALANCE_CONVERTED) || 0;
+        return acc + balanceConverted;
+      }, 0);
+      // alert(sumOfBalanceConverted)
+      // alert(certificateData['EQU_FCRNCY'])
+      var BALANCE_FCY_WORD = convertAmountToWords(sumOfBalanceConverted,certificateData['EQU_FCRNCY']);
+    }
+    
     dispatch(fetchTemplatesAsync());
     console.log(templates);
     const template_string = (template_string_name) => {
@@ -163,6 +212,7 @@ const Step4Form = () => {
       // const ACCOUNT_NAME = certificateData["ACCOUNT_NAME"];
       // alert(ACCOUNT_NAME)
       var finalContent = foundTemplate.template;
+      if (certificateData.CERTIFICATE_TYPE === 'S') {
       finalContent = finalContent.replace('${ACCOUNT_NAME}', certificateData["ACCOUNT_NAME"]);
       finalContent = finalContent.replace('${ACCOUNTNUMBER}', certificateData['ACCOUNTNUMBER']);
       finalContent = finalContent.replace('${REFERENCE_NO}', certificateData['REFERENCE_NO']);
@@ -171,8 +221,23 @@ const Step4Form = () => {
       finalContent = finalContent.replace(/\${ACCT_CRNCY_CODE}/g, certificateData['ACCT_CRNCY_CODE']);
       finalContent = finalContent.replace(/\${EQU_FCRNCY}/g, certificateData['EQU_FCRNCY']);
       finalContent = finalContent.replace(/\${ACCOUNT_CRNCY_WORD}/g, ACCOUNT_CRNCY_WORD);
+      finalContent = finalContent.replace(/\${BALANCE_FCY_WORD}/g, BALANCE_FCY_WORD);
+      finalContent = finalContent.replace('${CERT_ISSUING_BRANCH}', certificateData['CERT_ISSUING_BRANCH']);
       finalContent = finalContent.replace('${RATE}', certificateData['RATE']);
-
+      } else {
+        console.log('start')
+        console.log(certificateData['COMBINED_DATA'])
+        const tableData = DataTable(certificateData['COMBINED_DATA'])
+        finalContent = finalContent.replace('${TABLE}', tableData);
+        finalContent = finalContent.replace('${CIF_ID}', certificateData['CIF_ID']);
+        finalContent = finalContent.replace('${CERT_ISSUING_BRANCH}', certificateData['CERT_ISSUING_BRANCH']);
+        finalContent = finalContent.replace(/\${EQU_FCRNCY}/g, certificateData['EQU_FCRNCY']);
+        finalContent = finalContent.replace('${REFERENCE_NO}', certificateData['REFERENCE_NO']);
+        finalContent = finalContent.replace(/\${BALANCE_FCY_WORD}/g, BALANCE_FCY_WORD);
+        finalContent = finalContent.replace('${CERT_ISSUING_BRANCH}', certificateData['CERT_ISSUING_BRANCH']);
+        console.log(tableData)
+      }
+      
       // alert(foundTemplate.template);
       setContent(finalContent);
     } else {
@@ -216,7 +281,7 @@ const Step4Form = () => {
           control={control}
           render={({ field: { onChange, value } }) => (
             <SunEditor
-              setDefaultStyle="font-family: arial;width:800px; font-size: 12px; background: #fafafa !important; height: auto; position:relative; z-index:0"
+              setDefaultStyle="font-family: Arial; width: 800px; font-size: 12px; background: #fafafa !important; height: 297mm; position: relative; z-index: 0;"
               onChange={onChange}
               value={value}
               setContents={content}
@@ -224,7 +289,7 @@ const Step4Form = () => {
                 resizingBar: false,
                 resizeEnable: true,
                 resizingBarContainer: false,
-                height: 'auto',
+                height: 297, // Set the height in millimeters to match A4
                 minHeight: 160,
                 historyStackDelayTime: 0,
                 plugins: plugins,

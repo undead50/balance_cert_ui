@@ -157,20 +157,20 @@ return (
                                         control={control}
                                         render={({ field: { onChange, value } }) => (
                                             <SunEditor
-                                                setDefaultStyle="font-family: arial; font-size: 12px; background: #fafafa !important; height: auto; position:relative; z-index:0"
+                                            setDefaultStyle="font-family: Arial; width: 800px; font-size: 12px; background: #fafafa !important; height: 297mm; position: relative; z-index: 0;"
                                                 onChange={onChange}
                                                 value={value}
-                                            setContents={editMode ? form.getFieldValue('template'):null}
+                                                setContents={editMode ? form.getFieldValue('template'):null}
                                                 setOptions={{
-                                                    resizingBar: false,
-                                                    resizeEnable: true,
-                                                    resizingBarContainer: false,
-                                                    height: "auto",
-                                                    minHeight: 160,
-                                                    historyStackDelayTime: 0,
-                                                    plugins: plugins,
-                                                    buttonList: [editorButtons],
-                                                }}
+                                              resizingBar: false,
+                                              resizeEnable: true,
+                                              resizingBarContainer: false,
+                                              height: 297, // Set the height in millimeters to match A4
+                                              minHeight: 160,
+                                              historyStackDelayTime: 0,
+                                              plugins: plugins,
+                                              buttonList: [editorButtons],
+                                            }}
                                             />
                                         )}
                                     />

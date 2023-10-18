@@ -17,6 +17,7 @@ const initialState = {
   certificate_certificate_loading: false,
   report_type: "",
   custom_description: "",
+  verfication_certificate: [],
   certificate_detail: "",
   qr_certificate_detail: "",
   certificate_error: null,
@@ -28,6 +29,20 @@ export const fetchCertificatesAsync = createAsyncThunk('certificate/fetchCertifi
     const url = BACKEND_URL + `/certificate/fetchCertificates`;
     const payload = {
       referenceNumber:referenceNumber
+    }
+    const response = await axiosInstance.post(url,payload);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.error);
+  }
+});
+
+
+export const fetchCertificateByIdAsync = createAsyncThunk('certificate/fetchCertificatesById', async (referenceNumber) => {
+  try {
+    const url = BACKEND_URL + `/certificate/fetchCertificatesById`;
+    const payload = {
+      referenceNo:referenceNumber
     }
     const response = await axiosInstance.post(url,payload);
     return response.data;
@@ -95,7 +110,22 @@ const certificateSlice = createSlice({
     resetStateCertificate: (state) => initialState
   },
   extraReducers: (builder) => {
+    
     builder
+      .addCase(fetchCertificateByIdAsync.pending, (state) => {
+        state.certificate_loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCertificateByIdAsync.fulfilled, (state, action) => {
+        state.certificate_loading = false;
+        state.verfication_certificate = action.payload;
+      })
+      .addCase(fetchCertificateByIdAsync.rejected, (state, action) => {
+        state.certificate_loading = false;
+        state.error = action.error.message;
+        window.location.href = 'https://www.ctznbank.com/';
+        
+      })
       .addCase(fetchCertificatesAsync.pending, (state) => {
         state.certificate_loading = true;
         state.error = null;

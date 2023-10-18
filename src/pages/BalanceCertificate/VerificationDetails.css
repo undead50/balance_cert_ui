@@ -18,7 +18,7 @@
   }
 
   .logo {
-    max-width: 300px; /* Set the maximum width for your logo */
+    max-width: 250px; /* Set the maximum width for your logo */
     display: block; /* Center the logo horizontally */
     margin: 0 auto;
     margin-bottom: 20px;
@@ -28,7 +28,7 @@
     text-align: center;
     margin: 0 auto;
     margin-top: 120px;
-    width: 400px;
+    width: 380px;
     background: #f7f7f8; /* Adjust the alpha value to control the darkness of the background */
     padding: 15px; /* Add some padding to separate the content from the background */
   }

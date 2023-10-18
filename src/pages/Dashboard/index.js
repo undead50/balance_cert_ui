@@ -49,7 +49,7 @@ const Dashboard = () => {
           {userInfo.employeeName}
         </Tag>
       </p>
-      <Row gutter={12}>
+      {/* <Row gutter={12}>
         <Col span={6}>
           <Card style={{backgroundColor:'#84D2B5'}} onClick={() => handleClick('APPROVED')} className="hoverable-card">
           <Statistic title="APPROVED" style={{fontWeight:'bold'}} value={dashboards.map((dashboard) => {
@@ -110,7 +110,7 @@ const Dashboard = () => {
             </Card>
         </Col>    
 
-      </Row>
+      </Row> */}
     </>
   );
 };

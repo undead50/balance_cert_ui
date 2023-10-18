@@ -9,8 +9,9 @@ import {
   updateQrcertificateAsync,
 } from '../../store/slices/qrcertificateSlice';
 import { usePDF, Margin } from 'react-to-pdf';
-import { EyeOutlined,DeleteOutlined } from '@ant-design/icons';
+import { EyeOutlined,DeleteOutlined,LinkOutlined } from '@ant-design/icons';
 // import { useNotification } from '../../hooks/index';
+import { useNavigate } from 'react-router-dom';
 
 const QrcertificateTable = () => {
   const [form] = Form.useForm();
@@ -19,6 +20,9 @@ const QrcertificateTable = () => {
   const [editMode, setEditMode] = useState(false);
   const [content, setContent] = useState("");
   const [qrcontent, setQrContent] = useState("");
+
+
+  const navigate = useNavigate();
 
 
   // const { callNotification } = useNotification();
@@ -40,6 +44,16 @@ const QrcertificateTable = () => {
     setIsModalVisible(true)
   }
 
+  const handleVerfication = (record) => {
+    const url = `/verification?verficationID=${record.reference_no}`;
+    const newTab = window.open(url, '_blank');
+    if (newTab) {
+      newTab.focus();
+    } else {
+      // Handle popup blocker or similar issues.
+      navigate(url); // Navigate in the current tab as a fallback.
+    }
+  }
 
   // Function to handle deleting a record
   const handleDelete = (record) => {
@@ -75,9 +89,6 @@ const QrcertificateTable = () => {
   };
 
   const columns = [
-
-
-
     {
       title: 'created_at',
       dataIndex: 'created_at',
@@ -88,14 +99,11 @@ const QrcertificateTable = () => {
       dataIndex: 'reference_no',
       key: 'reference_no',
     },
-
-
     {
       title: 'branch_code',
       dataIndex: 'branch_code',
       key: 'branch_code',
     },
-
     {
       title: 'status',
       dataIndex: 'status',
@@ -108,18 +116,11 @@ const QrcertificateTable = () => {
         }
       },
     },
-
-
-
-
     {
       title: 'created_by',
       dataIndex: 'created_by',
       key: 'created_by',
     },
-
-
-
     {
       title: 'Action',
       key: 'action',
@@ -127,6 +128,7 @@ const QrcertificateTable = () => {
         <Space>
           <Button onClick={() => handleDelete(record)}><DeleteOutlined /></Button>
           <Button onClick={() => handleView(record)}><EyeOutlined /></Button>
+          <Button onClick={()=> handleVerfication(record)}><LinkOutlined /></Button>
         </Space>
       ),
     },
@@ -140,7 +142,7 @@ const QrcertificateTable = () => {
       {/* Modal for adding/editing a record */}
       <Modal
 
-        width={800}
+        width={900}
         open={isModalVisible}
         onCancel={() => {
           setIsModalVisible(false);
