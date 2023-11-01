@@ -15,6 +15,8 @@ import { resetStatePrivilege } from '../../store/slices/privilegeSlice';
 import { resetStateCategory } from '../../store/slices/categorySlice';
 import { resetStateMark } from '../../store/slices/markSlice';
 import { resetStateDashboard } from '../../store/slices/dashboardSlice';
+import { resetStateCertificate } from '../../store/slices/certificateSlice';
+import { resetStateQrcertificate } from '../../store/slices/qrcertificateSlice';
 
 const LoginPage = () => {
   // alert('login')
@@ -36,6 +38,9 @@ const LoginPage = () => {
     dispatch(resetStateCategory());
     dispatch(resetStateMark());
     dispatch(resetStateDashboard());
+    dispatch(resetStateCertificate());
+    dispatch(resetStateQrcertificate());
+
   }, []);
 
   useEffect(() => {

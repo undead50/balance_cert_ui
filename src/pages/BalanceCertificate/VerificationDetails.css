@@ -1,45 +1,63 @@
+/* Default styles for screens wider than 768px (adjust as needed) */
 .centered-card {
-    text-align: center;
-    margin: 0 auto;
-    margin-top: 120px;
-    width: 350px;
-    background-color: aqua;
-  }
+  text-align: center;
+  margin: 0 auto;
+  margin-top: 120px;
+  width: 340px;
+  background-color: rgb(31, 66, 66);
+}
 
-  .centered-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 5px;
-  }
-  
-  .centered-content {
-    text-align: left; /* Adjust text alignment within the Space component */
-  }
+.centered-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 5px;
+}
 
-  .logo {
-    max-width: 250px; /* Set the maximum width for your logo */
-    display: block; /* Center the logo horizontally */
-    margin: 0 auto;
-    margin-bottom: 20px;
+.centered-content {
+  text-align: left;
+}
+
+.logo {
+  max-width: 240px;
+  display: block;
+  margin: 0 auto;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.body {
+  background: linear-gradient(to right, #468CC1, #3EAB94);
+}
+
+.custom-card {
+  text-align: center;
+  margin: 0 auto;
+  margin-top: 120px;
+  width: 325px;
+  background: #f7f7f8;
+  padding: 15px;
+}
+
+.large-tag {
+  font-size: 14px;
+  padding: 3px 7px;
+}
+
+.medium-tag {
+  font-size: 14px;
+  padding: 3px 6px;
+}
+
+/* Media query for screens narrower than 768px */
+@media (max-width: 768px) {
+  .centered-card {
+    width: 100%; /* Make the card full width on smaller screens */
+    margin-top: 60px; /* Adjust the top margin */
   }
 
   .custom-card {
-    text-align: center;
-    margin: 0 auto;
-    margin-top: 120px;
-    width: 380px;
-    background: #f7f7f8; /* Adjust the alpha value to control the darkness of the background */
-    padding: 15px; /* Add some padding to separate the content from the background */
+    width: 100%; /* Make the custom card full width on smaller screens */
+    margin-top: 60px; /* Adjust the top margin */
   }
-
-  .large-tag {
-    font-size: 14px; /* Increase the font size to make it larger */
-    padding: 3px 7px; /* Adjust padding for a larger tag */
-    /* You can customize other styles as needed */
-  }
-  .medium-tag {
-    font-size: 14px; /* Adjust the font size for a medium-sized tag */
-    padding: 3px 6px; /* Adjust padding for a medium-sized tag */
-    /* You can customize other styles as needed */
-  }
+}

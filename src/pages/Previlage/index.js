@@ -17,6 +17,8 @@ const UserPrivilegesTable = () => {
   const [formValues, setFormValues] = useState({});
   const [editMode, setEditMode] = useState(false);
 
+  const { userInfo} = useSelector((state) => state.user);
+
   const { callNotification } = useNotification();
 
   const dispatch = useDispatch();
@@ -57,6 +59,7 @@ const UserPrivilegesTable = () => {
       dispatch(updatePrivilegeAsync(values));
       callNotification('Previlage Edited Successfully', 'success');
     } else {
+      values.CreatedBy = userInfo.userName
       dispatch(createPrivilegeAsync(values));
       callNotification('Previlage Created Successfully', 'success');
     }
@@ -121,7 +124,7 @@ const UserPrivilegesTable = () => {
       >
         Add
       </Button>
-      <Table dataSource={dataSource} columns={columns} />
+      <Table dataSource={dataSource} columns={columns} loading={loading} />
 
       {/* Modal for adding/editing a record */}
       <Modal

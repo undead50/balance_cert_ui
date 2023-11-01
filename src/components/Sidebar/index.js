@@ -45,6 +45,9 @@ function SideBard() {
           <Menu.Item key="7">
             <Link to={'/previlageIndex'}>Users</Link>
           </Menu.Item>
+          <Menu.Item key="8">
+          <Link to={'/syncBranch'}>Sync Branch</Link>
+          </Menu.Item>
           {/* <Menu.Item key="7">Team 2</Menu.Item> */}
         </SubMenu>
       }

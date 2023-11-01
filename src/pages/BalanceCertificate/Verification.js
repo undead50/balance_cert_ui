@@ -7,6 +7,9 @@ import { useDispatch } from 'react-redux';
 import { fetchCertificateByIdAsync } from '../../store/slices/certificateSlice';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { decrypt } from '../../hooks/crypto';
+
+
 const { Title, Text } = Typography;
 
 
@@ -24,8 +27,9 @@ const VerificationDetails = () => {
     const verficationID = queryParams.get('verficationID');
 
     useEffect(() => {
+        // alert(verficationID)
         if (verficationID) {
-            dispatch(fetchCertificateByIdAsync(verficationID))
+            dispatch(fetchCertificateByIdAsync(decrypt(verficationID)))
         } else {
             window.location.href = 'https://www.ctznbank.com/';
         }

@@ -20,10 +20,19 @@ const initialState = {
 };
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-export const fetchQrcertificatesAsync = createAsyncThunk('qrcertificate/fetchQrcertificates', async () => {
+export const fetchQrcertificatesAsync = createAsyncThunk('qrcertificate/fetchQrcertificates', async (data) => {
+  
+  const params = {
+    startDate : data.startDate,
+    endDate: data.endDate,
+    branch_code: data.branch_code,
+    dashboardStatus: data.dashboardStatus
+  };
+  
   try {
     const url = BACKEND_URL + '/qrcertificate/fetchQrcertificates';
-    const response = await axiosInstance.get(url);
+    const response = await axiosInstance.get(url, {params}
+      );
     return response.data;
   } catch (error) {
     throw new Error(error.response.data.error);
