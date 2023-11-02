@@ -15,7 +15,10 @@ import { useNavigate } from 'react-router-dom';
 import { encrypt,decrypt } from '../../hooks/crypto';
 import * as XLSX from 'xlsx';
 import { fetchBranchsAsync } from '../../store/slices/branchSlice';
-
+import 'suneditor/dist/css/suneditor.min.css'; 
+import SunEditor from 'suneditor-react';
+import plugins, { table } from 'suneditor/src/plugins';
+import './index.css'
 
 const { RangePicker } = DatePicker;
 
@@ -118,7 +121,7 @@ const QrcertificateTable = () => {
 
   const handleView = (record) => {
     // alert(record.certificate)
-    setContent(parse(record.certificate))
+    setContent(record.certificate)
     setQrContent(record.verification_qr)
     setIsModalVisible(true)
   }
@@ -311,21 +314,35 @@ const QrcertificateTable = () => {
           background: '#f0f0f0',             // Background color
           padding: '20px',                   // Padding inside the div
         }}>
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <div>
 
           </div>
-          <div className="sun-editor-editable" style={{ margin: 0, padding: 0 }} ref={targetRef}>
-            <br />
+          <div style={{ display: 'flex', backgroundColor: '#fafafa' }} ref={targetRef}>
             <div>
-              {/* <img src={`data:image/png;base64,${qrcontent}`} style={{ height: 'auto',width:'10%', marginLeft: '3%' }} alt="Base64 Image" /> */}
-              <div style={{height: 'auto',width:'13%', marginLeft: '3%'}}>
-              <QRCode 
-                  size='115'
-                type="svg" 
-                value={qrcontent}
+              {/* QRCode container */}
+              <div style={{
+                marginLeft: '4%', marginTop:'3%'}}>
+                <QRCode size={98} bordered={false} bgColor="transparent" value={qrcontent} />
+              </div>
+              {/* SunEditor container */}
+              <SunEditor
+                setDefaultStyle="border:none !important;font-family: Arial; width: 800px; font-size: 12px; background: #fafafa !important; height: 297mm; position: relative;"
+                setContents={content.replace(/\\/g, '')}
+                disable={true}
+                hideToolbar={true}
+                className='sun-editor'
+                border="none"
+                setOptions={{
+                  resizingBar: false,
+                  resizeEnable: true,
+                  resizingBarContainer: false,
+                  height: 297, // Set the height in millimeters to match A4
+                  minHeight: 160,
+                  historyStackDelayTime: 0,
+                  plugins: plugins,
+                  
+                }}
                 />
-                </div>
-              <div style={{ marginTop: '-14%' }}>{content}</div>
             </div>
           </div>
         </div>

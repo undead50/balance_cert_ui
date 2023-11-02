@@ -71,7 +71,9 @@ const TemplateTable = () => {
     values.created_by = userInfo.userName;
     values.template = control._formValues.template
     if (editMode) {
+      console.log(control._formValues.template)
       dispatch(updateTemplateAsync(values));
+      
       // callNotification('Template Edited Successfully', 'success');
     } else {
       dispatch(createTemplateAsync(values));

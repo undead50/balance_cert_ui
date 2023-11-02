@@ -59,7 +59,7 @@ const Step3Form = () => {
             <div id="myqrcode" style={{ display: 'flex', justifyContent: 'center' }}>
                 <QRCode
                     value={url}
-                    bgColor="#fff"
+                        bgColor="#fff"
                     style={{
                         marginBottom: 19,
                         }}
